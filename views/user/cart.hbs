@@ -1,0 +1,47 @@
+<section>
+    <div class="container">
+        {{#if total}}
+        <table class="table table-bordered mt-5">
+            <thead>
+                <tr>
+                    <th>Items</th>
+                    <th>Title</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            
+            {{#each products}}
+            <tbody>
+                
+                <tr id="tr{{this.product._id}}">
+                <td><img class="Image" src="/product-images/{{this.product._id}}.jpg" style="width: 50px;height: 60px;" alt=""></td>
+                <td>{{this.product.productname}}</td>
+                <td>{{this.product.prize}}</td>
+                
+                <td><button class="cart-item-count ml-3 btn btn-secondary btn-sm"  id="neg-btn{{this.product._id}}"  onclick="changeQuandity('{{this._id}}','{{this.product._id}}',-1,'{{this.quandity}}')">-</button><span class="badge badge-light"   id="spn{{this.product._id}}">{{this.quandity}}</span><button class="cart-item-count mr-3 btn btn-secondary btn-sm"  onclick="changeQuandity('{{this._id}}','{{this.product._id}}',1,'{{this.quandity}}')">+</button></td>
+                <td><button  onclick="productDelete('{{this.product._id}}','{{this._id}}','{{this.product.productname}}')"class="btn btn-danger">remove</button></td>
+                
+                </tr>
+                <tr><div class="text-center text-success" ><h4 id="delete-msg"class="font-italic"></h4></div></tr>
+                
+            </tbody>
+            {{/each}}
+        </table>
+        <hr>
+        <div class="float-right pr-5">
+        
+        <h3 class="float-right mr-5">Total:Rs. <span id="total">{{total}}</span> </h4><br>
+        <a href="/place-order"class="btn btn-success  mt-3"style="width:100%;"><b>Place Order</b></a>
+    </div>
+        {{else}}
+        <div class="container">
+            <span class=" text-center">
+                <h3 class="font-bold">Empty Cart</h3>
+            </span>
+        </div>
+        {{/if}}
+    </div>
+    
+    
+</section>

@@ -1,0 +1,585 @@
+.card {
+  display: flex;
+  border: none;
+  border-radius: 30px;
+  box-shadow: 3px 3px 3px 3px rgb(0, 0, 0, 0.2);
+  padding: 5px;
+  margin: 10px;
+  position: relative;
+  transition: all 0.75s ease-out;
+  z-index: 1;
+  flex: 1;
+  
+}
+
+
+body {
+
+  padding-top: 70px;
+
+  align-items: center;
+}
+
+.card-img-top {
+  height: 30vh;
+  border-radius: 30px;
+}
+
+.container {
+  border-radius: 10px;
+  padding-bottom: 10px;
+
+  align-items: center;
+}
+.row {
+  justify-content: space-between;
+  padding: 10px;
+  justify-items: center;
+}
+.navbar {
+  border: none;
+  width: 17vw;
+  box-shadow: 0px 0px 0px 4px rgba(0, 0, 0, 0.2);
+  background-color: white;
+}
+
+.btn {
+  border: none;
+  border-radius: 50px;
+  box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.2);
+}
+.carousel {
+  height: 45vh;
+  border-radius: 30px;
+  padding-top: 5px;
+}
+.d-block {
+  width: 100%;
+  height: 50vh;
+  border-radius: 10px;
+  padding-top: 5px;
+}
+.dropdown-menu {
+  border-radius: 30px;
+}
+.table {
+  background-color: white;
+}
+.Image {
+  border-radius: 10px;
+}
+.navbar-brand h3 {
+  font-variant: small-caps;
+
+  text-shadow: 0px 0px 3px 3px rgb(red, green, blue);
+}
+.loginErr {
+  
+  font-family:serif;
+  color:cyan;
+  font-size: 1.3em;
+  
+}
+
+.card:hover {
+  border: 5px solid black;
+  background-color: rgb(91, 215, 236);
+
+  transform: scale(1.1);
+  z-index: 2;
+}
+.icon {
+  height: 20px;
+  width: 20px;
+  margin-top: 10px;
+  background: transparent;
+  border: none;
+  border-radius: 5px;
+  margin-right: 5px;
+}
+.like {
+  border: none;
+  height: 25px;
+  width: 25px;
+  background: transparent;
+  outline: none;
+  display: flex;
+  justify-items: center;
+  text-align: center;
+  border-radius: 60%;
+}
+
+.icon-like {
+  background: transparent;
+  border-radius: 50%;
+  height: 25px;
+  width: 25px;
+  position: absolute;
+
+  justify-items: center;
+}
+.icon-liked {
+  background: transparent;
+  border-radius: 50%;
+  height: 25px;
+  width: 25px;
+  position: absolute;
+
+  justify-items: center;
+  z-index: -1;
+}
+
+.like:focus {
+  outline: 0;
+}
+.remove-btn {
+  border-radius: 50%;
+  border: none;
+
+  background-color: red;
+  color: black;
+  height: 30px;
+  width: 30px;
+  box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.2);
+  font-size: 1.3em;
+  text-align: center;
+}
+.remove-btn:focus {
+  outline: 0;
+}
+.iconliked {
+  background: transparent;
+  border-radius: 50%;
+  height: 25px;
+  width: 25px;
+  
+justify-self: center;
+  
+  z-index: 2;
+  bottom: 5px;
+}
+.liked {
+  border: none;
+  height: 25px;
+  width: 25px;
+  background:transparent;
+  outline: none;
+ 
+  justify-content: center;
+  text-align: center;
+  display: flex;
+  position: absolute;
+  border-radius: 60%;
+  right: 17px;
+  
+ 
+  z-index: 2;
+}
+.liked:focus{
+  outline: 0;
+  
+  
+}
+
+
+.like-btns{
+  height: 25px;
+  width: 25px;
+  float: right;
+}
+.search-div{
+  
+ 
+  position: absolute;
+  display: none;
+  
+
+  top: 85px;
+  
+ 
+  
+}
+.search-div-active{
+  transition: width 2s, height 4s;
+  width:90%;
+  justify-self: center;
+  left: 5%;
+ justify-items: center;
+  position: absolute;
+  display: flex;
+  background-color:rgb(87, 82, 82);
+  top: 85px;
+  
+  z-index: 4;
+  padding: 10px;
+  border-radius: 30px;
+  box-shadow: 0px 0px 5px 5px rgb(0, 0, 0, 0.2);
+
+  
+
+}
+.sec{
+  z-index: -1;
+  background-color: silver;
+}
+.sec1{
+  filter: blur(4px);
+  -webkit-filter: blur(4px);
+
+}
+.hide-like-btn{
+  display: none;
+}
+.search{
+ 
+  width: 0px;
+  padding: 5px 5px;
+
+  color: white;
+  border: none;
+  background-color:transparent;
+  
+  
+  
+  
+  
+}
+.search-btn{
+  display: flex;
+  float: right;
+ background-color:transparent;
+ border-radius: 50%;
+ height: 30px;
+ width: 30px;
+ justify-content: center;
+ color: rgb(255, 255, 255);
+ align-self:center;
+padding: 6px 6px;
+margin-right: 6px;
+
+
+ 
+ 
+
+}
+
+.searchbox:hover > .search   {
+  
+    transition: 1s;
+    left: 0;
+     width: 80%;
+     
+}
+
+
+
+
+
+.searchbox:hover > .search-btn{
+  background-color:rgb(0, 0, 0);
+  color: white;
+  margin-right: 3px;
+  animation-delay: 10ms;
+  right:10px;
+}
+.search:focus {
+  width:80%;
+}
+
+.searchbox{
+  
+  
+  border-radius: 30px;
+  
+  margin-right: 10px;
+  background-color:rgb(24, 23, 23);
+  color: azure;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+.main{
+  justify-content: space-around;
+  
+  padding: 10px 10px ;
+
+}
+/* .login-bg{
+  height: 99vh;
+  width: 100%;
+  background: url(/images/log.jpg);
+  background-size: cover;
+  
+  margin: 0;
+ 
+  
+  
+
+  
+
+}
+.login-name,.login-password{
+  background-color: transparent;
+  border:none;  
+  border-bottom: 3px solid springgreen;
+  width: 250px;
+  color: white;
+ 
+
+}
+ .login-name:focus{
+   
+   border-bottom:2px solid blue;
+ }
+ .login-password:focus{
+  
+   border-bottom:2px solid blue;
+ }
+.login-btn{
+  background-color: transparent;
+  float: right;
+  border: 2px solid chocolate;
+
+}
+.login-text{
+  font-weight: 100;
+  font-family:serif;
+  
+  text-align: center;
+  color: black;
+  
+  
+
+ 
+
+}
+
+.login-form{
+  
+  position: absolute;
+  top: 39%;
+  left: 39%;
+  justify-content: space-around;
+  
+  
+  
+}
+.text-box{
+  margin: 10px 10px;
+}
+.login-form a{
+  color: chocolate;
+}
+.nopro{
+  color:black;
+  border-bottom: 3px solid black;
+  text-align: center;
+  justify-content: center;
+  justify-self: center;
+   font-size: x-large;
+   font-weight: 100;
+  
+}*/
+.login .head span {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 800;
+  font-size: 50px;
+  line-height: 60px;
+  /* or 100% */
+
+  letter-spacing: -0.05em;
+}
+
+.LIF label {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 35px;
+  line-height: 49px;
+  letter-spacing: -0.05em;
+}
+
+.LIF input {
+  background: #FFFFFF;
+  border: 2px solid #000000;
+  border-radius: 11px;
+  width: 605px;
+  height: 55px;
+  padding-left: 20px;
+}
+
+::placeholder {
+  padding: 10px;
+}
+
+.LIF button {
+  width: 221px;
+  height: 60px;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 29px;
+  line-height: 28px;
+  /* or 97% */
+  text-align: center;
+  color: #111111;
+  background-color: #FFFFFF;
+}
+
+.LIF a input {
+  width: 221px;
+  height: 60px;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 29px;
+  line-height: 28px;
+  text-align: center;
+  color: #111111;
+  background-color: #FFFFFF;
+  border-radius: 0px;
+}
+.LIF .error {
+  font-size: 16px;
+  padding-left: 10px;
+  color: red;
+  margin: 0;
+}
+@media screen and (max-width:1024px){
+  /* .login-bg{
+    flex-direction: column;
+  }  */
+  .carousel{
+    height: 200px;
+    
+  }
+  .d-block{
+    height: 200px;
+  }
+  .main{
+    align-items: center;
+    
+ }
+ .card{
+   width: fit-content; 
+   height: 400px;
+ }
+ .search:focus {
+  width:80%;
+}
+.searchbox:hover >.navbar-brand{
+  display: none;
+}
+.searchbox:hover > .search   {
+  
+  transition: 1s;
+  left: 0;
+   width: 80%;
+   
+}
+.searchbox:hover > .search-btn{
+  background-color:red;
+  color: white;
+  margin-right: 3px;
+  animation-delay: 10ms;
+  right:10px;
+}
+}
+.SUF .error {
+  font-size: 16px;
+  padding-left: 10px;
+  color: red;
+  margin: 0;
+}
+.signup .head {
+  width: 569px;
+  height: 103px;
+}
+.SUF button {
+  width: 221px;
+  height: 60px;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 29px;
+  line-height: 28px;
+  /* or 97% */
+  text-align: center;
+  color: #111111;
+  background-color: #FFFFFF;
+}
+.signup .head {
+  width: 569px;
+  height: 103px;
+}
+
+.signup .head span {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 800;
+  font-size: 50px;
+  line-height: 60px;
+  /* or 100% */
+
+  letter-spacing: -0.05em;
+}
+
+.SUF label {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 35px;
+  line-height: 49px;
+  letter-spacing: -0.05em;
+}
+
+.SUF input {
+  background: #FFFFFF;
+  border: 2px solid #000000;
+  border-radius: 11px;
+  width: 605px;
+  height: 55px;
+  padding-left: 20px;
+}
+
+::placeholder {
+  padding: 10px;
+}
+
+.SUF button {
+  width: 221px;
+  height: 60px;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 29px;
+  line-height: 28px;
+  /* or 97% */
+  text-align: center;
+  color: #111111;
+  background-color: #FFFFFF;
+}
+.editBtn{
+  height: 2.5rem;
+}
+.deleteBtn{
+  font-size: 2.5rem !important;
+    position: absolute;
+    padding-left: 10.4rem;
+    color: red;
+    padding-bottom: 15px;
+    margin-top: -2px;
+}
+.blockBtn
+{
+  font-size: 2.5rem !important;
+    position: absolute;
+    padding-left: 4rem;
+    color: #8b8b8b;
+    padding-bottom: 15px;
+    margin-top: -2px;
+    z-index: 1000;
+}

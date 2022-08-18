@@ -1,0 +1,18 @@
+ <section class="login ml-5">
+   
+      <div class="head pt-4 mt-3">
+        <span>Login</span>
+    </div>
+     {{loginErr}}
+    <form class="LIF" name="LIF" method="post"  action="/Login" >
+        <label for="email">Email</label><br>
+        <input type="email" name="email" placeholder="Email..."><br>
+        <label for="password">Password</label><br>
+        <input type="password" name="password" placeholder="Password..."><br>
+        <br>
+        <button type="submit">Login</button><br><br>
+        <a href="/sendOTP"><input type="button" name="" id="" value="OTP Login"></a> <br><br>
+         <a href="/signup">Create new Accout</a> 
+    </form>
+
+</section>

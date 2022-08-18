@@ -1,0 +1,27 @@
+<section class="login">
+    <div class="head pt-4 mt-3">
+        <span>Login</span>
+    </div>
+    <form class="LIF" name="LIF" method="post" action="/sendOTP" id="login">
+              <label for="phoneNo">Phone No.</label><br>
+          <input type="text" name="phone" placeholder="PhoneNo..."><br>
+        <h4 class="err" id="NoErr"> </h4>
+        <br>
+        <button type="submit" onclick="toggle()">Send OTP</button>
+    </form>
+</section>
+
+{{!-- <script type="text/javascript">
+    function validateMyForm1() {
+        console.log("fn")
+        let passErr1 = document.getElementById("passErr1")
+        let pass1 = document.forms["LIF"]["password"].value;
+        let tPass1=pass1.trim()
+        if(tPass1 == "")
+        {
+            passErr1.innerText="Invalid password"
+            return false
+        }
+        return true;
+    }
+</script> --}}

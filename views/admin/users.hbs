@@ -1,0 +1,48 @@
+<section>
+  {{#if msg}}
+    {{msg}}
+  {{/if}}
+  <table id="userTable" class="table mt-5 pl-3">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Options</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each users}}
+        <tr>
+          <th scope="row">{{this.name}}</th>
+          <td>{{this.email}}</td>
+
+          <td>
+
+            <a href="/admin/edit-user?id={{this._id}}"><img
+                src="/images/EditButton.svg"
+                alt=""
+                class="editBtn"
+              /></a>
+
+            
+            {{#if this.blocked}}
+              <a href="/admin/unblock-user?id={{this._id}}"><i
+                  class="fa fa-user-times blockBtn"
+                  style="color: orange;"
+                ></i></a>
+            {{else}}
+              <a href="/admin/block-user?id={{this._id}}"><i
+                  class="fa fa-user-times blockBtn"
+                ></i></a>
+            {{/if}}
+   
+            <a
+              href="/admin/delete-user?id={{this._id}}"
+              onclick="return confirm('Are you  want to remove {{this.name}}')"
+            ><i class="fa fa-trash deleteBtn"></i></a>
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</section>
