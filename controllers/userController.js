@@ -4,12 +4,14 @@ const authToken = process.env.AUTH_TOKEN;
 const client = require("twilio")(accoutSid, authToken);
 const smsKey = process.env.SMS_SECRET_KEY;
 const userHelper = require("../helpers/user-helper");
-const productHelper = require('../helpers/product-helpers')
+const productHelper = require("../helpers/product-helpers");
+const adminHelper = require("../helpers/admin-helper");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const JWT_AUTH_TOKEN = process.env.JWT_AUTH_TOKEN;
-let msg = false
-
+let msg = false;
+const db = require("../config/connection");
+const collections = require("../config/collections");
 exports.login = async (req, res, next) => {
   try {
     userHelper.doLogin(req.body).then((response) => {
@@ -30,7 +32,7 @@ exports.login = async (req, res, next) => {
           })
           .redirect("/");
       } else {
-        msg = response.msg
+        msg = response.msg;
         req.session.userLoginErr = "invalid user name or password";
         res.redirect("/login");
       }
@@ -47,16 +49,36 @@ exports.home = async function (req, res, next) {
     let wishlist = null;
     if (user) {
       cartCount = await userHelper.cartCount(user._id);
-      wishlist = await userHelper.getWishPord(user._id);
+      wishlist = await userHelper.getWishProd(user._id);
       wishlist = wishlist?.products;
     }
-    // res.render("user/view-products", { user });
-    productHelper.getAllProducts().then((products)=>{
+    let newProducts = await db
+      .get()
+      .collection(collections.PRODUCT_COLLECTION)
+      .find()
+      .sort({ createdAt: -1 })
+      .limit(3)
+      .toArray();
 
-    res.render('user/view-products', {products,user,cartCount,wishlist});
-    })
+    // res.render("user/view-products", { user });
+    productHelper.getAllProducts().then((products) => {
+      adminHelper.getCategories().then((categories) => {
+        productHelper.getAllProducts().then((products2) => {
+          res.render("user/view-products", {
+            products,
+            user,
+            cartCount,
+            wishlist,
+            categories,
+            products2,
+            newProducts,
+          });
+        });
+      });
+    });
   } catch (err) {
-    res.render("user/view-products");
+    loginWarn = req.session.noUser;
+    res.render("user/view-products", { loginWarn });
     console.log(err);
   }
 };
@@ -67,12 +89,12 @@ exports.viewLogin = (req, res) => {
       res.redirect("/");
     } else {
       if (msg) {
-        res.render("user/login", { loginErr: msg});
-        msg=false
+        res.render("user/login", { loginErr: msg });
+        msg = false;
+      } else {
+        res.render("user/login", { loginErr: req.session.userLoginErr });
+        req.session.userLoginErr = false;
       }
-      else{
-      res.render("user/login", { loginErr: req.session.userLoginErr });
-      req.session.userLoginErr = false;}
     }
   } catch (err) {
     console.log(err);
@@ -108,11 +130,9 @@ exports.SignUp = (req, res) => {
       } else {
         req.session.userLoggedIn = true;
         req.session.user = response;
-        const accessToken = jwt.sign(
-          { data: response.phone },
-          JWT_AUTH_TOKEN,
-          { expiresIn: "99999999s" }
-        );
+        const accessToken = jwt.sign({ data: response.phone }, JWT_AUTH_TOKEN, {
+          expiresIn: "99999999s",
+        });
         res
           .status(202)
           .cookie("accessToken", accessToken, {
@@ -146,8 +166,12 @@ exports.logout = (req, res) => {
 exports.viewCart = async (req, res) => {
   try {
     let products = await userHelper.getCartProducts(req.session.user._id);
-    let total = await userHelper.getTotalAmount(req.session.user._id);
 
+    let total = await userHelper.getTotalAmount(req.session.user._id);
+    products.forEach((data) => {
+      console.log("..........................", data);
+      data.subTotal = Number(data.quantity) * Number(data.product.price);
+    });
     res.render("user/cart", { products, total, user: req.session.user });
   } catch (err) {
     console.log(err);
@@ -156,9 +180,13 @@ exports.viewCart = async (req, res) => {
 
 exports.addToCart = (req, res) => {
   try {
-    userHelper.addToCart(req.query.id, req.session.user._id).then(() => {
-      res.json({ status: true });
-    });
+    if (req.session.verifyErr) {
+      res.render("/Login");
+    } else {
+      userHelper.addToCart(req.query.id, req.session.user._id).then(() => {
+        res.json({ status: true });
+      });
+    }
   } catch (err) {
     console.log(err);
   }
@@ -166,14 +194,21 @@ exports.addToCart = (req, res) => {
 
 exports.changeCartQuantity = (req, res) => {
   try {
-    userHelper.changeCartQuantity(req.body).then(async (responce) => {
-      let total = await userHelper.getTotalAmount(req.session.user._id);
+    let price = 0;
+    productHelper.productsDetails(req.body.product).then((response) => {
+      price = response.price;
+    });
+    // console.log(price);
+    userHelper.changeCartQuantity(req.body).then(async (response) => {
+      let total = await userHelper.getTotalAmount(req.session.user?._id);
 
-      responce.total = total;
-      res.json(responce);
+      response.total = total;
+      response.price = price;
+      res.json(response);
     });
   } catch (err) {
     console.log(err);
+    console.log(req.body);
   }
 };
 
@@ -190,7 +225,12 @@ exports.deleteProduct = (req, res) => {
 exports.viewPlaceOrder = async (req, res) => {
   try {
     let total = await userHelper.getTotalAmount(req.session.user._id);
-    res.render("user/placeorder", { total, user: req.session.user });
+    let user = await adminHelper.userDetails(req.session.user._id);
+    let addresses = false;
+    if (user.addresses) {
+      addresses = user.addresses;
+    }
+    res.render("user/placeorder", { total, user: req.session.user, addresses });
   } catch (err) {
     console.log(err);
   }
@@ -198,10 +238,13 @@ exports.viewPlaceOrder = async (req, res) => {
 
 exports.placeOrder = async (req, res) => {
   try {
+    console.log("Checkout form body", req.body);
+    console.log("========");
     let products = await userHelper.orderProducts(req.session.user._id);
-
+    let user = await adminHelper.userDetails(req.session.user._id);
+    console.log(user);
     let totalPrice = await userHelper.getTotalAmount(req.session.user._id);
-
+    req.body.UserId = req.session.user._id;
     userHelper.orderPlace(req.body, products, totalPrice).then((orderId) => {
       if (req.body["Payment-method"] === "COD") {
         res.json({ codSuccess: true });
@@ -209,6 +252,7 @@ exports.placeOrder = async (req, res) => {
         userHelper
           .generateRazorPay(orderId, totalPrice)
           .then((order) => {
+            order.user = user;
             res.json(order);
           })
           .catch((err) => {
@@ -233,7 +277,8 @@ exports.orderSuccess = async (req, res) => {
 exports.viewOrders = async (req, res) => {
   try {
     let orders = await userHelper.getOrders(req.session.user._id);
-
+    console.log(orders);
+    console.log("second userID", req.session.user._id);
     res.render("user/orders", { user: req.session.user, orders });
   } catch (err) {
     console.log(err);
@@ -268,11 +313,10 @@ exports.verifyPayment = async (req, res) => {
   }
 };
 
-exports.viewwishList = (req, res) => {
+exports.viewwishList = async (req, res) => {
   try {
-    userHelper.wishList(req.body).then((response) => {
-      res.json(response);
-    });
+    let products = await userHelper.getWishlist(req.session.user._id);
+    res.render("user/wishlist", { products, user: req.session.user });
   } catch (err) {
     console.log(err);
   }
@@ -320,18 +364,18 @@ exports.sendOTP = (req, res) => {
     const phone = req.body.phone;
     userHelper.sendOTP(phone).then(async (response) => {
       const phone = response.phone;
-      req.session.loggedIn = true;
-      req.session.user = response;
+
+      req.session.tempUser = response;
       const otp = Math.floor(100000 + Math.random() * 900000);
       const ttl = 2 * 60 * 1000;
       const expires = Date.now() + ttl;
       const data = `${phone}.${otp}.${expires}`;
-      console.log("data", data);
+
       const hash = crypto
         .createHmac("sha256", smsKey)
         .update(data)
         .digest("hex");
-      console.log("hash", hash);
+
       const fullhash = `${hash}.${expires}`;
 
       client.messages
@@ -388,7 +432,8 @@ exports.verifyOTP = async (req, res) => {
       const accessToken = jwt.sign({ data: phone }, JWT_AUTH_TOKEN, {
         expiresIn: "300000s",
       });
-
+      req.session.loggedIn = true;
+      req.session.user = req.session.tempUser;
       await res
         .status(202)
         .cookie("accessToken", accessToken, {
@@ -399,12 +444,106 @@ exports.verifyOTP = async (req, res) => {
         .cookie("authSession", true, {
           expires: new Date(new Date().getTime + 30 * 1000),
         })
+
         .redirect("/");
     } else {
-      return res
-        .status(400)
-        .send({ verification: "false", msg: "incorrect otp" });
+      return res.status(400).render("user/verifyOTP", { msg: "incorrect otp" });
     }
+  } catch (err) {
+    console.log(err);
+  }
+};
+exports.productsDetails = async (req, res) => {
+  try {
+    let user = req.session.user;
+    let cartCount = null;
+    let wishlist = null;
+    if (user) {
+      cartCount = await userHelper.cartCount(user._id);
+      wishlist = await userHelper.getWishProd(user._id);
+      wishlist = wishlist?.products;
+    }
+    let proId = req.query.id;
+
+    let product = await productHelper.productsDetails(proId);
+    let category = await productHelper.categoryDetails(product.category);
+    res.render("user/products", {
+      product,
+      user,
+      cartCount,
+      wishlist,
+      category,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+let updatedUser = false;
+exports.profile = async (req, res) => {
+  try {
+    let user = req.session.user;
+
+    if (updatedUser) {
+      user = updatedUser;
+      req.session.user = updatedUser;
+    }
+    let cartCount = null;
+    let wishlist = null;
+    if (user) {
+      cartCount = await userHelper.cartCount(user._id);
+      wishlist = await userHelper.getWishProd(user._id);
+    }
+
+    res.render("user/profile", { user, cartCount, wishlist });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+exports.updateProfile = async (req, res) => {
+  try {
+    let userId = req.session.user._id;
+
+    userHelper.updateProfile(userId, req.body).then(() => {
+      adminHelper.userDetails(userId).then((response) => {
+        req.session.updatedUser = response;
+        updatedUser = response;
+      });
+
+      res.redirect("/profile");
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+exports.addAddress = async (req, res, next) => {
+  try {
+    let userId = req.session.user._id;
+
+    userHelper.addAddress(userId, req.body).then(() => {
+      adminHelper.userDetails(userId).then((response) => {
+        req.session.updatedUser = response;
+        updatedUser = response;
+      });
+
+      res.redirect("/profile");
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+exports.addAddress2 = async (req, res, next) => {
+  try {
+    let userId = req.session.user._id;
+
+    userHelper.addAddress(userId, req.body).then(() => {
+      adminHelper.userDetails(userId).then((response) => {
+        req.session.updatedUser = response;
+        updatedUser = response;
+      });
+
+      res.redirect("/place-order");
+    });
   } catch (err) {
     console.log(err);
   }

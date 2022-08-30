@@ -8,6 +8,8 @@
                     <th>Title</th>
                     <th>Price</th>
                     <th>Quantity</th>
+                    <th>Sub total</th>
+                    <th></th>
                 </tr>
             </thead>
             
@@ -17,10 +19,11 @@
                 <tr id="tr{{this.product._id}}">
                 <td><img class="Image" src="/product-images/{{this.product._id}}.jpg" style="width: 50px;height: 60px;" alt=""></td>
                 <td>{{this.product.productname}}</td>
-                <td>{{this.product.prize}}</td>
+                <td>{{this.product.price}}</td>
                 
-                <td><button class="cart-item-count ml-3 btn btn-secondary btn-sm"  id="neg-btn{{this.product._id}}"  onclick="changeQuandity('{{this._id}}','{{this.product._id}}',-1,'{{this.quandity}}')">-</button><span class="badge badge-light"   id="spn{{this.product._id}}">{{this.quandity}}</span><button class="cart-item-count mr-3 btn btn-secondary btn-sm"  onclick="changeQuandity('{{this._id}}','{{this.product._id}}',1,'{{this.quandity}}')">+</button></td>
-                <td><button  onclick="productDelete('{{this.product._id}}','{{this._id}}','{{this.product.productname}}')"class="btn btn-danger">remove</button></td>
+                <td><button class="cart-item-count ml-3 betaButton btn-sm"  id="neg-btn{{this.product._id}}"  onclick="changeQuantity('{{this._id}}','{{this.product._id}}',-1,'{{this.quantity}}')" style="width: 3rem;">-</button><span class="badge badge-light"   id="spn{{this.product._id}}">{{this.quantity}}</span><button class="cart-item-count mr-3 betaButton btn-sm"  onclick="changeQuantity('{{this._id}}','{{this.product._id}}',1,'{{this.quantity}}')" style="width: 3rem;">+</button></td>
+                <td><span id="subTotal">{{this.subTotal}}</span></td>
+                <td><button  onclick="productDelete('{{this.product._id}}','{{this._id}}','{{this.product.productname}}')"class="betaButton">remove</button></td>
                 
                 </tr>
                 <tr><div class="text-center text-success" ><h4 id="delete-msg"class="font-italic"></h4></div></tr>
@@ -32,7 +35,16 @@
         <div class="float-right pr-5">
         
         <h3 class="float-right mr-5">Total:Rs. <span id="total">{{total}}</span> </h4><br>
-        <a href="/place-order"class="btn btn-success  mt-3"style="width:100%;"><b>Place Order</b></a>
+        <a href="/place-order"class="betaButton  mt-3"style="text-decoration: none;
+    background: black;
+    color: white;   
+     text-decoration: none;
+    background: black;
+    color: white;
+    padding: 1rem;
+    position: absolute;
+    transform: translate(10px, 5px);
+    height: 4rem;"><b>Place Order</b></a>
     </div>
         {{else}}
         <div class="container">

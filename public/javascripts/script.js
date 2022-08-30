@@ -31,8 +31,8 @@ $("#search").on('change keyup paste', function () {
                 <img class="card-img-top" src="/product-images/${pro._id}.jpg" alt="Card image cap">
                 <div class="card-body">
                 <h5 id="card-name" class="card-title">${pro.productname}</h5>
-                <p id="card-text" class="card-text">${pro.discription}</p>
-                <p class="card-text">Rs.${pro.prize}</p>
+                <p id="card-text" class="card-text">${pro.description}</p>
+                <p class="card-text">Rs.${pro.price}</p>
                 <button class="btn btn-primary" onclick="addToCart('${pro._id}')">add to cart</button>
                
                 </div>
@@ -57,48 +57,59 @@ $("#search").on('change keyup paste', function () {
 function addToCart(proId){
     $.ajax({
         url:'/add-to-cart?id='+proId,
-        method:'get',
-        success:(responce)=>{
-            if(responce.status){
+        method:'POST',
+        success:(response)=>{
+           
+            if(response.status){
                 let count=$('#cart-count').html()
                 count=parseInt(count)+1         
                 $('#cart-count').html(count)
+                console.log('hi buddy');
+            }
+            else{
+                console.log('hi buddy');
+                document.getElementById('logwarn').innerHTML= ' <span class="alert alert-danger">Please login</span>'
             }
         }
     })
 
 }
-function changeQuandity(cartId,proId,count){
-    let quandity=parseInt(document.getElementById('spn'+proId).innerHTML)
+function changeQuantity(cartId,proId,count){
+
+    let quantity=parseInt(document.getElementById('spn'+proId).innerHTML)
 
     $.ajax({
-        url:'/cart-change-quandity',
+        url:'/cart-change-quantity',
         data:{
             cart:cartId,
             product:proId,
             count:count,
-            quandity:quandity
+            quantity:quantity
         },
         method:'post',
-        success:(responce)=>{
-        
-            if(responce.deleteProduct){
-                if(responce.total){
-
+        success:(response)=>{
+            
+            let subTotal = response.price*(quantity+count)
+            console.log(subTotal);
+            $('#subTotal').html(subTotal)
+            if(response.deleteProduct){
+                if(response.total){
+                  
              $('#tr'+proId).remove()
              let msg='Product Removed'
              $('#delete-msg').html(msg)
-             $('#total').html(responce.total)
+             $('#total').html(response.total)
+             
             }else{
                 location.reload();
             }
 
         }else{
             
-            let quandity=$('#spn'+proId).html()
-             quandity=parseInt(quandity)+count
-            $('#spn'+proId).html(quandity)
-            $('#total').html(responce.total)
+            let quantity=$('#spn'+proId).html()
+             quantity=parseInt(quantity)+count
+            $('#spn'+proId).html(quantity)
+            $('#total').html(response.total)
             }
         
             
@@ -133,15 +144,16 @@ $('#checkout-form').submit((e)=>{
         url:'/place-order',
         method:'post',
         data:$('#checkout-form').serialize(),
-          success:(responce)=>{
-              if(responce.codSuccess){
+          success:(response)=>{
+              if(response.codSuccess){
                 location.href='/orderPlaced'
               }
-              else if(responce.paymentErr){
+              else if(response.paymentErr){
                 alert("payment error")
                   
               } else {
-                razorPayment(responce)
+                console.log(response);
+                razorPayment(response)
               }
             
     }
@@ -151,21 +163,21 @@ $('#checkout-form').submit((e)=>{
 function razorPayment(order) {
     
     var options = {
-        "key": "rzp_test_74IUoLSXBjLRXM", // Enter the Key ID generated from the Dashboard
+        "key": "rzp_test_9osRhNEeYctsvv", // Enter the Key ID generated from the Dashboard
         "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
         "currency": "INR",
-        "name": "ckvaizz",
+        "name": order.user.name,
         "description": "Test Transaction",
-        "image": "https://example.com/your_logo",
+        "image": "/images/resize-1661314920805561225Group1.jpg",
         "order_id":order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
         "handler": function (response){
             
             verifyPayment(response,order)
         },
         "prefill": {
-            "name": "Gaurav Kumar",
-            "email": "gaurav.kumar@example.com",
-            "contact": "9999999999"
+            "name": order.user.name,
+            "email": order.user.email,
+            "contact": order.user.phone
         },
         "notes": {
             "address": "Razorpay Corporate Office"
@@ -187,11 +199,11 @@ function verifyPayment(payment,order){
         order
     },
     method:'post',
-    success:(responce)=>{
-        if(responce.status){
+    success:(response)=>{
+        if(response.status){
             location.href='/orderPlaced'
         }else{
-            alert(responce.errmsg)
+            alert(response.errmsg)
         }
 
     }
@@ -206,8 +218,8 @@ function userDetails(userId,id){
         method:'get',
         success:(response)=>{
             console.log(response);
-            $('#name'+id).html(response.Name)
-            $('#email'+id).html(response.Email)
+            $('#name'+id).html(response.name)
+            $('#email'+id).html(response.email)
 
         }
     })
@@ -216,8 +228,11 @@ function userDetails(userId,id){
 
 function setStatus(id){
     let status=$('#status'+id).val()
-    
-    
+   
+    if (!status) {
+        status = "Waiting for cancel approval"
+        $('#status'+id).html(status)
+    }
     $.ajax({
         url:'/admin/set-status',
         data:{
@@ -241,15 +256,15 @@ function wishList(userId,proId){
             proId:proId
         },
         method:'post',
-        success:(responce)=>{
-            if (responce.status){
+        success:(response)=>{
+            if (response.status){
                 $('#like'+proId).hide()
-
+                $('#like2'+proId).hide()
                
 
             }else{
                 $('#like'+proId).show()
-
+                $('#like2'+proId).show()
             }
                 
         }
@@ -270,9 +285,9 @@ function unWish(userId, proId) {
             proId:proId
         },
         method:'post',
-        success: (responce) => {
-            console.log(responce);
-            if (!responce.status) {
+        success: (response) => {
+            console.log(response);
+            if (!response.status) {
                
             }
             
@@ -280,9 +295,9 @@ function unWish(userId, proId) {
     })
    
 }
-Handlebars.registerHelper('ifEquals', function(arg1, arg2, options) {
-    return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
-});
+// Handlebars.registerHelper('ifEquals', function(arg1, arg2, options) {
+//     return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
+// });
 
 function removeWish(proId){
     $.ajax({
@@ -296,6 +311,7 @@ function removeWish(proId){
     })
 }
 
- 
+
+
 
 

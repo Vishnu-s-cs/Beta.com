@@ -4,7 +4,6 @@ const bcrypt=require('bcrypt')
 var objectId=require('mongodb').ObjectId
 module.exports={
     doLogin:(adminData)=>{
-        console.log(adminData);
         return new Promise(async(resolve,reject)=>{
             let response={}
             let admin=await db.get().collection(collections.ADMIN_COLLECTION).findOne({email:adminData.email})
@@ -25,7 +24,7 @@ module.exports={
             }else
             {
                 console.log("user not found")
-                resolve({status:false})
+                resolve({status:"falseUser"})
             }
         })
 
@@ -40,7 +39,7 @@ module.exports={
     },
     getAllOrders:()=>{
         return new Promise(async(resolve,reject)=>{
-            let orders=await db.get().collection(collections.ORDER_COLLECTION).find().toArray()
+            let orders=await db.get().collection(collections.ORDER_COLLECTION).find().sort({ "deliveryDetails.Date": -1 }).toArray()
             
             resolve(orders)
         })
@@ -72,7 +71,7 @@ module.exports={
                 },
                 {
                     $project:{
-                        item:1,quandity:1,product:{$arrayElemAt:['$products',0]}
+                        item:1,quantity:1,product:{$arrayElemAt:['$products',0]}
                     }
                 }
                 
@@ -123,7 +122,27 @@ module.exports={
                 console.log(err)
             })
         })
+    },
+   
+    getCategories:()=>{
+        return new Promise(async(resolve,reject)=>{
+         let categories= await db.get().collection(collections.CATEGORY_COLLECTION).find().toArray()
+         
+         resolve(categories)
+        })
     }
+    ,
+   
+    addCategories:(data)=>{
+        
+        db.get().collection(collections.CATEGORY_COLLECTION).insertOne(data)
+         
+         
+  
+    },
+//     getOrderStats:()=>{
+//         db.get().collection(collections.ORDER_COLLECTION)
+// 1    }
     
     
 }

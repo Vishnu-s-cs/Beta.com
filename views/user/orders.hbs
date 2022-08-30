@@ -3,14 +3,18 @@
 <table class="table table-bordered mt-5">
   <thead>
     <tr>
-      <th scope="col">Date</th>
-      <th scope="col">Address</th>
-      <th scope="col">Pincode</th>
-      <th scope="col">Mobile</th>
+      <th scope="col" style="
+    width: 19rem;
+">Date</th>
+      <th scope="col" style="
+    width: 16rem;
+">Address</th>
       <th scope="col">Amount</th>
       <th scope="col">Payment</th>
       <th scope="col">Status</th>
-      
+       <th scope="col" style="
+    width: 19rem;
+">Options</th>
     </tr>
   </thead>
   <tbody>
@@ -18,16 +22,24 @@
     <tr>
       <th scope="row">{{this.deliveryDetails.Date}}</th>
       <td scope="row">{{this.deliveryDetails.address}}</td>
-      <td scope="row">{{this.deliveryDetails.pincode}}</td>
-      <td scope="row">{{this.deliveryDetails.mobile_No}}</td>
+
       <td scope="row">{{this.totalAmount}}</td>
       <td scope="row">{{this.payment_Method}}</td>
-      <td scope="row">{{this.status}}</td>
+      <td scope="row"  id="status{{this._id}}" >{{this.status}}</td>
       
-      <td scope="row"><a href="/orderProducts?id={{this._id}}"class="btn btn-primary">Products</a></td>
+      <td scope="row"><a href="/orderProducts?id={{this._id}}"class="betaButton">View Products</a>
+     <span class="betaButton"  onclick="setStatus('{{this._id}}')"  style="cursor: pointer;">
+      Request cancel order
+      </span>
+     </td>
       
     </tr>
     {{/each}}
   </tbody>
 </table>
 </section>
+<style>
+  th{
+        width: 8rem;
+}
+</style>

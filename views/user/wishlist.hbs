@@ -8,8 +8,8 @@
   <img class="card-img-top" src="/product-images/{{this.product._id}}.jpg" alt="Card image cap">
   <div class="card-body">
     <h5 id="card-name" class="card-title">{{this.product.productname}}</h5>
-    <p id="card-text" class="card-text">{{this.product.discription}}</p>
-    <p class="card-text">Rs.{{this.product.prize}}</p>
+    <p id="card-text" class="card-text">{{this.product.description}}</p>
+    <p class="card-text">Rs.{{this.product.price}}</p>
     <button class="btn btn-primary" onclick="addToCart('{{this.product._id}}')">add to cart</button>
     <button class="remove-btn float-right" onclick="removeWish('{{this.product._id}}')">x</button>
   </div>

@@ -1,0 +1,40 @@
+
+<section class="mt-5">
+    <div class="pdtImg">
+       <img class='mx-auto img-thumbnail'
+                src="/product-images/{{product._id}}.jpg"
+                width="auto" height="auto"
+/>
+    </div>
+
+  <h4 style="
+    position: relative;
+    top: -21.5rem;
+    left: 27rem;
+    font-weight: 700;
+">{{product.productname}}{{category.category}}</h4>
+<span style="
+    position: absolute;
+    top: 10.5rem;
+    left: 27rem;
+    font-weight: 600;
+">₹{{product.price}}</span>
+<span style="
+    position: absolute;
+    top: 12.5rem;
+    left: 27rem;
+    font-weight: 600;
+">{{product.description}}</span>
+<button class="betaBtn" onclick="addToCart('{{product._id}}')" style="
+    top: 24rem;
+    position: absolute;
+    left: 27rem;
+    color: white;
+    background: black;
+    width: 22rem;
+    height: 3rem;
+    font-size: 1.5rem;
+    font-weight: 500;
+">Add to cart</button>
+          
+</section>

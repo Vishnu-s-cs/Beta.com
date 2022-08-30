@@ -9,14 +9,11 @@
   transition: all 0.75s ease-out;
   z-index: 1;
   flex: 1;
-  
 }
 
-
 body {
-
   padding-top: 70px;
-
+  overflow-x: hidden;
   align-items: center;
 }
 
@@ -74,20 +71,11 @@ body {
   text-shadow: 0px 0px 3px 3px rgb(red, green, blue);
 }
 .loginErr {
-  
-  font-family:serif;
-  color:cyan;
+  font-family: serif;
+  color: cyan;
   font-size: 1.3em;
-  
 }
 
-.card:hover {
-  border: 5px solid black;
-  background-color: rgb(91, 215, 236);
-
-  transform: scale(1.1);
-  z-index: 2;
-}
 .icon {
   height: 20px;
   width: 20px;
@@ -152,9 +140,9 @@ body {
   border-radius: 50%;
   height: 25px;
   width: 25px;
-  
-justify-self: center;
-  
+
+  justify-self: center;
+
   z-index: 2;
   bottom: 5px;
 }
@@ -162,149 +150,124 @@ justify-self: center;
   border: none;
   height: 25px;
   width: 25px;
-  background:transparent;
+  background: transparent;
   outline: none;
- 
+
   justify-content: center;
   text-align: center;
   display: flex;
   position: absolute;
   border-radius: 60%;
   right: 17px;
-  
- 
+
   z-index: 2;
 }
-.liked:focus{
+.liked:focus {
   outline: 0;
-  
-  
 }
 
-
-.like-btns{
+.like-btns {
   height: 25px;
   width: 25px;
   float: right;
 }
-.search-div{
-  
- 
+.search-div {
   position: absolute;
   display: none;
-  
 
   top: 85px;
-  
- 
-  
 }
-.search-div-active{
+.search-div-active {
   transition: width 2s, height 4s;
-  width:90%;
+  width: 90%;
   justify-self: center;
   left: 5%;
- justify-items: center;
+  justify-items: center;
   position: absolute;
   display: flex;
-  background-color:rgb(87, 82, 82);
+  background-color: rgb(87, 82, 82);
   top: 85px;
-  
+
   z-index: 4;
   padding: 10px;
   border-radius: 30px;
   box-shadow: 0px 0px 5px 5px rgb(0, 0, 0, 0.2);
-
-  
-
 }
-.sec{
+.sec {
   z-index: -1;
-  background-color: silver;
 }
-.sec1{
+.sec1 {
   filter: blur(4px);
   -webkit-filter: blur(4px);
-
 }
-.hide-like-btn{
+.hide-like-btn {
   display: none;
 }
-.search{
- 
+.search {
   width: 0px;
   padding: 5px 5px;
 
   color: white;
   border: none;
-  background-color:transparent;
-  
-  
-  
-  
-  
+  background-color: transparent;
 }
-.search-btn{
+.search-btn {
   display: flex;
   float: right;
- background-color:transparent;
- border-radius: 50%;
- height: 30px;
- width: 30px;
- justify-content: center;
- color: rgb(255, 255, 255);
- align-self:center;
-padding: 6px 6px;
-margin-right: 6px;
-
-
- 
- 
-
+  background-color: transparent;
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  justify-content: center;
+  color: rgb(255, 255, 255);
+  align-self: center;
+  padding: 6px 6px;
+  margin-right: 6px;
 }
 
-.searchbox:hover > .search   {
-  
-    transition: 1s;
-    left: 0;
-     width: 80%;
-     
+.searchbox:hover > .search {
+  transition: 1s;
+  left: 0;
+  width: 80%;
 }
 
-
-
-
-
-.searchbox:hover > .search-btn{
-  background-color:rgb(0, 0, 0);
+.searchbox:hover > .search-btn {
+  background-color: rgb(0, 0, 0);
   color: white;
   margin-right: 3px;
   animation-delay: 10ms;
-  right:10px;
+  right: 10px;
 }
 .search:focus {
-  width:80%;
+  width: 80%;
 }
 
-.searchbox{
-  
-  
+.searchbox {
   border-radius: 30px;
-  
+
   margin-right: 10px;
-  background-color:rgb(24, 23, 23);
+  background-color: rgb(24, 23, 23);
   color: azure;
   height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
-  
 }
-.main{
+.main {
   justify-content: space-around;
-  
-  padding: 10px 10px ;
 
+  padding: 10px 10px;
+}
+.pdtImg {
+  height: 22rem;
+  width: 33rem;
+}
+.pdtImg img {
+  height: 21rem;
+  width: 21rem;
+}
+.dashCards i {
+  color: #000000 !important;
 }
 /* .login-bg{
   height: 99vh;
@@ -383,7 +346,7 @@ margin-right: 6px;
   
 }*/
 .login .head span {
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-style: normal;
   font-weight: 800;
   font-size: 50px;
@@ -394,7 +357,7 @@ margin-right: 6px;
 }
 
 .LIF label {
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-style: normal;
   font-weight: 400;
   font-size: 35px;
@@ -403,7 +366,7 @@ margin-right: 6px;
 }
 
 .LIF input {
-  background: #FFFFFF;
+  background: #ffffff;
   border: 2px solid #000000;
   border-radius: 11px;
   width: 605px;
@@ -418,7 +381,7 @@ margin-right: 6px;
 .LIF button {
   width: 221px;
   height: 60px;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   font-style: normal;
   font-weight: 500;
   font-size: 29px;
@@ -426,20 +389,20 @@ margin-right: 6px;
   /* or 97% */
   text-align: center;
   color: #111111;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
 }
 
 .LIF a input {
   width: 221px;
   height: 60px;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   font-style: normal;
   font-weight: 500;
   font-size: 29px;
   line-height: 28px;
   text-align: center;
   color: #111111;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border-radius: 0px;
 }
 .LIF .error {
@@ -448,45 +411,41 @@ margin-right: 6px;
   color: red;
   margin: 0;
 }
-@media screen and (max-width:1024px){
+@media screen and (max-width: 1024px) {
   /* .login-bg{
     flex-direction: column;
   }  */
-  .carousel{
-    height: 200px;
-    
-  }
-  .d-block{
+  .carousel {
     height: 200px;
   }
-  .main{
+  .d-block {
+    height: 200px;
+  }
+  .main {
     align-items: center;
-    
- }
- .card{
-   width: fit-content; 
-   height: 400px;
- }
- .search:focus {
-  width:80%;
-}
-.searchbox:hover >.navbar-brand{
-  display: none;
-}
-.searchbox:hover > .search   {
-  
-  transition: 1s;
-  left: 0;
-   width: 80%;
-   
-}
-.searchbox:hover > .search-btn{
-  background-color:red;
-  color: white;
-  margin-right: 3px;
-  animation-delay: 10ms;
-  right:10px;
-}
+  }
+  .card {
+    width: fit-content;
+    height: 400px;
+  }
+  .search:focus {
+    width: 80%;
+  }
+  .searchbox:hover > .navbar-brand {
+    display: none;
+  }
+  .searchbox:hover > .search {
+    transition: 1s;
+    left: 0;
+    width: 80%;
+  }
+  .searchbox:hover > .search-btn {
+    background-color: red;
+    color: white;
+    margin-right: 3px;
+    animation-delay: 10ms;
+    right: 10px;
+  }
 }
 .SUF .error {
   font-size: 16px;
@@ -501,7 +460,7 @@ margin-right: 6px;
 .SUF button {
   width: 221px;
   height: 60px;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   font-style: normal;
   font-weight: 500;
   font-size: 29px;
@@ -509,7 +468,7 @@ margin-right: 6px;
   /* or 97% */
   text-align: center;
   color: #111111;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
 }
 .signup .head {
   width: 569px;
@@ -517,7 +476,7 @@ margin-right: 6px;
 }
 
 .signup .head span {
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-style: normal;
   font-weight: 800;
   font-size: 50px;
@@ -528,7 +487,7 @@ margin-right: 6px;
 }
 
 .SUF label {
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-style: normal;
   font-weight: 400;
   font-size: 35px;
@@ -537,7 +496,7 @@ margin-right: 6px;
 }
 
 .SUF input {
-  background: #FFFFFF;
+  background: #ffffff;
   border: 2px solid #000000;
   border-radius: 11px;
   width: 605px;
@@ -552,7 +511,7 @@ margin-right: 6px;
 .SUF button {
   width: 221px;
   height: 60px;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   font-style: normal;
   font-weight: 500;
   font-size: 29px;
@@ -560,26 +519,99 @@ margin-right: 6px;
   /* or 97% */
   text-align: center;
   color: #111111;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
 }
-.editBtn{
+.editBtn {
   height: 2.5rem;
 }
-.deleteBtn{
+.deleteBtn {
   font-size: 2.5rem !important;
-    position: absolute;
-    padding-left: 10.4rem;
-    color: red;
-    padding-bottom: 15px;
-    margin-top: -2px;
+  position: absolute;
+  padding-left: 8rem;
+  color: red;
+  padding-bottom: 15px;
+  margin-top: -2px;
 }
-.blockBtn
-{
+.blockBtn {
   font-size: 2.5rem !important;
-    position: absolute;
-    padding-left: 4rem;
-    color: #8b8b8b;
-    padding-bottom: 15px;
-    margin-top: -2px;
-    z-index: 1000;
+  position: absolute;
+  padding-left: 1rem;
+  color: #8b8b8b;
+  padding-bottom: 15px;
+  margin-top: -2px;
+  z-index: 1000;
+}
+.betaButton {
+  width: 189px;
+  height: 38px;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 21px;
+  line-height: 28px;
+  text-align: center;
+  color: #111111;
+  background-color: #ffffff;
+  border: solid;
+}
+.addProducts select {
+  width: 33rem;
+  height: 2.5rem;
+  border-radius: 5px;
+}
+.editProducts select {
+  width: 33rem;
+  height: 2.5rem;
+  border-radius: 5px;
+}
+
+
+.form-control:focus {
+  box-shadow: none;
+  border-color: #ba68c8;
+}
+
+.profile-button {
+  background: rgb(99, 39, 120);
+  box-shadow: none;
+  border: none;
+}
+
+.profile-button:hover {
+  background: #682773;
+}
+
+.profile-button:focus {
+  background: #682773;
+  box-shadow: none;
+}
+
+.profile-button:active {
+  background: #682773;
+  box-shadow: none;
+}
+
+.back:hover {
+  color: #682773;
+  cursor: pointer;
+}
+
+.labels {
+  font-size: 11px;
+}
+
+.add-experience:hover {
+  background: #ba68c8;
+  color: #fff;
+  cursor: pointer;
+  border: solid 1px #ba68c8;
+}
+.dataTables_wrapper .dataTables_filter input{
+  border: solid 2px black !important;
+}
+.d-block{
+  width: 90rem;
+    height: 30rem;
+    margin-left: 2.5rem;
+    border-radius: 0px;
 }

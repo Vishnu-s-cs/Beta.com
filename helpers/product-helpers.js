@@ -3,8 +3,8 @@ var collections=require('../config/collections')
 var objectId=require('mongodb').ObjectId
 module.exports={
     addproducts:(product,callback)=>{
-        product.prize=parseInt(product.prize)
-        
+        product.price=parseInt(product.price)
+        product.createdAt = new Date().toISOString() 
         db.get().collection('product').insertOne(product).then((data)=>{
             callback(data.ops[0]._id)
         }).catch((err)=>{
@@ -26,30 +26,57 @@ module.exports={
         })
     },
     productsDetails:(proId)=>{
-        
+        console.log(proId);
         return new Promise(async(resolve,reject)=>{
             await db.get().collection(collections.PRODUCT_COLLECTION).findOne({_id:objectId(proId)}).then((products)=>{
+                console.log(products);
                 resolve(products)
+                
         })
         })
 
     },
     updateProducts:(ProId,productDetails)=>{
+        productDetails.price=parseInt(productDetails.price)
         return new Promise((resolve,reject)=>{
-            productDetails.prize=parseInt(productDetails.prize)
             db.get().collection(collections.PRODUCT_COLLECTION)
             .updateOne({_id:objectId(ProId)},{
                 $set:{
                     productname:productDetails.productname,
-                    catogery:productDetails.catogery,
-                    discription:productDetails.discription,
-                    prize:productDetails.prize
+                    category:productDetails.category,
+                    description:productDetails.description,
+                    price:productDetails.price,
+                    updatedAt: new Date().toISOString()
                 }
-            }).then((responce)=>{
+            }).then((response)=>{
                 resolve()
             })
         })
 
-    }
+    },
+    categoryDetails:(catId)=>{
+        
+        return new Promise(async(resolve,reject)=>{
+            await db.get().collection(collections.CATEGORY_COLLECTION).findOne({_id:objectId(catId)}).then((category)=>{
+                resolve(category)
+        })
+        })
+
+    },
+    editCategory:(catId,data)=>{
+        console.log(catId);
+       db.get().collection(collections.CATEGORY_COLLECTION).updateOne({_id:objectId(catId)},{$set:{category:data}})
+             
+        
+
+    },
+    deleteCategory:(proid)=>{
+     
+            db.get().collection(collections.CATEGORY_COLLECTION).removeOne({_id:objectId(proid)})
+    },
+    removeOrder:(proid)=>{
+     
+        db.get().collection(collections.ORDER_COLLECTION).removeOne({_id:objectId(proid)})
+}
 
 }

@@ -1,10 +1,69 @@
 const express = require("express");
-let verify = require("../verify");
+
 const router = express.Router();
 const controller = require("../controllers/userController");
 require("dotenv").config();
-verify = verify.verify;
 
+const jwt = require("jsonwebtoken");
+var db = require("../config/connection");
+var collections = require("../config/collections");
+let phoneNo = 0;
+const paypal = require('../paypal')
+
+
+
+
+
+router.post("/api/orders", async (req, res) => {
+  const order = await paypal.createOrder();
+  res.json(order);
+});
+
+router.post("/api/orders/:orderId/capture", async (req, res) => {
+  const { orderId } = req.params;
+  const captureData = await paypal.capturePayment(orderId);
+  res.json(captureData);
+});
+//auth middleware
+    async function verify (req, res, next){
+      console.log(req.session.user);
+     
+      if (req.session.user==undefined) {
+     req.session.noUser="Please login"
+      }
+ else{
+      const accessToken = req.cookies.accessToken;
+   
+
+  jwt.verify(
+          accessToken,
+          process.env.JWT_AUTH_TOKEN,
+          async (err, phone) => {
+            if (phone) {
+              req.phone = phone;
+              phoneNo = phone;
+              next();
+            } else if (err.message === "TokenExpiredError") {
+              console.log("txe");
+              return res.status(403).redirect("/Login");
+            } else {
+        
+              res.status(403).redirect("/Login");
+            
+            }
+          }
+        );
+        let user = db
+          .get()
+          .collection(collections.USER_COLLECTION)
+          .findOne({ phone: phoneNo });
+        if (user.blocked) {
+          res.status(403).redirect("/Login");
+        }
+  
+      }
+    }
+  
 /* GET home page. */
 router.get("/", controller.home);
 
@@ -22,29 +81,29 @@ router.get("/Logout", controller.logout);
 
 router.get("/cart", verify, controller.viewCart);
 
-router.get("/add-to-cart", verify, controller.addToCart);
+router.post("/add-to-cart", verify, controller.addToCart);
 
-router.post("/cart-change-quantity", verify, controller.changeCartQuantity);
+router.post("/cart-change-quantity", controller.changeCartQuantity);
 
-router.post("/delete-product", verify, controller.deleteProduct);
+router.post("/delete-product", controller.deleteProduct);
 
-router.get("/place-order", verify, controller.viewPlaceOrder);
+router.get("/place-order", controller.viewPlaceOrder);
 
-router.post("/place-order", verify, controller.placeOrder);
+router.post("/place-order", controller.placeOrder);
 
-router.get("/orderPlaced", verify, controller.orderSuccess);
+router.get("/orderPlaced",controller.orderSuccess);
 
-router.get("/orders", verify, controller.viewOrders);
+router.get("/orders", controller.viewOrders);
 
-router.get("/orderProducts", controller.viewOrderProducts);
+router.get("/orderProducts",verify, controller.viewOrderProducts);
 
 router.post("/verify-payment", controller.verifyPayment);
 
-router.post("/wish-list", controller.wishList);
+router.post("/wish-list",controller.wishList);
 
-router.get("/wish-list", controller.viewwishList);
+router.get("/wish-list",controller.viewwishList);
 
-router.get("/remove-wish", controller.removeWishList);
+router.get("/remove-wish",controller.removeWishList);
 
 router.get("/search", controller.search);
 
@@ -53,5 +112,15 @@ router.get("/sendOTP", controller.viewSendOTP);
 router.post("/sendOTP", controller.sendOTP);
 
 router.post("/verifyOTP", controller.verifyOTP);
+
+router.get('/product-details',controller.productsDetails) 
+
+router.get('/profile',verify,controller.profile) 
+
+router.post('/update-profile',controller.updateProfile)
+
+router.post('/add-address',controller.addAddress)
+
+router.post('/add-address2',controller.addAddress2)
 
 module.exports = router;

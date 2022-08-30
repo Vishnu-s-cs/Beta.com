@@ -1,0 +1,160 @@
+<section style="padding-bottom: 1rem;">
+      <div class="container-fluid pt-4 px-4">
+                <div class="g-4">
+                    <div class="">
+                        <div class="bg-light rounded h-100 p-4 " style="
+                        
+    margin-top: 8rem;
+
+    width: 43rem;
+">
+                            <h6 class="mb-4">Overall Sales</h6>
+                            <canvas id="line-chart"></canvas>
+                        </div>
+                    </div>
+                     <div class="bg-light rounded h-100 p-4 " style="
+    width: 43rem;
+    margin-top: 2rem;
+">
+                            <h6 class="mb-4">Monthly sales</h6>
+                            <canvas id="monthly"></canvas>
+                        </div>
+                    {{!-- <div class="col-sm-12 col-xl-6">
+                        <div class="bg-light rounded h-100 p-4">
+                            <h6 class="mb-4">Multiple Line Chart</h6>
+                            <canvas id="salse-revenue"></canvas>
+                        </div>
+                    </div> --}}
+                </div>           
+      </div>
+         <div class="bg-light rounded d-flex align-items-center justify-content-between p-4" style="
+   width: 13rem;
+      left: 17.5rem;
+    position: absolute;
+        top: 7.8rem;
+">
+                            <i class="fa fa-chart-bar fa-3x"></i>
+                            <div class="ms-3">
+                                <p class="mb-2">Total Sales</p>
+                                <h6 class="mb-0">₹{{total}}</h6>
+                            </div>
+                        </div>
+</section>
+<script src="/javascripts/chart/chart.min.js"></script>
+<script>
+
+
+    $(window).on('load',function() {
+   let money = []
+    let date = []
+    let month = []
+    let monthMoney =[]
+  
+  $.ajax({
+        url:'/admin/get-order-details',
+        method:'get',
+        success:(response)=>{
+
+            
+        
+          response.forEach(data => {
+        date.push(data.deliveryDetails.Date)
+        money.push(data.totalAmount)
+        });
+       date.reverse()
+       money.reverse()
+         
+        }
+
+    
+  });
+  $.ajax({
+        url:'/admin/stats',
+        method:'get',
+        success:(response)=>{
+
+         response.forEach(data=>{
+           
+           switch(data._id)
+           {
+            case 1 : month.push("Jan")
+                     break;
+                    case 2 : month.push("Feb")
+                     break;
+                     case 3 : month.push("Mar")
+                     break;
+                     case 4 : month.push("Apr")
+                     break;
+                     case 5 : month.push("May")
+                     break;
+                     case 6 : month.push("Jun")
+                     break;
+                     case 7 : month.push("July")
+                     break;
+                     case 8 : month.push("Aug")
+                     break;
+                     case 9 : month.push("Sep")
+                     break;
+                     case 10 : month.push("Oct")
+                     break;
+                     case 11: month.push("Nov")
+                     break;
+                     case 12: month.push("Dec")
+                     break;
+           }
+          
+            monthMoney.push(data.total)
+
+         })
+         month.reverse()
+         monthMoney.reverse()
+        }
+
+    
+  });
+  setTimeout(()=>{
+console.log(month)
+ var ctx3 = $("#line-chart").get(0).getContext("2d");
+     var myChart3 = new Chart(ctx3, {
+         type: "line",
+         data: {
+             labels: date,
+             datasets: [{
+                 label: "Sales",
+                 fill: false,
+                 backgroundColor: "rgba(255, 51, 204, 2)",
+                 data: money
+             }]
+         },
+         options: {
+             responsive: true
+         }
+     });
+  },300)
+      setTimeout(()=>{
+
+ var ctx3 = $("#monthly").get(0).getContext("2d");
+     var myChart3 = new Chart(ctx3, {
+         type: "line",
+         data: {
+             labels: month,
+             datasets: [{
+                 label: "Sales",
+                 fill: false,
+                 backgroundColor: "rgba(0, 156, 255, .3)",
+                 data: monthMoney
+             }]
+         },
+         options: {
+             responsive: true
+         }
+     });
+  },300)
+   
+    })
+
+   
+   
+       
+  
+</script>

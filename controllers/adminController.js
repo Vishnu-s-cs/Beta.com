@@ -3,8 +3,13 @@ var adminHelpers=require('../helpers/admin-helper');
 let msg = ""
 exports.products = async (req, res) => {
     try {
-        productHelpers.getAllProducts().then((products)=>{
-            res.render('admin/admin-products',{admin:true,products});
+     
+       await productHelpers.getAllProducts().then((products)=>{
+        adminHelpers.getCategories().then((categories)=>{
+        
+          res.render('admin/admin-products',{admin:true,products,categories});
+        })
+        
         })
     } catch (err) {
       console.log(err);
@@ -12,7 +17,27 @@ exports.products = async (req, res) => {
   };
   exports.dashboard= async (req, res) => {
     try {
-      res.render('admin/dashboard',{admin:true});
+      let total = 0
+      await adminHelpers.getAllOrders().then((orders)=>{
+        
+ 
+         orders.forEach(data => {
+          
+          total=total+data.totalAmount
+         });
+        
+       })
+       adminHelpers.getUsers().then((users)=>{
+        adminHelpers.getAllOrders().then((orders) => {
+        res.render('admin/dashboard',{admin:true,total,users,orders});
+      });
+   
+        
+      })
+     
+   
+
+     
       
     } catch (err) {
       console.log(err);
@@ -56,43 +81,108 @@ exports.unblock = async (req, res) => {
       console.log(err);
     }
   };
+exports.viewManageCategory = async (req, res) => {
+    try {
+      adminHelpers.getCategories().then((response)=>{
+        
+        let category=  response
+        console.log(req.session.admin);
+        res.render("admin/manageCategory",{category,admin:req.session.admin});
+    })
+   } catch (err) {
+      console.log(err);
+    }
+  };
+exports.viewLogin = async (req, res) => {
+    try {
+      res.render("admin/admin-login");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+exports.addCategory = async (req, res) => {
+    try {
+      adminHelpers.addCategories(req.body)
+        res.redirect("/admin/manage-categories");
+
+      // redirect to /admin/manage-categories
+    } catch (err) {
+      console.log(err);
+    }
+  };
+exports.viewEditCategory = async (req, res) => {
+    try {
+      let catId=req.query.id
+      
+      let category=await productHelpers.categoryDetails(catId)
+      
+      res.render('admin/editCategory',{admin:true,category,Admin:req.session.admin})
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  exports.editCategory = (req, res) => {
+    try {
+      let catId=req.query.id
+     let data = req.body.category
+    productHelpers.editCategory(catId,data)
+      
+      res.redirect('/admin/manage-categories')
+    } catch (err) {
+      console.log(err);
+    }
+  };
+exports.deleteCategory = async (req, res) => {
+    try {
+      let proid=req.query.id
+    productHelpers.deleteCategory(proid)
+      res.redirect("/admin/manage-categories")
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  exports.removeOrder = async (req, res) => {
+    try {
+      let proid=req.query.id
+    productHelpers.removeOrder(proid)
+      res.redirect("/admin/all-orders")
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  exports.viewSalesReport = async (req, res) => {
+    try {
+      let total = 0
+     await adminHelpers.getAllOrders().then((orders)=>{
+       
+
+        orders.forEach(data => {
+         
+         total=total+data.totalAmount
+        });
+       
+      })
+    
+      
+      res.render('admin/salesReport',{admin:req.session.admin,total})
+    } catch (err) {
+      console.log(err);
+    }
+  };
+exports.orderDetails = async (req, res) => {
+    try {
+      adminHelpers.getAllOrders().then((orders) => {
+        res.json(orders);
+        // res.send(orders)
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 // exports.orderSuccess = async (req, res) => {
-//     try {
-//       res.render("user/orderSuccess");
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   };exports.orderSuccess = async (req, res) => {
-//     try {
-//       res.render("user/orderSuccess");
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   };exports.orderSuccess = async (req, res) => {
-//     try {
-//       res.render("user/orderSuccess");
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   };exports.orderSuccess = async (req, res) => {
-//     try {
-//       res.render("user/orderSuccess");
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   };exports.orderSuccess = async (req, res) => {
-//     try {
-//       res.render("user/orderSuccess");
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   };exports.orderSuccess = async (req, res) => {
-//     try {
-//       res.render("user/orderSuccess");
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   };exports.orderSuccess = async (req, res) => {
 //     try {
 //       res.render("user/orderSuccess");
 //     } catch (err) {

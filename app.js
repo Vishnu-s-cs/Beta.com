@@ -14,7 +14,14 @@ var hbs=require('express-handlebars');
 const helpers = require('template-helpers')();
 var fileUpload = require('express-fileupload')
 var app = express();
+var method = hbs.create({})
 
+method.handlebars.registerHelper('ifCond',function(v1,v2,options){
+  if(v1 == v2){
+    return options.fn(this);
+  }
+     return options.inverse(this);
+});
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
@@ -43,6 +50,7 @@ const exhbs= hbs.create({
 
 
 app.engine('hbs',exhbs.engine)
+app.use(express.json());
 app.use(function(req, res, next) {
   res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
   next();

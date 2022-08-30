@@ -8,8 +8,8 @@ const { resolveCname } = require("dns");
 const { resolve } = require("path");
 
 var instance = new Razorpay({
-  key_id: "rzp_test_74IUoLSXBjLRXM",
-  key_secret: "o3po6jeg50ebWG1bvYNjfT1e",
+  key_id: "rzp_test_9osRhNEeYctsvv",
+  key_secret: "73qfzFvApj30rgWd3CxUBxCW",
 });
 module.exports = {
   doSignup: (userData) => {
@@ -84,7 +84,7 @@ module.exports = {
   addToCart: (proId, userId) => {
     let prodObj = {
       item: objectId(proId),
-      quandity: 1,
+      quantity: 1,
     };
     return new Promise(async (resolve, reject) => {
       let userCart = await db
@@ -92,17 +92,17 @@ module.exports = {
         .collection(collections.CART_COLLECTION)
         .findOne({ user: objectId(userId) });
       if (userCart) {
-        let proExits = userCart.products.findIndex(
+        let proExists = userCart.products.findIndex(
           (products) => products.item == proId
         );
 
-        if (proExits != -1) {
+        if (proExists != -1) {
           db.get()
             .collection(collections.CART_COLLECTION)
             .updateOne(
               { user: objectId(userId), "products.item": objectId(proId) },
               {
-                $inc: { "products.$.quandity": 1 },
+                $inc: { "products.$.quantity": 1 },
               }
             )
             .then(() => {
@@ -150,7 +150,7 @@ module.exports = {
           {
             $project: {
               item: "$products.item",
-              quandity: "$products.quandity",
+              quantity: "$products.quantity",
             },
           },
           {
@@ -164,7 +164,7 @@ module.exports = {
           {
             $project: {
               item: 1,
-              quandity: 1,
+              quantity: 1,
               product: { $arrayElemAt: ["$products", 0] },
             },
           },
@@ -186,11 +186,12 @@ module.exports = {
       resolve(count);
     });
   },
-  changeCartQuandity: (details) => {
+  changeCartQuantity: (details) => {
+    
     return new Promise((resolve, reject) => {
       let count = parseInt(details.count);
-
-      if (count == -1 && details.quandity == 1) {
+  
+      if (count == -1 && details.quantity == 1) {
         db.get()
           .collection(collections.CART_COLLECTION)
           .updateOne(
@@ -204,6 +205,7 @@ module.exports = {
             resolve({ deleteProduct: true });
           });
       } else {
+        console.log(details);
         db.get()
           .collection(collections.CART_COLLECTION)
           .updateOne(
@@ -212,7 +214,7 @@ module.exports = {
               "products.item": objectId(details.product),
             },
             {
-              $inc: { "products.$.quandity": count },
+              $inc: { "products.$.quantity": count },
             }
           )
           .then(() => {
@@ -221,7 +223,7 @@ module.exports = {
       }
     });
   },
-  deteProduct: (details) => {
+  deleteProduct: (details) => {
     return new Promise((resolve, reject) => {
       db.get()
         .collection(collections.CART_COLLECTION)
@@ -251,7 +253,7 @@ module.exports = {
           {
             $project: {
               item: "$products.item",
-              quandity: "$products.quandity",
+              quantity: "$products.quantity",
             },
           },
           {
@@ -265,14 +267,14 @@ module.exports = {
           {
             $project: {
               item: 1,
-              quandity: 1,
+              quantity: 1,
               product: { $arrayElemAt: ["$products", 0] },
             },
           },
           {
             $group: {
               _id: null,
-              total: { $sum: { $multiply: ["$quandity", "$product.prize"] } },
+              total: { $sum: { $multiply: ["$quantity", "$product.price"] } },
             },
           },
         ])
@@ -302,10 +304,7 @@ module.exports = {
 
       let orderObj = {
         deliveryDetails: {
-          address: order.Address,
-          pincode: order.Pincode,
-          mobile_No: order["Mobile No"],
-
+          address: order.address,
           Date: new Date(),
         },
         userId: objectId(order.UserId),
@@ -318,12 +317,12 @@ module.exports = {
       db.get()
         .collection(collections.ORDER_COLLECTION)
         .insertOne(orderObj)
-        .then((responce) => {
+        .then((response) => {
           db.get()
             .collection(collections.CART_COLLECTION)
             .removeOne({ user: objectId(order.UserId) });
 
-          resolve(responce.ops[0]._id);
+          resolve(response.ops[0]._id);
         });
     });
   },
@@ -354,7 +353,7 @@ module.exports = {
           {
             $project: {
               item: "$products.item",
-              quandity: "$products.quandity",
+              quantity: "$products.quantity",
             },
           },
           {
@@ -368,7 +367,7 @@ module.exports = {
           {
             $project: {
               item: 1,
-              quandity: 1,
+              quantity: 1,
               product: { $arrayElemAt: ["$products", 0] },
             },
           },
@@ -379,6 +378,7 @@ module.exports = {
     });
   },
   generateRazorPay: (orderId, total) => {
+    console.log("generateRazorpay");
     return new Promise((resolve, reject) => {
       var options = {
         amount: total * 100, // amount in the smallest currency unit
@@ -526,7 +526,7 @@ module.exports = {
         });
     });
   },
-  getWishPord: (user) => {
+  getWishProd: (user) => {
     return new Promise(async (resolve, reject) => {
       let prods = await db
         .get()
@@ -556,4 +556,42 @@ module.exports = {
         });
     });
   },
+  updateProfile:(userId,userDetails)=>{
+       
+      return new Promise((resolve,reject)=>{
+          db.get().collection(collections.USER_COLLECTION)
+          .updateOne({_id:objectId(userId)},{
+              $set:{
+                 name:userDetails.name,
+                 surName:userDetails.surname,
+                  email:userDetails.email,
+                  phone:userDetails.phone
+             }
+          }).then((response)=>{
+           
+              resolve()
+          })
+      })
+
+  },
+  addAddress:(userId,userDetails)=>{
+       let address = {   address:userDetails.address,
+        area:userDetails.area,
+        city:userDetails.city,
+        pin:userDetails.pin,
+         state:userDetails.state,
+        country:userDetails.country}
+      return new Promise((resolve,reject)=>{
+          db.get().collection(collections.USER_COLLECTION)
+          .updateOne({_id:objectId(userId)},{
+              $push:{
+                  addresses : address
+             }
+          }).then((response)=>{
+           
+              resolve()
+          })
+      })
+
+  }
 };

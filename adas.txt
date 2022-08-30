@@ -1,0 +1,87 @@
+getReport: () => {
+        return new Promise(async (resolve, reject) => {
+            const users = await db.get().collection(collection.USER_COLLECTION).find({ block: { $ne: true } }).toArray()
+            const totalSales = await db.get().collection(collection.ORDER_COLLECTION).find({ delivery_status: { $eq: 'Delivered' } }).toArray()
+            const totalOrders = await db.get().collection(collection.ORDER_COLLECTION).find().toArray()
+           
+            let revenue=0
+            let codCount=0
+            let razorCount=0
+            let paypalCount=0
+            let productsCount=0
+            let revenueData=[]
+            let date=[]
+            let dailySale=0
+            let  dailyProductsCount=0
+            let dailyPaypalCount=0
+            let dailyCodCount=0
+            let dailyRazorCount=0
+         
+            for(let obj in totalSales){
+               let pros=totalSales[obj].products
+               productsCount+=pros.length
+               revenue+=totalSales[obj].total
+               totalSales[obj].payment_method=='COD'? codCount++:( totalSales[obj].payment_method=='Razorpay'?razorCount++:paypalCount++)
+               date.push(totalSales[obj].date)
+               revenueData.push(totalSales[obj].total)
+            }
+
+            let nowDate = new Date()
+            let fDate = moment(nowDate ).format('YYYY-MM-DD')
+            for(let x in totalSales){
+                if(totalSales[x].date == fDate){
+                    let pros=totalSales[x].products
+                    dailyProductsCount+=pros.length
+                    dailySale+=totalSales[x].total
+                    totalSales[x].payment_method=='COD'? dailyCodCount++:( totalSales[x].payment_method=='Razorpay'?dailyRazorCount++:dailyPaypalCount++)
+                }
+            }       
+            console.log(dailySale,dailyProductsCount,dailyCodCount,dailyRazorCount,dailyPaypalCount)
+
+            let details = {
+                revenue: revenue,
+                codCount,
+                razorCount,
+                paypalCount,
+                productsCount,
+                date,
+                dailySale,dailyProductsCount,dailyCodCount,dailyRazorCount,dailyPaypalCount,
+                revenueData,
+                avgRevenue: revenue/totalSales.length,
+                salesCount: totalSales.length,
+                OrderCount:totalOrders.length,
+                totalUsers: users.length
+            }
+            
+            console.log( date+'\n'+
+                revenueData)
+                console.log(details)
+            resolve(details)
+        })
+    }
+
+
+
+    router.get("/stats", async (req, res) => {
+  const today = new Date();
+  const latYear = today.setFullYear(today.setFullYear() - 1);
+
+  try {
+    const data = await User.aggregate([
+      {
+        $project: {
+          month: { $month: "$createdAt" },
+        },
+      },
+      {
+        $group: {
+          _id: "$month",
+          total: { $sum: 1 },
+        },
+      },
+    ]);
+    res.status(200).json(data)
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});

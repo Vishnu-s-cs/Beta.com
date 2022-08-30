@@ -1,34 +1,60 @@
 <section>
     <div class="container mt-5">
-        <form action="" id="checkout-form">
-            <div class="row">
-                <div class="col-md-6 border border-dark">
-                    <h2 class="text-center">Enter delivery Details</h2>
-                    <div>
-                        <label for="">Address</label><br>
-                        <input type="text"class="form-control" id="address" name="Address"><br>
-                        <label for="">Pincode</label><br>
-                        <input type="number" name="Pincode" id="Pincode" class="form-control"><br>
-                        <label for="">Mobile No</label><br>
-                        <input type="number" name="Mobile No" id="Mobile No" class="form-control"><br>
-                        <input type="text" name="UserId" value="{{user._id}}" hidden>
+        <h3 style="padding-left: 1rem;">Add address</h3>
+       <form  class="UFA" action="/add-address2" method="post" style="
+    width: 38rem;
+">
+               <div class="col-md-12"><label class="labels">Address</label><textarea type="text" class="form-control" placeholder="enter address" value="" name="address"></textarea></div>
+                    
+                    <div class="col-md-12"><label class="labels">City</label><input type="text" class="form-control" placeholder="enter city" value="" name="city"></div>
+                    <div class="col-md-12"><label class="labels">Area</label><input type="text" class="form-control" placeholder="enter area" value="" name="area"></div>
+                    <div class="col-md-12"><label class="labels">Postcode</label><input type="text" class="form-control" placeholder="enter post code" value="" name="pin"></div>
+                     <div class="row mt-3">
+                         <div class="col-md-6"><label class="labels">State/Region</label><input type="text" class="form-control" value="" placeholder="state" name="state"></div>
+                    <div class="col-md-6"><label class="labels">Country</label><input type="text" class="form-control" placeholder="country" value="" name="country"></div>
+                  
+                    <button type="submit" style="margin-top: 2rem;" class="betaButton ml-3">Add address</button>
 
-
-                    </div>
+                    </form>
+ <form id="checkout-form">
+                <div class="address" style="
+    position: absolute;
+    top: 8rem;
+    left: 50rem;
+">
+<label for="address" style="
+    font-weight: bold;
+">Select from saved addresses</label><br>
+                      {{#each addresses}}
+                        <input type="radio" id="html" name="address" value="{{this.address}},{{ this.city}},{{ this.pin}}"  required>
+                         {{this.address}}
+                         {{this.city}}
+                         {{this.pin}}
+                         <br>
+                         {{/each}}
                 </div>
+                       
                 <div class="col-md-4 ">
-                    <div class="container mt-5 ml-5 checkout border border-primary ">
+                    <div class="container mt-5 ml-5 checkout border border-primary " style="
+    position: absolute;
+    left: 38rem;
+    top: -24.4rem;
+    width: 16rem;
+    padding-bottom: 2rem;
+    padding-top: 1rem;
+">
                         <h5>Total Amount:Rs. {{total}}</h5>
                         <hr>
                         <div class="payment">
                             <p>Payment method</p>
                             <label class="radio-inline" >
-                                <input type="radio" name="Payment-method" value="COD">COD
+                                <input type="radio" name="Payment-method" value="COD" required>COD
                             </label><br>
                             <label class="radio-inline mt-2">
-                                <input type="radio" name="Payment-method" value="Online-Payment">Online Payment
-                            </label>
-                            <button class="float-right btn-primary">Checkout</button>
+                                <input type="radio" name="Payment-method" value="Online-Payment" required>Razorpay Payment
+                            </label><br><br>
+                            <button class="float-rleft btn-primary">Checkout using razorpay</button>
+                            <div id="paypal-button-container" style="margin-top: 1rem;"></div>
                         </div>
                     </div>
                 </div>

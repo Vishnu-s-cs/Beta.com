@@ -1,0 +1,55 @@
+
+<section class="profile mt-5" style="">
+   <div class="container rounded bg-white mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-3 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
+            <i class="fa fa-plus" aria-hidden="true" style="position: absolute;
+    top: 14.3rem;
+    color: green;
+    background: white;
+    border-radius: 100%;
+    font-size: 1.5rem;
+    left: 11rem;"></i>
+            <span class="font-weight-bold">{{user.name}}</span><span class="text-black-50">{{user.email}}</span><span>{{user.phone}} </span></div>
+        </div>
+        <div class="col-md-5 border-right">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-right">Profile Settings</h4>
+                </div>
+                <form class="UF" action="/update-profile" method="post">
+                <div class="row mt-2">
+                    <div class="col-md-6"><label class="labels">Name</label><input type="text" class="form-control" placeholder="name" value="" name="name"></div>
+                    <div class="col-md-6"><label class="labels">Surname</label><input type="text" class="form-control" value="" placeholder="surname" name="surname"></div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col-md-12"><label class="labels">Mobile Number</label><input type="text" class="form-control" placeholder="enter phone number" value="" name="phone"></div>
+                    <div class="col-md-12"><label class="labels">Email ID</label><input type="text" class="form-control" placeholder="enter email id" value="" name="email"></div>
+                </div>
+               
+                <div class="mt-5 text-center"><button class="betaButton" type="submit" style="margin-right: 12rem;">Save Profile</button></div>
+            </div>
+        </div>
+        </form>
+        <div class="col-md-4">
+             <h4 class="text-left pl-3 mt-5">Add address</h4>
+             <form  class="UFA" action="/add-address" method="post">
+               <div class="col-md-12"><label class="labels">Address</label><textarea type="text" class="form-control" placeholder="enter address" value="" name="address"></textarea></div>
+                    
+                    <div class="col-md-12"><label class="labels">City</label><input type="text" class="form-control" placeholder="enter city" value="" name="city"></div>
+                    <div class="col-md-12"><label class="labels">Area</label><input type="text" class="form-control" placeholder="enter area" value="" name="area"></div>
+                    <div class="col-md-12"><label class="labels">Postcode</label><input type="text" class="form-control" placeholder="enter post code" value="" name="pin"></div>
+                     <div class="row mt-3">
+                         <div class="col-md-6"><label class="labels">State/Region</label><input type="text" class="form-control" value="" placeholder="state" name="state"></div>
+                    <div class="col-md-6"><label class="labels">Country</label><input type="text" class="form-control" placeholder="country" value="" name="country"></div>
+                  
+                    <button type="submit" style="margin-top: 2rem;" class="betaButton ml-3">Add address</button>
+                </div>
+                </form>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</section>
