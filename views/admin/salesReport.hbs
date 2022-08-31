@@ -1,44 +1,56 @@
 <section style="padding-bottom: 1rem;">
-      <div class="container-fluid pt-4 px-4">
-                <div class="g-4">
-                    <div class="">
-                        <div class="bg-light rounded h-100 p-4 " style="
-                        
-    margin-top: 8rem;
+  <div class="row">
+    <div class="container-flex pt-4 px-4">
+      <div class="g-4">
+        
+          <div
+            class="bg-light rounded h-100 p-4 col-sm-6"
+            style=" margin-top: 8rem;width: 43rem;" >
+            <h6 class="mb-4">Overall Sales</h6>
+            <canvas id="line-chart"></canvas>
+          </div>
+   
+        <div
+          class="bg-light rounded h-100 p-4 col-sm-6"
+          style="width: 43rem;margin-top: 2rem;display: inline-block;top: -25.3rem;left: 39rem;">
+          <h6 class="mb-4">Monthly sales</h6>
+          <canvas id="monthly"></canvas>
+        </div>
 
-    width: 43rem;
-">
-                            <h6 class="mb-4">Overall Sales</h6>
-                            <canvas id="line-chart"></canvas>
-                        </div>
-                    </div>
-                     <div class="bg-light rounded h-100 p-4 " style="
-    width: 43rem;
-    margin-top: 2rem;
-">
-                            <h6 class="mb-4">Monthly sales</h6>
-                            <canvas id="monthly"></canvas>
-                        </div>
-                    {{!-- <div class="col-sm-12 col-xl-6">
-                        <div class="bg-light rounded h-100 p-4">
-                            <h6 class="mb-4">Multiple Line Chart</h6>
-                            <canvas id="salse-revenue"></canvas>
-                        </div>
-                    </div> --}}
-                </div>           
       </div>
-         <div class="bg-light rounded d-flex align-items-center justify-content-between p-4" style="
+    </div>
+
+ 
+
+  <div
+    class="bg-light rounded d-flex align-items-center justify-content-between p-4"
+    style="
    width: 13rem;
       left: 17.5rem;
     position: absolute;
         top: 7.8rem;
+"
+  >
+    <i class="fa fa-chart-bar fa-3x"></i>
+    <div class="ms-3">
+      <p class="mb-2">Total Sales</p>
+      <h6 class="mb-0">₹{{total}}</h6>
+    </div>
+  </div>
+  <div
+    class="bg-light rounded d-flex align-items-center justify-content-between p-4"
+   style="
+   width: 15rem;
+   left: 35.5rem;
+   position: absolute;
+   top: 7.8rem;
 ">
-                            <i class="fa fa-chart-bar fa-3x"></i>
-                            <div class="ms-3">
-                                <p class="mb-2">Total Sales</p>
-                                <h6 class="mb-0">₹{{total}}</h6>
-                            </div>
-                        </div>
+    <i class="fa fa-chart-bar fa-3x"></i>
+    <div class="ms-3">
+      <p class="mb-2">Total no. of sales</p>
+      <h6 class="mb-0">{{no}}</h6>
+    </div>
+  </div>
 </section>
 <script src="/javascripts/chart/chart.min.js"></script>
 <script>
@@ -58,7 +70,7 @@
             
         
           response.forEach(data => {
-        date.push(data.deliveryDetails.Date)
+        date.push((data.deliveryDetails.Date).split('T')[0])
         money.push(data.totalAmount)
         });
        date.reverse()
@@ -116,7 +128,7 @@
 console.log(month)
  var ctx3 = $("#line-chart").get(0).getContext("2d");
      var myChart3 = new Chart(ctx3, {
-         type: "line",
+         type: "bar",
          data: {
              labels: date,
              datasets: [{
@@ -157,4 +169,4 @@ console.log(month)
    
        
   
-</script>
+</script> 

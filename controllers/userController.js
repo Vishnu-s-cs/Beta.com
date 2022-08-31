@@ -242,7 +242,7 @@ exports.placeOrder = async (req, res) => {
     console.log("========");
     let products = await userHelper.orderProducts(req.session.user._id);
     let user = await adminHelper.userDetails(req.session.user._id);
-    console.log(user);
+   
     let totalPrice = await userHelper.getTotalAmount(req.session.user._id);
     req.body.UserId = req.session.user._id;
     userHelper.orderPlace(req.body, products, totalPrice).then((orderId) => {
@@ -257,6 +257,7 @@ exports.placeOrder = async (req, res) => {
           })
           .catch((err) => {
             console.log("#### err");
+            console.log(err);
             res.status(500).json({ paymentErr: true });
           });
       }
@@ -277,8 +278,14 @@ exports.orderSuccess = async (req, res) => {
 exports.viewOrders = async (req, res) => {
   try {
     let orders = await userHelper.getOrders(req.session.user._id);
-    console.log(orders);
-    console.log("second userID", req.session.user._id);
+
+   let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    orders.forEach(data => {
+      // console.log(data.deliveryDetails.Date);
+      data.date=(data.deliveryDetails.Date.toLocaleDateString("en-US", options))
+      
+      });
+      console.log("changed orders",orders);
     res.render("user/orders", { user: req.session.user, orders });
   } catch (err) {
     console.log(err);
@@ -287,15 +294,18 @@ exports.viewOrders = async (req, res) => {
 
 exports.viewOrderProducts = async (req, res) => {
   try {
+   
     let product = await userHelper.orderedProducts(req.query.id);
+ 
     res.render("user/orderProducts", { user: req.session.user, product });
   } catch (err) {
     console.log(err);
   }
-};
+};                    
 
 exports.verifyPayment = async (req, res) => {
   try {
+ 
     userHelper
       .verifyPayment(req.body)
       .then(() => {

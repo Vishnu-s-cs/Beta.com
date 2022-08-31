@@ -7,7 +7,7 @@
       <tr>
         <th scope="col">Name</th>
         <th scope="col">Email</th>
-        <th scope="col">Options</th>
+        <th scope="col">Block/unblock</th>
       </tr>
     </thead>
     <tbody>
@@ -32,11 +32,11 @@
                   class="fa fa-user-times blockBtn"
                 ></i></a>
             {{/if}}
-   
+{{!--    
             <a
               href="/admin/delete-user?id={{this._id}}"
               onclick="return confirm('Are you  want to remove {{this.name}}')"
-            ><i class="fa fa-trash deleteBtn"></i></a>
+            ><i class="fa fa-trash deleteBtn"></i></a> --}}
           </td>
         </tr>
       {{/each}}

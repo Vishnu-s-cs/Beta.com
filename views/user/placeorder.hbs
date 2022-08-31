@@ -48,13 +48,17 @@
                         <div class="payment">
                             <p>Payment method</p>
                             <label class="radio-inline" >
-                                <input type="radio" name="Payment-method" value="COD" required>COD
+                                <input type="radio" name="Payment-method" value="COD" onclick="toggle()" required>COD
+                            </label><br>
+                            <label class="radio-inline" >
+                                <input type="radio" name="Payment-method" value="paypal" onclick="toggle1()" required>Paypal
                             </label><br>
                             <label class="radio-inline mt-2">
-                                <input type="radio" name="Payment-method" value="Online-Payment" required>Razorpay Payment
+                                <input type="radio" name="Payment-method" value="Online-Payment" onclick="toggle()" required>Razorpay Payment
                             </label><br><br>
-                            <button class="float-rleft btn-primary">Checkout using razorpay</button>
-                            <div id="paypal-button-container" style="margin-top: 1rem;"></div>
+                            <button type="submit" class="float-rleft btn-primary clr" id="co">Checkout</button>
+                      
+                            <div id="paypal-button-container" style="margin-top: 1rem;" class="clr"></div>
                         </div>
                     </div>
                 </div>
@@ -63,3 +67,27 @@
 
     </div>
 </section>
+<style>
+  .clr {
+    display: none;
+  }
+
+  .sft {
+   display: block;
+  }
+</style>
+<script>
+  function toggle() {
+    const list = document.getElementById("co").classList;
+    const list2 = document.getElementById("paypal-button-container").classList;
+    list.add("sft");
+    list2.remove("sft");
+  
+  }
+   function toggle1() {
+      const list = document.getElementById("co").classList;
+    const list2 = document.getElementById("paypal-button-container").classList;
+    list2.add("sft");
+    list.remove("sft");
+  }
+</script>

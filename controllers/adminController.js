@@ -18,18 +18,35 @@ exports.products = async (req, res) => {
   exports.dashboard= async (req, res) => {
     try {
       let total = 0
+      let newDate = []
+      no= 0
+      let u_no =0
       await adminHelpers.getAllOrders().then((orders)=>{
         
  
          orders.forEach(data => {
-          
+       
+     
+         no++
           total=total+data.totalAmount
          });
         
        })
-       adminHelpers.getUsers().then((users)=>{
+     await  adminHelpers.getUsers().then((users)=>{
         adminHelpers.getAllOrders().then((orders) => {
-        res.render('admin/dashboard',{admin:true,total,users,orders});
+          orders.forEach(data => {
+       
+            data.date=((data.deliveryDetails.Date).toLocaleDateString("en-US"))
+           
+       
+            });
+            users.forEach(data => {
+       
+              u_no++
+             
+         
+              });
+        res.render('admin/dashboard',{admin:true,total,users,orders,no,u_no});
       });
    
         
@@ -156,18 +173,19 @@ exports.deleteCategory = async (req, res) => {
   exports.viewSalesReport = async (req, res) => {
     try {
       let total = 0
+      let no = 0
      await adminHelpers.getAllOrders().then((orders)=>{
        
 
         orders.forEach(data => {
-         
+         no++
          total=total+data.totalAmount
         });
        
       })
     
       
-      res.render('admin/salesReport',{admin:req.session.admin,total})
+      res.render('admin/salesReport',{admin:req.session.admin,total,no})
     } catch (err) {
       console.log(err);
     }
@@ -175,6 +193,8 @@ exports.deleteCategory = async (req, res) => {
 exports.orderDetails = async (req, res) => {
     try {
       adminHelpers.getAllOrders().then((orders) => {
+        // orders.deliveryDetails.Date =  (orders.deliveryDetails.Date).toLocaleDateString('en-US')
+        // console.log(orders,orders.deliveryDetails.Date);
         res.json(orders);
         // res.send(orders)
       });

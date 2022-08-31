@@ -15,6 +15,7 @@ body {
   padding-top: 70px;
   overflow-x: hidden;
   align-items: center;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 .card-img-top {

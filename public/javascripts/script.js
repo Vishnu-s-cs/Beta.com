@@ -192,6 +192,7 @@ function razorPayment(order) {
 
 }
 function verifyPayment(payment,order){
+   console.log("helo");
     $.ajax({
         url:'/verify-payment',
         data:{
@@ -199,14 +200,14 @@ function verifyPayment(payment,order){
         order
     },
     method:'post',
-    success:(response)=>{
+    success:(response=>{
+        console.log("hello",response);
         if(response.status){
             location.href='/orderPlaced'
         }else{
-            alert(response.errmsg)
+          alert('payment failed')
         }
-
-    }
+      })
     })
 }
 

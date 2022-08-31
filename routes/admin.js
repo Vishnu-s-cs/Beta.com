@@ -2,10 +2,12 @@ var express = require("express");
 var router = express.Router();
 var productHelpers = require("../helpers/product-helpers");
 var adminHelpers = require("../helpers/admin-helper");
+let userHelpers = require("../helpers/user-helper")
 const controller = require("../controllers/adminController");
 const { response } = require("express");
 var db=require('../config/connection')
-var collections=require('../config/collections')
+var collections=require('../config/collections');
+const userHelper = require("../helpers/user-helper");
 //auth middleware
 function verifyAdmin(req, res, next) {
   if (!req.session.admin) {
@@ -151,11 +153,11 @@ router.get("/all-orders", (req, res) => {
   });
 });
 router.get("/ordered-products", (req, res) => {
-  adminHelpers.getOrderProducts(req.query.id).then((products) => {
+  userHelper.orderedProducts(req.query.id).then((products) => {
     res.render("admin/ordered-products", {
       admin: true,
       Admin: req.session.admin,
-      products,
+      products
     });
   });
 });

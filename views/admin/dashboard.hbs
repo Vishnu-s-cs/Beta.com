@@ -3,7 +3,7 @@
 
 <div class="container-fluid pt-4 px-4">
   <div class="row g-4 dashCards">
-    <div class="col-sm-6 col-xl-3">
+    <div class="col-sm-3">
       <div
         class="bg-light rounded d-flex align-items-center justify-content-between p-4"
       >
@@ -14,19 +14,35 @@
         </div>
       </div>
     </div>
+     <div class="col-sm-3 ">
+      <div
+        class="bg-light rounded d-flex align-items-center justify-content-between p-4"
+      >
+        <i class="fa fa-dollar fa-3x text-primary"></i>
+        <div class="ms-3">
+          <p class="mb-2">Total no. of sales</p>
+          <h6 class="mb-0">{{no}}</h6>
+        </div>
+      </div>
+    </div>
+     <div class="col-sm-3 ">
+      <div
+        class="bg-light rounded d-flex align-items-center justify-content-between p-4"
+      >
+        <i class="fa fa-users fa-3x text-primary"></i>
+        <div class="ms-3">
+          <p class="mb-2">Total users</p>
+          <h6 class="mb-0">{{u_no}}</h6>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 <!-- Sale & Revenue End -->
 
 <!-- Sales Chart Start -->
-<div class="container-fluid pt-4 px-4">
-  <div
-    class="row g-4"
-    style="
-    width: 110rem;
-"
-  >
-    <div class="col-sm-12 col-xl-6">
+<div class="row" style="  width: 77rem;">
+    <div class="col-sm-6">
       <div class="bg-light text-center rounded p-4">
         <div class="d-flex align-items-center justify-content-between mb-4">
           <h6 class="mb-0">Sales</h6>
@@ -35,16 +51,35 @@
         <canvas id="line-chart"></canvas>
       </div>
     </div>
-  </div>
-</div>
+ 
+
 <!-- Sales Chart End -->
 
+ <div class="bg-light rounded h-100 p-4 col-sm-6 " style="
+   
+">
+                            <h6 class="mb-4">Monthly sales</h6>
+                            <canvas id="monthly"></canvas>
+                        </div>
+                    {{!-- <div class="col-sm-12 col-xl-6">
+                        <div class="bg-light rounded h-100 p-4">
+                            <h6 class="mb-4">Multiple Line Chart</h6>
+                            <canvas id="salse-revenue"></canvas>
+                        </div>
+                    </div> --}}
+                </div>           
+      </div>
+  </div>
+      </div>
 <!-- Recent Sales Start -->
 <div class="container-fluid pt-4 px-4">
   <div
     class="bg-light rounded p-4"
     style="
     width: 29rem;
+    display: inline-block;
+    left: 18rem;
+    position: absolute;
 "
   >
     <div class="d-flex align-items-center justify-content-between mb-4">
@@ -72,14 +107,15 @@
     </div>
     <div class="table-responsive"  style="
     position: absolute;
-    width: 29rem;
-       top: 50.6rem;
-    left: 52rem;
+    width: 46rem;
+    top: -0.4rem;
+    left: 30rem;
     overflow-x: hidden;
+    overflow-y:hidden;
     height: 25rem;
     border-radius: 6px;
-    background-color: white;
-        padding: 1rem;
+    background-color: #f7f7f7;
+    padding: 1rem;
 ">   <div class="d-flex align-items-center justify-content-between mb-4" style="background: white;">
       <h6 class="mb-0 pt-3">Latest transactions</h6>
 
@@ -94,9 +130,11 @@
                     </tr>
                 </thead>
                 <tbody>
+               
                     {{#each orders}}
+
                     <tr>
-                        <td>{{this.deliveryDetails.Date}}</td>
+                        <td>{{this.date}}</td>
                         
                         <td>
                          {{this.totalAmount}}
@@ -134,6 +172,7 @@
                         </td>
                     </tr>
                     {{/each}}
+                
                 </tbody>
             </table>
     </div>
@@ -147,9 +186,12 @@
 <script src="/javascripts/chart/chart.min.js"></script>
 <script>
 
- $(window).on('load',function() {
+
+    $(window).on('load',function() {
    let money = []
     let date = []
+    let month = []
+    let monthMoney =[]
   
   $.ajax({
         url:'/admin/get-order-details',
@@ -159,19 +201,62 @@
             
         
           response.forEach(data => {
-        date.push(data.deliveryDetails.Date)
+        date.push((data.deliveryDetails.Date).split('T')[0])
         money.push(data.totalAmount)
         });
-       
+       date.reverse()
+       money.reverse()
          
         }
 
     
   });
+  $.ajax({
+        url:'/admin/stats',
+        method:'get',
+        success:(response)=>{
 
+         response.forEach(data=>{
+           
+           switch(data._id)
+           {
+            case 1 : month.push("Jan")
+                     break;
+                    case 2 : month.push("Feb")
+                     break;
+                     case 3 : month.push("Mar")
+                     break;
+                     case 4 : month.push("Apr")
+                     break;
+                     case 5 : month.push("May")
+                     break;
+                     case 6 : month.push("Jun")
+                     break;
+                     case 7 : month.push("July")
+                     break;
+                     case 8 : month.push("Aug")
+                     break;
+                     case 9 : month.push("Sep")
+                     break;
+                     case 10 : month.push("Oct")
+                     break;
+                     case 11: month.push("Nov")
+                     break;
+                     case 12: month.push("Dec")
+                     break;
+           }
+          
+            monthMoney.push(data.total)
+
+         })
+         month.reverse()
+         monthMoney.reverse()
+        }
+
+    
+  });
   setTimeout(()=>{
- console.log(money)
- console.log(date)
+console.log(month)
  var ctx3 = $("#line-chart").get(0).getContext("2d");
      var myChart3 = new Chart(ctx3, {
          type: "line",
@@ -180,7 +265,7 @@
              datasets: [{
                  label: "Sales",
                  fill: false,
-                 backgroundColor: "rgba(0, 156, 255, .3)",
+                 backgroundColor: "rgba(255, 51, 204, 2)",
                  data: money
              }]
          },
@@ -189,10 +274,31 @@
          }
      });
   },300)
-     
+      setTimeout(()=>{
+
+ var ctx3 = $("#monthly").get(0).getContext("2d");
+     var myChart3 = new Chart(ctx3, {
+         type: "line",
+         data: {
+             labels: month,
+             datasets: [{
+                 label: "Sales",
+                 fill: false,
+                 backgroundColor: "rgba(0, 156, 255, .3)",
+                 data: monthMoney
+             }]
+         },
+         options: {
+             responsive: true
+         }
+     });
+  },300)
    
     })
 
-
+   
+   
+       
+  
 </script>
 <!-- Widgets End -->

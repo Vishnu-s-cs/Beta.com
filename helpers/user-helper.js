@@ -338,7 +338,7 @@ module.exports = {
   },
   orderedProducts: (orderId) => {
     return new Promise(async (resolve, reject) => {
-      console.log("orderID", orderId);
+     
 
       let products = await db
         .get()
@@ -348,12 +348,12 @@ module.exports = {
             $match: { _id: objectId(orderId) },
           },
           {
-            $unwind: "$products",
+            $unwind: "$products.products",
           },
           {
             $project: {
-              item: "$products.item",
-              quantity: "$products.quantity",
+              item: "$products.products.item",
+              quantity: "$products.products.quantity",
             },
           },
           {
@@ -373,7 +373,6 @@ module.exports = {
           },
         ])
         .toArray();
-
       resolve(products);
     });
   },
@@ -397,9 +396,10 @@ module.exports = {
     });
   },
   verifyPayment: (details) => {
+    console.log(details);
     return new Promise((resolve, reject) => {
       const crypto = require("crypto");
-      let hmac = crypto.createHmac("sha256", "o3po6jeg50ebWG1bvYNjfT1e");
+      let hmac = crypto.createHmac("sha256", "73qfzFvApj30rgWd3CxUBxCW");
 
       hmac.update(
         details["payment[razorpay_order_id]"] +
@@ -408,8 +408,10 @@ module.exports = {
       );
       hmac = hmac.digest("hex");
       if (hmac == details["payment[razorpay_signature]"]) {
+        console.log("what is up");
         resolve();
       } else {
+        console.log('failed');
         reject;
       }
     });
