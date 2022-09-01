@@ -119,45 +119,77 @@ function changeQuantity(cartId,proId,count){
 
 }
 function productDelete(proId,cartId,prodName){
-   var check=  confirm("remove "+prodName+" form cart")
-   if(check){
-$.ajax({
-     url:'/delete-product',
-     data:{
-        product:proId,
-        cart:cartId
-    },
-    method:'post',
-    success:(response)=>{
-        $('#tr'+proId).remove()
-        let msg=prodName+' removed'
-        $('#delete-msg').html(msg)
-        
 
-    }
-})
-   }
+    swal({
+        title: "Are you sure?",
+        text: "remove "+prodName+" from cart",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+            $.ajax({
+                url:'/delete-product',
+                data:{
+                   product:proId,
+                   cart:cartId
+               },
+               method:'post',
+               success:(response)=>{
+                   $('#tr'+proId).remove()
+                   let msg=prodName+' removed'
+                   $('#delete-msg').html(msg)
+                   
+           
+               }
+           })
+          swal(prodName+" has removed from cart", {
+            icon: "success",
+          });
+        } else {
+          swal("deletion aborted");
+        }
+      });
+
+ 
 }
 $('#checkout-form').submit((e)=>{
     e.preventDefault()
-    $.ajax({
-        url:'/place-order',
-        method:'post',
-        data:$('#checkout-form').serialize(),
-          success:(response)=>{
-              if(response.codSuccess){
-                location.href='/orderPlaced'
-              }
-              else if(response.paymentErr){
-                alert("payment error")
-                  
-              } else {
-                console.log(response);
-                razorPayment(response)
-              }
-            
+   
+    console.log($('#checkout-form').serialize());
+    try {
+        let address = $('#checkout-form').serialize().split('&')[0]
+        if (address!='Payment-method=COD' && address!='Payment-method=Online-Payment' && address!='Payment-method=paypal') {
+            $.ajax({
+                url:'/place-order',
+                method:'post',
+                data:$('#checkout-form').serialize(),
+                  success:(response)=>{
+                      if(response.codSuccess){
+                        location.href='/orderPlaced'
+                      }
+                      else if(response.paymentErr){
+                        alert("payment error")
+                          
+                      } else {
+                        console.log(response);
+                        razorPayment(response)
+                      }
+                    
+            }
+            })
+        }
+        else{
+            swal("Please provide delivery informations");
+        }
+      
+
+    } catch (error) {
+        console.log("address error");
     }
-    })
+
+ 
 })
 
 function razorPayment(order) {

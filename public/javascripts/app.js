@@ -1,7 +1,7 @@
 paypal
   .Buttons({
     // Sets up the transaction when a payment button is clicked
-    createOrder: function (data, actions) {
+    createOrder: async function (data, actions) {
       return fetch("/api/orders", {
         method: "post",
       })
@@ -13,7 +13,7 @@ paypal
     },
 
     // Finalize the transaction after payer approval
-    onApprove: function (data, actions) {
+    onApprove:async  function (data, actions) {
       return fetch(`/api/orders/${data.orderID}/capture`, {
         method: "post",
       })
@@ -26,14 +26,13 @@ paypal
             JSON.stringify(orderData, null, 2)
           );
           var transaction = orderData.purchase_units[0].payments.captures[0];
-          alert(
+          swal(
             "Transaction " +
               transaction.status +
               ": " +
-              transaction.id +
-              "\n\nSee console for all available details"
+              transaction.id 
           );
-
+          $( "#co" ).trigger( "click" );
           // When ready to go live, remove the alert and show a success message within this page. For example:
           // var element = document.getElementById('paypal-button-container');
           // element.innerHTML = '';

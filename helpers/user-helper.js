@@ -300,7 +300,7 @@ module.exports = {
   },
   orderPlace: (order, products, totalPrice) => {
     return new Promise((resolve, reject) => {
-      let status = order["Payment-method"] === "COD" ? "placed" : "pending";
+      let status = order["Payment-method"] === "COD" || order["Payment-method"] === "paypal" ? "placed" : "pending";
 
       let orderObj = {
         deliveryDetails: {

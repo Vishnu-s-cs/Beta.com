@@ -33,7 +33,20 @@ exports.products = async (req, res) => {
         
        })
      await  adminHelpers.getUsers().then((users)=>{
+      users.reverse()
+      let newUsers = []
+      let newTrans = []
+      for (let index = 0; index < 5; index++) {
+        newUsers.push(users[index])
+        
+      }
+      users = newUsers
         adminHelpers.getAllOrders().then((orders) => {
+          for (let index = 0; index < 3; index++) {
+            newTrans.push(orders[index])
+            
+          }
+          orders = newTrans
           orders.forEach(data => {
        
             data.date=((data.deliveryDetails.Date).toLocaleDateString("en-US"))

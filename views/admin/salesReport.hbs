@@ -18,6 +18,25 @@
         </div>
 
       </div>
+       <div
+          class="bg-light rounded p-4 col-sm-6"
+          style="width: 43rem;margin-top: 2rem;display: inline-block;top: -25.3rem;">
+          <h6 class="mb-4">weekly sales</h6>
+          <canvas id="weekly"></canvas>
+        </div>
+    <div
+          class="bg-light rounded p-4 col-sm-6"
+          style="width: 43rem;margin-top: 2rem;display: inline-block;top: -50.6rem;left: 39rem;">
+          <h6 class="mb-4">daily sales</h6>
+          <canvas id="daily"></canvas>
+        </div>
+            <div
+          class="bg-light rounded p-4 col-sm-6"
+          style="width: 43rem;margin-top: 2rem;display: inline-block;top: -50.6rem;">
+          <h6 class="mb-4">yearly sales</h6>
+          <canvas id="yearly"></canvas>
+        </div>
+      </div>
     </div>
 
  
@@ -61,7 +80,12 @@
     let date = []
     let month = []
     let monthMoney =[]
-  
+  let week =[]
+  let wmoney=[]
+  let day=[]
+  let dmoney  =[]
+  let year = []
+  let ymoney= []
   $.ajax({
         url:'/admin/get-order-details',
         method:'get',
@@ -124,8 +148,62 @@
 
     
   });
+   $.ajax({
+        url:'/admin/stats2',
+        method:'get',
+        success:(response)=>{
+
+            
+        
+          response.forEach(data => {
+        week.push(data._id)
+        wmoney.push(data.total)
+        });
+       week.reverse()
+       wmoney.reverse()
+         
+        }
+
+    
+  });
+     $.ajax({
+        url:'/admin/stats3',
+        method:'get',
+        success:(response)=>{
+
+            
+        
+          response.forEach(data => {
+        day.push(data._id)
+        dmoney.push(data.total)
+        });
+       day.reverse()
+       dmoney.reverse()
+         
+        }
+
+    
+  });
+   $.ajax({
+        url:'/admin/stats4',
+        method:'get',
+        success:(response)=>{
+
+            
+        
+          response.forEach(data => {
+        year.push(data._id)
+        ymoney.push(data.total)
+        });
+       year.reverse()
+       ymoney.reverse()
+         
+        }
+
+    
+  });
   setTimeout(()=>{
-console.log(month)
+
  var ctx3 = $("#line-chart").get(0).getContext("2d");
      var myChart3 = new Chart(ctx3, {
          type: "bar",
@@ -162,7 +240,63 @@ console.log(month)
          }
      });
   },300)
-   
+    setTimeout(()=>{
+
+ var ctx3 = $("#weekly").get(0).getContext("2d");
+     var myChart3 = new Chart(ctx3, {
+         type: "bar",
+         data: {
+             labels: week,
+             datasets: [{
+                 label: "Sales (x: th week)",
+                 fill: false,
+                 backgroundColor: "rgba(181, 27, 27, 5)",
+                 data: wmoney
+             }]
+         },
+         options: {
+             responsive: true
+         }
+     });
+  },300)
+    setTimeout(()=>{
+
+ var ctx3 = $("#daily").get(0).getContext("2d");
+     var myChart3 = new Chart(ctx3, {
+         type: "line",
+         data: {
+             labels: day,
+             datasets: [{
+                 label: "Sales",
+                 fill: false,
+                 backgroundColor: "rgba(181, 27, 27, 5)",
+                 data: dmoney
+             }]
+         },
+         options: {
+             responsive: true
+         }
+     });
+  },300)
+   setTimeout(()=>{
+
+ var ctx3 = $("#yearly").get(0).getContext("2d");
+     var myChart3 = new Chart(ctx3, {
+         type: "bar",
+         data: {
+             labels: year,
+             datasets: [{
+                 label: "Sales",
+                 fill: false,
+                 backgroundColor: "rgba(181, 27, 27, 5)",
+                 data: ymoney
+             }]
+         },
+         options: {
+             responsive: true
+         }
+     });
+  },300)
     })
 
    

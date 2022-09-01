@@ -13,7 +13,7 @@
                 <tbody>
                     {{#each orders}}
                     <tr>
-                        <td>{{this.deliveryDetails.Date}}</td>
+                        <td>{{this.date}}</td>
                         
                         <td>
                          <select name="status" id="status{{this._id}}" class="betaButton" onchange="setStatus('{{this._id}}')" >

@@ -144,16 +144,23 @@ router.post("/add-category", controller.addCategory);
 router.get("/all-users", controller.getAllUsers);
 router.get("/all-orders", (req, res) => {
   adminHelpers.getAllOrders().then((orders) => {
+    let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    orders.forEach(data => {
+      // console.log(data.deliveryDetails.Date);
+      data.date=(data.deliveryDetails.Date.toLocaleDateString("en-US", options))
+      
+      });
     res.render("admin/orders", {
       admin: true,
       Admin: req.session.admin,
-      orders,
+      orders
     });
     // res.send(orders)
   });
 });
 router.get("/ordered-products", (req, res) => {
   userHelper.orderedProducts(req.query.id).then((products) => {
+   
     res.render("admin/ordered-products", {
       admin: true,
       Admin: req.session.admin,
@@ -207,5 +214,86 @@ router.get("/stats", async (req, res) => {
   }
 });
 
+router.get("/stats2", async (req, res) => {
+  const today = new Date();
+  const latYear = today.setFullYear(today.setFullYear() - 1);
+
+  try {
+    const data = await  db.get().collection('order').aggregate([
+      {
+      
+        $project: {
+          week: { $week: "$deliveryDetails.Date" },
+          total:"$totalAmount"
+        },
+      },
+      {
+        $group: {
+          _id: "$week",
+          total: { $sum: "$total" },
+        },
+      },
+    ]).sort({ _id: -1 }).toArray();
+    res.status(200).json(data)
+    console.log(data);
+  } catch (err) {
+    res.status(500).json(err);
+    console.log(err);
+  }
+});
+router.get("/stats3", async (req, res) => {
+  const today = new Date();
+  const latYear = today.setFullYear(today.setFullYear() - 1);
+
+  try {
+    const data = await  db.get().collection('order').aggregate([
+      {
+      
+        $project: {
+          dayOfMonth: { $dayOfMonth: "$deliveryDetails.Date" },
+          total:"$totalAmount"
+        },
+      },
+      {
+        $group: {
+          _id: "$dayOfMonth",
+          total: { $sum: "$total" },
+        },
+      },
+    ]).sort({ _id: -1 }).toArray();
+    res.status(200).json(data)
+    console.log(data);
+  } catch (err) {
+    res.status(500).json(err);
+    console.log(err);
+  }
+});
+
+router.get("/stats4", async (req, res) => {
+  const today = new Date();
+  const latYear = today.setFullYear(today.setFullYear() - 1);
+
+  try {
+    const data = await  db.get().collection('order').aggregate([
+      {
+        $project: {
+          year: { $year: "$deliveryDetails.Date" },
+          total:"$totalAmount"
+        },
+      },
+      {
+        $group: {
+          _id: "$year",
+          total: { $sum: "$total" },
+        },
+      },
+    ]).sort({ _id: -1 }).toArray();
+    res.status(200).json(data)
+    console.log(data);
+  } catch (err) {
+    res.status(500).json(err);
+    console.log(err);
+  }
+});
 
 module.exports = router;

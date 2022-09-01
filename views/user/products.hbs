@@ -1,10 +1,10 @@
 
 <section class="mt-5">
     <div class="pdtImg">
-       <img class='mx-auto img-thumbnail'
+       <img id="zoom" class='mx-auto img-thumbnail'
                 src="/product-images/{{product._id}}.jpg"
                 width="auto" height="auto"
-/>
+ />
     </div>
 
   <h4 style="
@@ -38,3 +38,16 @@
 ">Add to cart</button>
           
 </section>
+<script>
+  $(document).ready(function(){
+
+//$('.small-images img').click(function(){
+  //  let image = $(this).attr('src')
+    //$('.big-image img').attr('src',image)
+//})
+  $("#zoom").imagezoomsl({
+    zoomrange:[4,4]
+  });
+})
+
+</script>

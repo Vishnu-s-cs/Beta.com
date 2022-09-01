@@ -248,6 +248,8 @@ exports.placeOrder = async (req, res) => {
     userHelper.orderPlace(req.body, products, totalPrice).then((orderId) => {
       if (req.body["Payment-method"] === "COD") {
         res.json({ codSuccess: true });
+      } else if (req.body["Payment-method"] === "paypal") {
+        res.json({ codSuccess: true });
       } else {
         userHelper
           .generateRazorPay(orderId, totalPrice)
@@ -285,7 +287,7 @@ exports.viewOrders = async (req, res) => {
       data.date=(data.deliveryDetails.Date.toLocaleDateString("en-US", options))
       
       });
-      console.log("changed orders",orders);
+
     res.render("user/orders", { user: req.session.user, orders });
   } catch (err) {
     console.log(err);
