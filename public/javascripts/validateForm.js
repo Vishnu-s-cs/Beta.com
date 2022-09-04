@@ -40,7 +40,19 @@ $(document).ready(function () {
         required: true,
         minlength: 5,
         maxlength: 15,
+      },  
+       newPassword: {
+        required: true,
+        minlength: 5,
+        maxlength: 15,
       },
+      confirmPassword2: {
+        equalTo: "#password2",
+        minlength5: true,
+        required: true,
+        minlength: 5,
+        maxlength: 15,
+      },  
     },
     messages: {
       name: {

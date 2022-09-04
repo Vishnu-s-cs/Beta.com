@@ -1,4 +1,5 @@
 const crypto = require("crypto");
+const bcrypt = require("bcrypt");
 const accoutSid = process.env.ACCOUNT_SID;
 const authToken = process.env.AUTH_TOKEN;
 const client = require("twilio")(accoutSid, authToken);
@@ -8,6 +9,7 @@ const productHelper = require("../helpers/product-helpers");
 const adminHelper = require("../helpers/admin-helper");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+var objectId = require("mongodb").ObjectId;
 const JWT_AUTH_TOKEN = process.env.JWT_AUTH_TOKEN;
 let msg = false;
 const db = require("../config/connection");
@@ -560,3 +562,54 @@ exports.addAddress2 = async (req, res, next) => {
     console.log(err);
   }
 };
+exports.changePassword=async (req, res) => {
+  try{
+ let userId = req.session.user._id;
+
+  let enteredPassword = req.body.password;
+  let newPassword = req.body.newPassword;
+  let userdetails = await db.get().collection(collections.USER_COLLECTION).findOne({ _id: objectId(userId) });
+
+  let verifypassword = bcrypt.compareSync(
+    enteredPassword,
+    userdetails.password
+  ); //comparing changed password and new password is same
+
+
+
+  if (verifypassword) {
+    if (enteredPassword == newPassword) {
+      req.session.message = {
+        type: "danger",
+        message: "cannot type old password",
+      };
+      res.redirect("/profile");
+    } else {
+      await  db.get().collection(collections.USER_COLLECTION).updateOne(
+        { _id: objectId(userId) },
+        {
+          $set: {
+            password: bcrypt.hashSync(newPassword, 10),
+          },
+        }
+      );
+
+      req.session.message = {
+        type: "success",
+        message: "password changed",
+      };
+
+      res.redirect("/profile");
+    }
+  } else {
+    req.session.message = {
+      type: "danger",
+      message: "password is not correct",
+    };
+    res.redirect("/profile");
+  }
+
+  }catch(err){
+    console.log(err,'error happened while changing password');
+  }
+}

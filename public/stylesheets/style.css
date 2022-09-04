@@ -361,7 +361,9 @@ body {
   font-family: "Montserrat";
   font-style: normal;
   font-weight: 400;
-  font-size: 35px;
+  
+  font-size: 16px;
+
   line-height: 49px;
   letter-spacing: -0.05em;
 }
@@ -370,8 +372,8 @@ body {
   background: #ffffff;
   border: 2px solid #000000;
   border-radius: 11px;
-  width: 605px;
-  height: 55px;
+  width: 24rem;
+  height: 45px;
   padding-left: 20px;
 }
 
@@ -380,12 +382,12 @@ body {
 }
 
 .LIF button {
-  width: 221px;
-  height: 60px;
+  width: 194px;
+  height: 48px;
   font-family: "Poppins";
   font-style: normal;
   font-weight: 500;
-  font-size: 29px;
+  font-size: 18px;
   line-height: 28px;
   /* or 97% */
   text-align: center;
@@ -464,7 +466,7 @@ body {
   font-family: "Poppins";
   font-style: normal;
   font-weight: 500;
-  font-size: 29px;
+  font-size: 18px;
   line-height: 28px;
   /* or 97% */
   text-align: center;
@@ -491,7 +493,9 @@ body {
   font-family: "Montserrat";
   font-style: normal;
   font-weight: 400;
-  font-size: 35px;
+
+  font-size: 16px;
+
   line-height: 49px;
   letter-spacing: -0.05em;
 }
@@ -500,8 +504,8 @@ body {
   background: #ffffff;
   border: 2px solid #000000;
   border-radius: 11px;
-  width: 605px;
-  height: 55px;
+  width: 24rem;
+  height: 45px;
   padding-left: 20px;
 }
 
@@ -510,12 +514,12 @@ body {
 }
 
 .SUF button {
-  width: 221px;
-  height: 60px;
+  width: 194px;
+  height: 48px;
   font-family: "Poppins";
   font-style: normal;
   font-weight: 500;
-  font-size: 29px;
+  font-size: 18px;
   line-height: 28px;
   /* or 97% */
   text-align: center;

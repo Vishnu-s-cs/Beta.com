@@ -201,8 +201,9 @@
             
         
           response.forEach(data => {
+            if(data.status =="Delivered"){
         date.push((data.deliveryDetails.Date).split('T')[0])
-        money.push(data.totalAmount)
+        money.push(data.totalAmount)}
         });
        date.reverse()
        money.reverse()

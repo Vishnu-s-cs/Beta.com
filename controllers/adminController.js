@@ -27,8 +27,10 @@ exports.products = async (req, res) => {
          orders.forEach(data => {
        
      
-         no++
-          total=total+data.totalAmount
+          if (data.status == "Delivered") {
+            no++
+            total=total+data.totalAmount
+          }
          });
         
        })
@@ -191,8 +193,11 @@ exports.deleteCategory = async (req, res) => {
        
 
         orders.forEach(data => {
-         no++
-         total=total+data.totalAmount
+          if (data.status == "Delivered") {
+            no++
+            total=total+data.totalAmount
+          }
+        
         });
        
       })
@@ -215,13 +220,65 @@ exports.orderDetails = async (req, res) => {
       console.log(err);
     }
   };
+  exports.addproduct=async(req,res)=>{
+    try{
+      console.log(req.files.image1);
+      console.log(req.files.image2);
+      console.log(req.files.image3);
+  
+    let userfiles=[]
+  
+    if(req.files?.image1){ userfiles.push(req.files?.image1)}
+    if(req.files?.image2){ userfiles.push(req.files?.image2)}
+  
+    if(req.files?.image3){ userfiles.push(req.files?.image3)}
+  
+      const imgPath=[]
+      console.log(userfiles.length +"image length add product");
+      if(userfiles.length){
+        for(let i=0;i<userfiles.length;i++){
+          var uploadpath='./public/productimage/'+Date.now()+i+'.jpeg'
+         var img='productimage/'+Date.now()+i+'.jpeg'
+  
+          imgPath.push(img)
+          userfiles[i]?.mv(uploadpath,(err)=>{
+            if(err){
+              console.log(err+"error happened while moving image in add product")
+            }else{
+              console.log("image"+i+"added");
+            }})
+        }//end of for loop
+        
+        const productsave= await new Product({
+          product_name:req.body.productname,
+          desc:req.body.description ,
+          category: req.body.category,
+          size: req.body.size,
+          stock: req.body.stock,
+          price: req.body.price,
+          // offerprice:req.body.offerprice,
+          image:imgPath,
+          
+        })
+        if(productsave){
+           await productsave.save()
+           req.session.message = {
+            type: "success",
+             message: "Product added succesfilly",
+  }
+           res.redirect('/admin/products')
+        }else{
+          res.console.log(err+"error in saving the new product in add product")
+        }
+  //end of if statement 
+      }else{
+        console.log("error happend in moving images in add products");
+      }
+    }catch(err){
+      console.log(err+"error in add product")
+    }
+  }
 // exports.orderSuccess = async (req, res) => {
-//     try {
-//       res.render("user/orderSuccess");
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   };exports.orderSuccess = async (req, res) => {
 //     try {
 //       res.render("user/orderSuccess");
 //     } catch (err) {

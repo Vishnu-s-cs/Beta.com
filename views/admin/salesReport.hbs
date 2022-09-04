@@ -8,6 +8,7 @@
             style=" margin-top: 8rem;width: 43rem;" >
             <h6 class="mb-4">Overall Sales</h6>
             <canvas id="line-chart"></canvas>
+            start:<input type="date" id="start" value="2022-08-31"> End : <input type="date" id="end" value="2022-10-30">&nbsp;<button onclick="filterDate()">Filter</button>&nbsp;<button onclick="resetDate()">reset</button>
           </div>
    
         <div
@@ -71,10 +72,17 @@
     </div>
   </div>
 </section>
-<script src="/javascripts/chart/chart.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+ 
+
 <script>
 
-
+let convertedDates1 = []
+let date1= []
+let money1=[]
+  let dateGraph = {}
     $(window).on('load',function() {
    let money = []
     let date = []
@@ -86,6 +94,8 @@
   let dmoney  =[]
   let year = []
   let ymoney= []
+  let convertedDates = []
+
   $.ajax({
         url:'/admin/get-order-details',
         method:'get',
@@ -94,12 +104,16 @@
             
         
           response.forEach(data => {
-        date.push((data.deliveryDetails.Date).split('T')[0])
-        money.push(data.totalAmount)
+            if(data.status=="Delivered"){
+        date.push(new Date(data.deliveryDetails.Date))
+        money.push(data.totalAmount)}
         });
+
        date.reverse()
        money.reverse()
-         
+        console.log(date)
+   convertedDates = date.map(data=>new Date(data).setHours(0,0,0,0))
+   
         }
 
     
@@ -204,9 +218,9 @@
   });
   setTimeout(()=>{
 
- var ctx3 = $("#line-chart").get(0).getContext("2d");
-     var myChart3 = new Chart(ctx3, {
-         type: "bar",
+ var ctx = $("#line-chart").get(0).getContext("2d");
+     var myChart = new Chart(ctx, {
+         type: "line",
          data: {
              labels: date,
              datasets: [{
@@ -217,9 +231,17 @@
              }]
          },
          options: {
-             responsive: true
+             responsive: true,
+             scales:{
+              x:{
+                  type:'time',
+              }
+            
+             }
          }
      });
+       dateGraph= myChart
+      
   },300)
       setTimeout(()=>{
 
@@ -255,7 +277,7 @@
              }]
          },
          options: {
-             responsive: true
+             responsive: true,
          }
      });
   },300)
@@ -296,10 +318,37 @@
              responsive: true
          }
      });
+ convertedDates1=convertedDates
+ money1=money
+
   },300)
     })
+function filterDate(){
 
-   
+   console.log("co",dateGraph)
+   const start1 = new Date(document.getElementById('start').value)
+    const start=start1.setHours(0,0,0,0)
+   const end1 =new Date(document.getElementById('end').value)
+      const end=end1.setHours(0,0,0,0)
+  const filteredDates = convertedDates1.filter(date=> date>=start && date<=end)
+
+  dateGraph.data.labels = filteredDates
+  const startArray = convertedDates1.indexOf(filteredDates[0])
+   const endArray = convertedDates1.indexOf(filteredDates[filteredDates.length-1])
+  const copy = [...money1]
+  copy.splice(endArray+1, filteredDates.length)
+  copy.splice(0,startArray)
+  dateGraph.data.datasets[0].data = copy
+  dateGraph.update()
+     
+ //    myChart3.update();
+   }
+   function resetDate(){
+  dateGraph.data.labels = convertedDates1
+  dateGraph.data.datasets[0].data = money1
+      dateGraph.update()
+   }
+
    
        
   

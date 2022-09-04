@@ -193,7 +193,11 @@ router.get("/stats", async (req, res) => {
   try {
     const data = await  db.get().collection('order').aggregate([
       {
-      
+        $match:{
+            status:"Delivered"
+        },
+      },
+      {
         $project: {
           month: { $month: "$deliveryDetails.Date" },
           total:"$totalAmount"
@@ -220,6 +224,11 @@ router.get("/stats2", async (req, res) => {
 
   try {
     const data = await  db.get().collection('order').aggregate([
+      {
+        $match:{
+            status:"Delivered"
+        },
+      },
       {
       
         $project: {
@@ -248,6 +257,11 @@ router.get("/stats3", async (req, res) => {
   try {
     const data = await  db.get().collection('order').aggregate([
       {
+        $match:{
+            status:"Delivered"
+        },
+      },
+      {
       
         $project: {
           dayOfMonth: { $dayOfMonth: "$deliveryDetails.Date" },
@@ -275,6 +289,11 @@ router.get("/stats4", async (req, res) => {
 
   try {
     const data = await  db.get().collection('order').aggregate([
+      {
+        $match:{
+            status:"Delivered"
+        },
+      },
       {
         $project: {
           year: { $year: "$deliveryDetails.Date" },

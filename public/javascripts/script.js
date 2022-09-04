@@ -343,7 +343,36 @@ function removeWish(proId){
         
     })
 }
+function productRemove(proId,prodName){
 
+    swal({
+        title: "Are you sure?",
+        text: "remove "+prodName+" from cart",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+            $.ajax({
+                url:"/admin/delete-product?id="+proId,
+             
+               method:'get',
+               success:(response)=>{
+                 console.log(response);
+                location.reload()
+               }
+           })
+          swal(prodName+" has removed from products", {
+            icon: "success",
+          });
+        } else {
+          swal("deletion aborted");
+        }
+      });
+
+ 
+}
 
 
 

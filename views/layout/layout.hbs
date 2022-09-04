@@ -52,6 +52,15 @@
     {{>admin-sidebar}}
     {{else}}
     {{>user-header}}
+    <span id="top"></span>
+    <a href="#top"><i class="fa fa-arrow-up" aria-hidden="true" style="    position: fixed;
+    z-index: 5000;
+    top: 40rem;
+    left: 92rem;
+    color: #00000096;
+    border: 1px solid;
+    border-radius: 50%;
+    padding: 5px;"></i></a>
     {{/if}} 
     {{/if}}
     
@@ -61,23 +70,7 @@
     {{else}}
     {{>user-footer}}
     {{/if}}
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    {{!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.js"></script>
-    <script type="text/javascript" charset="utf8"
-    src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
-    <script>
-       <script>
-    $(function () {
-    $('#userTable').DataTable();
-    });
-  </script>
-    <script src="/javascripts/script.js"></script>
-   
-  <script src="/javascripts/validateForm.js"></script> --}}
+    
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
@@ -98,6 +91,8 @@
     <script src="/javascripts/app.js"></script>
     <script src="/javascripts/validateForm.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.js"></script>
+ 
+
   
   </body>
 </html>

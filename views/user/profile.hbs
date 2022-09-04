@@ -32,6 +32,7 @@
             </div>
         </div>
         </form>
+       
         <div class="col-md-4">
              <h4 class="text-left pl-3 mt-5">Add address</h4>
              <form  class="UFA" action="/add-address" method="post">
@@ -47,7 +48,28 @@
                     <button type="submit" style="margin-top: 2rem;" class="betaButton ml-3">Add address</button>
                 </div>
                 </form>
+                
+
         </div>
+        <div class="style"  style="
+    margin-left: 18rem;
+    margin-top: -7rem;
+">
+                 <h4 class="text-left pl-3 mt-5">Change password</h4>
+                 
+                <form class="SUF" name="SUF" action="/change-password" method="post">
+       
+        <label for="password" class="labels">Old Password</label>
+        <input type="password" name="password" placeholder="Password..." id="old password" class="form-control">
+        <label for="confirmPassword" class="labels">New Password</label>
+        <input type="password" name="newPassword" placeholder="new password..." class="form-control" id="password2">
+        <label for="newPassword" class="labels">Re-enter New Password</label>
+        <input type="password" name="confirmPassword2" placeholder="new password..." class="form-control">
+        <br>
+        <button type="submit">change password</button>
+   
+    </form>
+    </div>
     </div>
 </div>
 </div>

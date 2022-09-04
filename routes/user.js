@@ -123,4 +123,6 @@ router.post('/add-address',controller.addAddress)
 
 router.post('/add-address2',controller.addAddress2)
 
+router.post('/change-password',controller.changePassword)
+
 module.exports = router;
