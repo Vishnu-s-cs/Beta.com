@@ -262,90 +262,16 @@ body {
 .pdtImg {
   height: 22rem;
   width: 33rem;
+  margin-left: 18rem;
 }
 .pdtImg img {
-  height: 21rem;
-  width: 21rem;
+  height: 30rem;
+    width: 30rem;
 }
 .dashCards i {
   color: #000000 !important;
 }
-/* .login-bg{
-  height: 99vh;
-  width: 100%;
-  background: url(/images/log.jpg);
-  background-size: cover;
-  
-  margin: 0;
- 
-  
-  
 
-  
-
-}
-.login-name,.login-password{
-  background-color: transparent;
-  border:none;  
-  border-bottom: 3px solid springgreen;
-  width: 250px;
-  color: white;
- 
-
-}
- .login-name:focus{
-   
-   border-bottom:2px solid blue;
- }
- .login-password:focus{
-  
-   border-bottom:2px solid blue;
- }
-.login-btn{
-  background-color: transparent;
-  float: right;
-  border: 2px solid chocolate;
-
-}
-.login-text{
-  font-weight: 100;
-  font-family:serif;
-  
-  text-align: center;
-  color: black;
-  
-  
-
- 
-
-}
-
-.login-form{
-  
-  position: absolute;
-  top: 39%;
-  left: 39%;
-  justify-content: space-around;
-  
-  
-  
-}
-.text-box{
-  margin: 10px 10px;
-}
-.login-form a{
-  color: chocolate;
-}
-.nopro{
-  color:black;
-  border-bottom: 3px solid black;
-  text-align: center;
-  justify-content: center;
-  justify-self: center;
-   font-size: x-large;
-   font-weight: 100;
-  
-}*/
 .login .head span {
   font-family: "Montserrat";
   font-style: normal;
@@ -619,4 +545,59 @@ body {
     height: 30rem;
     margin-left: 2.5rem;
     border-radius: 0px;
+}
+.pagination{
+  text-align: center;
+  margin: 30px 30px 60px;
+  user-select: none;
+}
+
+.pagination li{
+  display: inline-block;
+  margin: 5px;
+  box-shadow: 0 5px 25px rgb(1 1 1 / 10%);
+}
+
+.pagination li a{
+  color: rgb(0, 0, 0);
+  text-decoration: none;
+  font-size: 1.2em;
+  line-height: 45px;
+}
+
+.pagination .previous-page, .next-page{
+  background: #0AB1CE;
+  width: 80px;
+  border-radius: 45px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.pagination .previous-page:hover{
+  transform: translateX(-5px);
+}
+
+.pagination .next-page:hover{
+  transform: translateX(5px);
+}
+
+.pagination .current-page, .dots{
+  background: #ccc;
+  width: 45px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.pagination .active{
+  background: #0AB1CE;
+}
+
+.pagination .disable{
+  background: #ccc;
+}
+.orders .dataTables_filter{
+  display: none;
+}
+.orders .dataTables_length{
+  display: none;
 }

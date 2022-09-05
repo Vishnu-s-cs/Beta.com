@@ -1,32 +1,35 @@
-
-<section class="mt-5">
-    <div class="pdtImg">
-       <img id="zoom" class='mx-auto img-thumbnail'
-                src="/product-images/{{product._id}}.jpg"
-                width="auto" height="auto"
- />
-    </div>
-
+<section class="mt-5" style="height: 110vh;">
+  <div class="adjust" style="position: absolute;left: 3rem;">
+  <div class="small-images">
+    <img class='mx-auto img-thumbnail' src="/product-images/{{product._id}}.jpg"/>
+    <img class='mx-auto img-thumbnail' src="/product-images/{{product._id}}0.jpg"/>
+    <img class='mx-auto img-thumbnail' src="/product-images/{{product._id}}1.jpg"/>
+  </div>
+  <div class="pdtImg">
+    <img id="zoom" class='mx-auto img-thumbnail' src="/product-images/{{product._id}}.jpg" width="auto" height="auto" />
+  </div>
+ <div style="position: relative;left: 25rem;">
   <h4 style="
     position: relative;
     top: -21.5rem;
     left: 27rem;
     font-weight: 700;
-">{{product.productname}}{{category.category}}</h4>
-<span style="
+">{{product.productname}}</h4>
+ 
+    <span style="
     position: absolute;
-    top: 10.5rem;
+top: -17rem;
     left: 27rem;
     font-weight: 600;
 ">₹{{product.price}}</span>
-<span style="
+    <span style="
+        top: -13rem;
     position: absolute;
-    top: 12.5rem;
     left: 27rem;
     font-weight: 600;
 ">{{product.description}}</span>
-<button class="betaBtn" onclick="addToCart('{{product._id}}')" style="
-    top: 24rem;
+    <button class="betaBtn" onclick="addToCart('{{product._id}}')" style="
+  top: -4rem;
     position: absolute;
     left: 27rem;
     color: white;
@@ -36,18 +39,52 @@
     font-size: 1.5rem;
     font-weight: 500;
 ">Add to cart</button>
-          
+{{#if user}}<div class="like-btns" style="    float: inherit;
+    position: absolute;
+    left: 50rem;
+    top: -4rem;
+    border: 1px solid;
+    padding: 11px 19px 36px 31px;"> <button onclick="wishList('{{user._id}}','{{product._id}}')" class="like float-right "><img
+                id="like{{product._id}}" class="icon-like" src="/images/heart.png" alt=""><img id="liked{{product._id}}"
+                class="icon-liked" src="/images/liked.png"
+                alt=""></button> 
+                {{#each wishlist}} {{#ifCond this ../proId}}
+            <button id="likebtn{{../proId}}" onclick="unWish('{{../user._id}}','{{../proId}}')" class="liked float-right liked{{../proId}}"><img  class="iconliked" src="/images/liked.png"
+                alt=""></button>
+        
+            {{/ifCond}}{{/each}}</div>
+            {{/if}}
+  </div>
+  </div>
 </section>
-<script>
-  $(document).ready(function(){
+<style>
+  .small-images{
+    height: 30%;
+    width: 100%;
+    justify-content: space-around;
+    display: grid;
+    gap: .5rem;
+    position: absolute;
+        left: -16rem;
 
-//$('.small-images img').click(function(){
-  //  let image = $(this).attr('src')
-    //$('.big-image img').attr('src',image)
-//})
-  $("#zoom").imagezoomsl({
-    zoomrange:[4,4]
-  });
-})
+  }
+  .small-images img{
+         height: 13rem;
+    width: auto;
+    display: flex;
+    cursor: pointer;
+    }
+</style>
+<script>
+  $(document).ready(function () {
+
+    $('.small-images img').click(function(){
+      let image = $(this).attr('src')
+    $('.pdtImg img').attr('src',image)
+    })
+    $("#zoom").imagezoomsl({
+      zoomrange: [4, 4]
+    });
+  })
 
 </script>

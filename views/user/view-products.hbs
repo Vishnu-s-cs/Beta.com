@@ -58,14 +58,7 @@
             <div class="card-body">
               <a href="/product-details?id={{this._id}}" class="text-start text-reset">
                 <div class="d-flex justify-content-between">
-                  <h5 class="card-title">{{this.productname}} {{#each ../categories}}
-      
-      {{#ifCond  this._id ../this.category}}
-     
-      <td>{{this.category}}</td>
-   
-      {{/ifCond}}
-      {{/each}}</h5>
+                  <h5 class="card-title">{{this.productname}}</h5>
              
                 </div>
               </a>
@@ -100,26 +93,22 @@
           </div>
 {{/each}}
 <div class="type m-5">
-{{#each products}}
+{{#each categories}}
 
 <h3 style="
     margin-bottom: -13rem;
     margin-left: 3.2rem;
-">Buy {{this.productname}}</h3>
-{{#each ../products2}}
+">Buy {{this.category}}</h3>
+{{#each ../products}}
      
-      {{#ifCond  this.productname ../this.productname}}
+      {{#ifCond  this.category ../this._id}}
      
     <div class="card h-100 ml-5" style="background-color: transparent;   width: 18rem; display: inline-block;  margin-top: 15rem;">
             <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light" data-mdb-ripple-color="light">
               <img src="/product-images/{{this._id}}.jpg" class="w-100" style="    height: 18.5rem;;
     border-radius: 30px;" />
               <a href="/product-details/{{this._id}}">
-                {{! <div class="mask">
-                  <div class="d-flex justify-content-start align-items-end h-100">
-                    <h5><span class="badge bg-primary ms-2">New</span></h5>
-                  </div>
-                </div> }}
+            
                 <div class="hover-overlay">
                   <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
                 </div>
@@ -128,16 +117,7 @@
             <div class="card-body">
               <a href="/product-details?id={{this._id}}" class="text-start text-reset">
                 <div class="d-flex justify-content-between">
-                  <h5 class="card-title">{{this.productname}} 
-                    
-          {{#each ../../categories}}
-      
-      {{#ifCond  this._id ../../this.category}}
-     
-      <td>{{this.category}}</td>
-   
-      {{/ifCond}}
-      {{/each}}</h5>
+                  <h5 class="card-title">{{this.productname}} </h5>
              
                 </div>
               </a>
@@ -175,6 +155,16 @@
       {{/ifCond}}
 {{/each}}
 {{/each}}
+    <div class="pagination">
+          <li class="page-item previous-page disable"><a class="page-link" href="#">Prev</a></li>
+          <li class="page-item current-page active"><a class="page-link" href="#">1</a></li>
+          <li class="page-item dots"><a class="page-link" href="#">...</a></li>
+          <li class="page-item current-page"><a class="page-link" href="#">5</a></li>
+          <li class="page-item current-page"><a class="page-link" href="#">6</a></li>
+          <li class="page-item dots"><a class="page-link" href="#">...</a></li>
+          <li class="page-item current-page"><a class="page-link" href="#">10</a></li>
+          <li class="page-item next-page"><a class="page-link" href="#">Next</a></li>
+        </div>
 </div>
 
 

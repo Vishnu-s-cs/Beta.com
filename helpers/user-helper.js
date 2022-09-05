@@ -525,6 +525,8 @@ module.exports = {
         )
         .then(() => {
           resolve();
+        }).catch((err)=>{
+          reject(err)
         });
     });
   },

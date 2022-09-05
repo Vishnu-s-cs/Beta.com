@@ -65,17 +65,17 @@ exports.home = async function (req, res, next) {
     // res.render("user/view-products", { user });
     productHelper.getAllProducts().then((products) => {
       adminHelper.getCategories().then((categories) => {
-        productHelper.getAllProducts().then((products2) => {
+        
           res.render("user/view-products", {
             products,
             user,
             cartCount,
             wishlist,
             categories,
-            products2,
+           
             newProducts,
           });
-        });
+        
       });
     });
   } catch (err) {
@@ -94,6 +94,7 @@ exports.viewLogin = (req, res) => {
         res.render("user/login", { loginErr: msg });
         msg = false;
       } else {
+        console.log("dasdas");
         res.render("user/login", { loginErr: req.session.userLoginErr });
         req.session.userLoginErr = false;
       }
@@ -180,7 +181,7 @@ exports.viewCart = async (req, res) => {
   }
 };
 
-exports.addToCart = (req, res) => {
+exports.addToCart = async(req, res) => {
   try {
     if (req.session.verifyErr) {
       res.render("/Login");
@@ -240,9 +241,18 @@ exports.viewPlaceOrder = async (req, res) => {
 
 exports.placeOrder = async (req, res) => {
   try {
-    console.log("Checkout form body", req.body);
+    // console.log("Checkout form body", req.body);
     console.log("========");
     let products = await userHelper.orderProducts(req.session.user._id);
+
+    products.products.forEach(data=>{
+      
+      userHelper
+      .removeWish(req.session.user._id, data.item)
+      .then((response) => {
+        console.log('');
+      });
+    })
     let user = await adminHelper.userDetails(req.session.user._id);
    
     let totalPrice = await userHelper.getTotalAmount(req.session.user._id);
@@ -480,9 +490,11 @@ exports.productsDetails = async (req, res) => {
     let proId = req.query.id;
 
     let product = await productHelper.productsDetails(proId);
+    console.log(proId);
     let category = await productHelper.categoryDetails(product.category);
     res.render("user/products", {
       product,
+      proId,
       user,
       cartCount,
       wishlist,

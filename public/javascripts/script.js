@@ -68,7 +68,8 @@ function addToCart(proId){
             }
             else{
                 console.log('hi buddy');
-                document.getElementById('logwarn').innerHTML= ' <span class="alert alert-danger">Please login</span>'
+                swal("Please login")
+            
             }
         }
     })
@@ -157,7 +158,7 @@ function productDelete(proId,cartId,prodName){
 $('#checkout-form').submit((e)=>{
     e.preventDefault()
    
-    console.log($('#checkout-form').serialize());
+
     try {
         let address = $('#checkout-form').serialize().split('&')[0]
         if (address!='Payment-method=COD' && address!='Payment-method=Online-Payment' && address!='Payment-method=paypal') {
@@ -333,15 +334,32 @@ function unWish(userId, proId) {
 // });
 
 function removeWish(proId){
-    $.ajax({
-        url:'/remove-wish?id='+proId,
-        method:'get',
-        success:(response)=>{
-            
-            location.reload();
+    swal({
+        title: "Are you sure?",
+        text: "remove  from wishlist",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+            $.ajax({
+                url:'/remove-wish?id='+proId,
+                method:'get',
+                success:(response)=>{
+                    
+                    location.reload();
+                }
+                
+            })
+          swal(" has removed from wishlist", {
+            icon: "success",
+          });
+        } else {
+          swal("deletion aborted");
         }
-        
-    })
+      });
+  
 }
 function productRemove(proId,prodName){
 

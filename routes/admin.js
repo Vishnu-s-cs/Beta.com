@@ -31,27 +31,28 @@ router.get("/add-products", (req, res) => {
     });
   });
 });
-router.post("/add-products", verifyAdmin, (req, res) => {
-  productHelpers.addproducts(req.body, (id) => {
-    try {
-      let image = req.files.image;
-      image.mv("./public/product-images/" + id + ".jpg", (err, data) => {
-        if (!err) {
-          res.render("admin/admin-products", {
-            admin: true,
-            Admin: req.session.admin,
-          });
-          console.log("DATA ADDED");
-        } else {
-          console.log(err);
-        }
-      });
-    } catch (error) {
-      res.redirect('/admin/products')
-    }
+router.post("/add-products",controller.addproduct)
+// router.post("/add-products", verifyAdmin, (req, res) => {
+//   productHelpers.addproducts(req.body, (id) => {
+//     try {
+//       let image = req.files.image;
+//       image.mv("./public/product-images/" + id + ".jpg", (err, data) => {
+//         if (!err) {
+//           res.render("admin/admin-products", {
+//             admin: true,
+//             Admin: req.session.admin,
+//           });
+//           console.log("DATA ADDED");
+//         } else {
+//           console.log(err);
+//         }
+//       });
+//     } catch (error) {
+//       res.redirect('/admin/products')
+//     }
    
-  });
-});
+//   });
+// });
 router.get("/delete-product", verifyAdmin, (req, res) => {
   let proid = req.query.id;
   productHelpers.deleteProduct(proid).then((response) => {
@@ -112,28 +113,36 @@ router.get("/edit-category", controller.viewEditCategory);
 
 router.post("/editCategory", controller.editCategory);
 router.get("/delete-category", controller.deleteCategory);
-router.post("/edit-products", (req, res) => {
+router.post("/edit-products", async(req, res) => {
   let proId = req.query.id;
-  productHelpers.updateProducts(proId, req.body).then(() => {
-
-    res.redirect("/admin/products");
+  productHelpers.updateProducts(proId, req.body).then(async() => {
     try {
-      if (req.files.image) {
-        let image = req.files.image;
-        image.mv("./public/product-images/" + proId + ".jpg", (err, data) => {
+      let image = req.files.image;
+      let subImages = []
+      if(req.files?.image2){ subImages.push(req.files?.image2)}
+      if(req.files?.image3){ subImages.push(req.files?.image3)}
+      for (let index = 0; index < 2; index++) {
+       await subImages[index].mv("./public/product-images/" + proId + index +".jpg", (err, data) => {
           if (!err) {
-            res.render("admin/admin-products", {
-              admin: true,
-              Admin: req.session.admin,
-            });
-            console.log("DATA ADDED");
+          console.log("sub images added",index);
+         
           } else {
             console.log(err);
           }
-        });
+        })
+        
       }
-    } catch (err) {
-      console.log(err);
+      await image.mv("./public/product-images/" + proId + ".jpg", (err, data) => {
+        if (!err) {
+          res.redirect("/admin/products");
+          
+        } else {
+          console.log(err);
+        }
+      });
+    } catch (error) {
+      console.log(error);
+      res.redirect('/admin/products')
     }
   });
 });

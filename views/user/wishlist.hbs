@@ -1,7 +1,7 @@
 <section>
  <div class="container mt-5">
         
-      <div class="row">
+      <div class="row" style="justify-content: flex-start;">
         {{#each products}}
         <div style="margin-top:6px;"class="col-md-3">
     <div id="card" class="card p-5em mt-7" style="width: 14rem;">
@@ -10,7 +10,9 @@
     <h5 id="card-name" class="card-title">{{this.product.productname}}</h5>
     <p id="card-text" class="card-text">{{this.product.description}}</p>
     <p class="card-text">Rs.{{this.product.price}}</p>
-    <button class="btn btn-primary" onclick="addToCart('{{this.product._id}}')">add to cart</button>
+    <button class="betaButton" onclick="addToCart('{{this.product._id}}')" style="
+    width: 7rem;
+">add to cart</button>
     <button class="remove-btn float-right" onclick="removeWish('{{this.product._id}}')">x</button>
   </div>
   </div>
