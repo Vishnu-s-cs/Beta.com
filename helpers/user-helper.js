@@ -374,6 +374,7 @@ module.exports = {
         ])
         .toArray();
       resolve(products);
+      console.log(products);
     });
   },
   generateRazorPay: (orderId, total) => {
@@ -515,7 +516,8 @@ module.exports = {
   },
   removeWish: (user, pro) => {
     return new Promise((resolve, reject) => {
-      db.get()
+      try {
+        db.get()
         .collection(collections.WISHLIST_COLLECTION)
         .updateOne(
           { userId: objectId(user) },
@@ -528,6 +530,12 @@ module.exports = {
         }).catch((err)=>{
           reject(err)
         });
+      } catch (error) {
+        console.log('product not existing');
+      }
+
+
+      
     });
   },
   getWishProd: (user) => {

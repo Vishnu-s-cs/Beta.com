@@ -171,11 +171,13 @@ exports.viewCart = async (req, res) => {
     let products = await userHelper.getCartProducts(req.session.user._id);
 
     let total = await userHelper.getTotalAmount(req.session.user._id);
+    
+    let categories = await adminHelper.getCategories()
     products.forEach((data) => {
       console.log("..........................", data);
       data.subTotal = Number(data.quantity) * Number(data.product.price);
     });
-    res.render("user/cart", { products, total, user: req.session.user });
+    res.render("user/cart", { products, total, user: req.session.user,categories});
   } catch (err) {
     console.log(err);
   }

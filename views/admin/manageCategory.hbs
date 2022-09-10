@@ -5,7 +5,7 @@
   <form action="/admin/add-category" method="post">
   <label for="category"></label><br>
       <input type="text" class="form-control" name="category" placeholder="Add category...">
-      <button type="submit"  class="betaButton mt-1 ml-auto" style="text-decoration: none ; color:black">Add Category</button>
+      <button type="submit"  class="betaButton mt-1 ml-auto" style="text-decoration: none ; ">Add Category</button>
   </form>
 </section>
   </div>
@@ -13,6 +13,7 @@
     <thead>
       <tr>
         <th scope="col">Category</th>
+        <th scope="col">Offer</th>
         <th scope="col">Options</th>
       </tr>
     </thead>
@@ -20,6 +21,11 @@
       {{#each category}}
         <tr>
           <th scope="row">{{this.category}}</th>
+          {{#if this.offer}}
+          <td scope="row">{{this.offer}}%</td>
+          {{else}}
+          <span> </span>
+          {{/if}}
           <td>
 
             <a href="/admin/edit-category?id={{this._id}}"><img

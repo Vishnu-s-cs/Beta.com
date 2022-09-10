@@ -98,27 +98,27 @@ router.get("/cart", verify, controller.viewCart);
 
 router.post("/add-to-cart", verify, controller.addToCart);
 
-router.post("/cart-change-quantity", controller.changeCartQuantity);
+router.post("/cart-change-quantity",verify, controller.changeCartQuantity);
 
-router.post("/delete-product", controller.deleteProduct);
+router.post("/delete-product",verify, controller.deleteProduct);
 
-router.get("/place-order", controller.viewPlaceOrder);
+router.get("/place-order",verify, controller.viewPlaceOrder);
 
-router.post("/place-order", controller.placeOrder);
+router.post("/place-order",verify, controller.placeOrder);
 
-router.get("/orderPlaced", controller.orderSuccess);
+router.get("/orderPlaced",verify, controller.orderSuccess);
 
-router.get("/orders", controller.viewOrders);
+router.get("/orders",verify, controller.viewOrders);
 
 router.get("/orderProducts", verify, controller.viewOrderProducts);
 
-router.post("/verify-payment", controller.verifyPayment);
+router.post("/verify-payment",verify, controller.verifyPayment);
 
-router.post("/wish-list", controller.wishList);
+router.post("/wish-list",verify, controller.wishList);
 
-router.get("/wish-list", controller.viewwishList);
+router.get("/wish-list",verify, controller.viewwishList);
 
-router.get("/remove-wish", controller.removeWishList);
+router.get("/remove-wish",verify, controller.removeWishList);
 
 router.get("/search", controller.search);
 
@@ -128,16 +128,16 @@ router.post("/sendOTP", controller.sendOTP);
 
 router.post("/verifyOTP", controller.verifyOTP);
 
-router.get('/product-details', controller.productsDetails)
+router.get('/product-details',verify, controller.productsDetails)
 
 router.get('/profile', verify, controller.profile)
 
-router.post('/update-profile', controller.updateProfile)
+router.post('/update-profile', verify,controller.updateProfile)
 
-router.post('/add-address', controller.addAddress)
+router.post('/add-address',verify, controller.addAddress)
 
-router.post('/add-address2', controller.addAddress2)
+router.post('/add-address2',verify, controller.addAddress2)
 
-router.post('/change-password', controller.changePassword)
+router.post('/change-password',verify, controller.changePassword)
 
 module.exports = router;

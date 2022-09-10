@@ -1,5 +1,5 @@
 <!-- Sale & Revenue Start -->
-<section class="p-3 pb-5">
+<section class="p-3 pb-5 dash">
 
 <div class="container-fluid pt-4 px-4">
   <div class="row g-4 dashCards">
@@ -36,6 +36,7 @@
         </div>
       </div>
     </div>
+    
   </div>
 </div>
 <!-- Sale & Revenue End -->
@@ -178,6 +179,30 @@
     </div>
   </div>
 </div>
+<h4 style="
+    position: absolute;
+    left: 20rem;
+    top: 70rem;
+">Records</h4>
+<table class="table" style="
+    position: absolute;
+    left: 20rem;
+    top: 74rem;
+        width: 44rem;
+">
+ 
+  <tr>
+    <th>Most Sold</th>
+  </tr>
+  <tr><th>Name</th>
+  <th>count</th>
+  <th>price</th></tr>
+  <tr>
+    <td id="ms"></td>
+    <td id="count"></td>
+    <td id="price"></td>
+  </tr>
+</table>
 </section>
 <!-- Recent Sales End -->
 
@@ -192,7 +217,22 @@
     let date = []
     let month = []
     let monthMoney =[]
-  
+   $.ajax({
+        url:'/admin/getMostStats',
+        method:'get',
+        success:(response)=>{
+           console.log(response)
+            $('#ms').html(response.productname)
+            $('#count').html(response.count)
+            $('#price').html(response.price)
+
+        
+          
+         
+        }
+
+    
+  });
   $.ajax({
         url:'/admin/get-order-details',
         method:'get',

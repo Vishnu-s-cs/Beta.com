@@ -14,7 +14,7 @@ var hbs=require('express-handlebars');
 const helpers = require('template-helpers')();
 var fileUpload = require('express-fileupload')
 var app = express();
-var method = hbs.create({})
+let method = hbs.create({})
 
 method.handlebars.registerHelper('ifCond',function(v1,v2,options){
   if(v1 == v2){
@@ -43,6 +43,15 @@ const exhbs= hbs.create({
         
         
       }
+    },
+    off:function (a,b,options){
+     
+    
+      
+     
+       
+        return parseInt(a-(a*(b/100)))
+  
     }
   }
 

@@ -26,10 +26,10 @@ module.exports={
         })
     },
     productsDetails:(proId)=>{
-        console.log(proId);
+        
         return new Promise(async(resolve,reject)=>{
             await db.get().collection(collections.PRODUCT_COLLECTION).findOne({_id:objectId(proId)}).then((products)=>{
-                console.log(products);
+               
                 resolve(products)
                 
         })

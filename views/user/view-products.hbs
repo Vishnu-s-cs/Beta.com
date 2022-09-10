@@ -65,14 +65,30 @@
               {{!-- <a href="" class="text-start text-reset">
                 <p>category</p>
               </a> --}}
+              {{#each ../categories}}
+                {{#ifCond ../this.category this._id}}
+                  {{#if this.offer}}
+                  <strike> <h6 class="text-start"> ₹{{../this.price}}</strike>&nbsp;₹{{#off ../this.price this.offer}}{{/off}}</h6> 
+                  <span class="badge" style="
+    position: absolute;
+    top: 22rem;
+    left: 15rem;
+    color:black;
+">-{{this.offer}}%</span>
+                  {{else}}
+                  <h6 class="text-start"> ₹{{../this.price}}</h6>
+                  {{/if}}
+                  
+
+                {{/ifCond}}
+              {{/each}}
              
-              <h6 class="text-start"> ₹{{this.price}}</h6>
          
 
               {{!-- <a href="#" class="btn btn-outline-dark rounded-0 p-1">Add to Wishlist</a> --}}
               {{!-- <a href="/add-to-cart/{{this._id}}"> --}}
                <button class="betaButton" onclick="addToCart('{{this._id}}')" style="
-    width: 8rem;
+    width: 9rem;
     background: black;
     color: white;
     font-weight: bold;
@@ -98,7 +114,9 @@
 <h3 style="
     margin-bottom: -13rem;
     margin-left: 3.2rem;
-">Buy {{this.category}}</h3>
+">Buy {{this.category}} {{#if this.offer}} <span style="    color: #64c9a7;
+    font-size: 1.2rem;
+    padding-left: 2rem">Buy now get {{this.offer}}% off on this category!</span>{{/if}}</h3>
 {{#each ../products}}
      
       {{#ifCond  this.category ../this._id}}
@@ -125,13 +143,21 @@
                 <p>category</p>
               </a> --}}
              
-              <h6 class="text-start"> ₹{{this.price}}</h6>
+              {{#if ../this.offer}}
+                  <strike> <h6 class="text-start"> ₹{{this.price}}</strike>&nbsp;₹{{#off this.price ../this.offer}}{{/off}}</h6> 
+ <span class="badge" style="
+    position: absolute;
+    top: 22rem;
+    left: 15rem;
+    color:black;
+">-{{../this.offer}}%</span>
+                  {{else}}
+                  <h6 class="text-start"> ₹{{this.price}}</h6>
+                  {{/if}}
          
 
-              {{!-- <a href="#" class="btn btn-outline-dark rounded-0 p-1">Add to Wishlist</a> --}}
-              {{!-- <a href="/add-to-cart/{{this._id}}"> --}}
-               <button class="betaButton" onclick="addToCart('{{this._id}}')" style="
-    width: 8rem;
+                      <button class="betaButton" onclick="addToCart('{{this._id}}')" style="
+    width: 9rem;
     background: black;
     color: white;
     font-weight: bold;
@@ -146,7 +172,7 @@
             {{/if}}
             {{/iff}}{{/each}}</div>{{/if}}
                 </button>
-                {{!-- </a> --}}
+           
 
             </div>
           </div>

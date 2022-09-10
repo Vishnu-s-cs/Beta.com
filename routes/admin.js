@@ -323,5 +323,40 @@ router.get("/stats4", async (req, res) => {
     console.log(err);
   }
 });
+//
+router.get('/getMostStats',async (req,res)=>{
+ 
 
+ await adminHelpers.getMostStats().then(async(response)=>{
+    let top = 0
+    for (let i= 0; i < response.length-1; i++) {
+      if (response[i].count<response[i+1].count) {
+        top  = response[i+1]
+      }
+      
+    }
+  productHelpers.productsDetails(top._id).then(async(product)=>{
+     try {
+       product.count = top.count
+      
+    } catch (error) {
+      console.log("wait for top");
+    }
+   
+    res.json(product)
+  })
+   
+  })
+})
+ router.post('/add-offer',async(req,res)=>{
+  try {
+    let catId = req.query.id
+    let off = req.body.off
+    adminHelpers.addCategoryOff(catId,off)
+ }
+ catch(err){
+  console.log(err);
+ } 
+}
+ )
 module.exports = router;

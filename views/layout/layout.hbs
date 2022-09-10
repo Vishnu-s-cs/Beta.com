@@ -57,6 +57,7 @@
 ">
     {{>admin-sidebar}}
     {{else}}
+    <div style="min-height: 81vh;">
     {{>user-header}}
     <span id="top"></span>
     <a href="#top"><i class="fa fa-arrow-up" aria-hidden="true" style="    position: fixed;
@@ -74,7 +75,9 @@
     {{#if admin}}
   </div>
   {{else}}
+    </div>
   {{>user-footer}}
+
   {{/if}}
 
 

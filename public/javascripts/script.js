@@ -68,7 +68,7 @@ function addToCart(proId){
             }
             else{
                 console.log('hi buddy');
-                swal("Please login")
+                swal("Please login").then(()=>{location.href='/Login'})
             
             }
         }
@@ -91,7 +91,7 @@ function changeQuantity(cartId,proId,count){
         success:(response)=>{
             
             let subTotal = response.price*(quantity+count)
-            console.log(subTotal);
+            
             $('#subTotal').html(subTotal)
             if(response.deleteProduct){
                 if(response.total){
@@ -145,11 +145,9 @@ function productDelete(proId,cartId,prodName){
            
                }
            })
-          swal(prodName+" has removed from cart", {
-            icon: "success",
-          });
+      
         } else {
-          swal("deletion aborted");
+         
         }
       });
 
@@ -352,11 +350,9 @@ function removeWish(proId){
                 }
                 
             })
-          swal(" has removed from wishlist", {
-            icon: "success",
-          });
+        
         } else {
-          swal("deletion aborted");
+      
         }
       });
   
@@ -381,9 +377,7 @@ function productRemove(proId,prodName){
                 location.reload()
                }
            })
-          swal(prodName+" has removed from products", {
-            icon: "success",
-          });
+      
         } else {
           swal("deletion aborted");
         }

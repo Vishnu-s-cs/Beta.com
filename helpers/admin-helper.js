@@ -104,9 +104,87 @@ module.exports={
          
   
     },
-//     getOrderStats:()=>{
-//         db.get().collection(collections.ORDER_COLLECTION)
-// 1    }
+    //
+    getMostStats:()=>{
+        return new Promise(async (resolve, reject) => {
+            let data = await db
+              .get()
+              .collection(collections.ORDER_COLLECTION)
+              .aggregate([
+                {
+                  $unwind: "$products.products",
+                },
+                {
+                  $project: {
+                    item: "$products.products.item",
+                  },
+                },
+                {
+                  $lookup: {
+                    from: collections.PRODUCT_COLLECTION,
+                    localField: "item",
+                    foreignField: "_id",
+                    as: "products",
+                  },
+                }, 
+               
+                {
+                  $project: {
+                    product:"$item",
+                    total: { $sum: 1 },
+                  },
+                },
+                {
+                    $group:{
+                        _id:"$product",
+                        count:{$sum:1}
+                    }
+                }
+                
+               
+              ])
+              .toArray();
+            resolve(data);
+          });
+   },
+   addCategoryOff:(catId,offer)=>{
+    try {
+        return new Promise(async(resolve,reject)=>{
+            let offerPrice = []
+            let off=Number(offer)
+            let ppa = {category:catId} 
+            await db.get().collection(collections.PRODUCT_COLLECTION).find(ppa).toArray().then((res)=>{
+                res.forEach(data=>{
+                    let price = Number(data.price)
+                    offerPrice.push({offerPrice:parseInt(price-(price*(off/100))),proId:data._id})
+                })
+               offerPrice.forEach(data=>{
+                db.get().collection(collections.PRODUCT_COLLECTION).updateOne({_id:data.proId},{$set:{offerPrice:data.offerPrice}})
+               })
+               db.get().collection(collections.CATEGORY_COLLECTION).updateOne({_id:objectId(catId)},{$set:{offer:off}}).then((res)=>{
+                
+               })
+            })
+          resolve()
+            
     
+        })
+        
+    } catch (error) {
+        console.log(error);
+    }
+    
+        
+        //  let offer
+        // db.get().collection('categories').updateOne({category:"Nothing"},{$set:{offer:off}}).then(()=>{
+        //     db.get().collection(collections.PRODUCT_COLLECTION).updateMany({category:"6314f64327d16938f421f191"},{$set:{offerPrice:{$inc:{
+        //         "$price":-{$mul:{"$price":{$div:{off:100}}}}
+        //     }}}}).then(()=>{
+        //         resolve()
+        //     })
+     
+    // })
+   }
+    //
     
 }

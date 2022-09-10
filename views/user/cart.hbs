@@ -1,4 +1,4 @@
-<section>
+<section class="cart">
     <div class="container">
         {{#if total}}
         <table class="table table-bordered mt-5">
@@ -19,10 +19,38 @@
                 <tr id="tr{{this.product._id}}">
                 <td><img class="Image" src="/product-images/{{this.product._id}}.jpg" style="width: 50px;height: 60px;" alt=""></td>
                 <td>{{this.product.productname}}</td>
-                <td>{{this.product.price}}</td>
+                <td>
+                    {{#each ../categories}}
+                   
+                {{#ifCond ../this.product.category this._id}}
+                  {{#if this.offer}}
+                  <strike> <h6 class="text-start"> ₹{{../this.product.price}}</strike>&nbsp;₹{{#off ../this.product.price this.offer}}{{/off}}</h6> 
+                 
+                  {{else}}
+                  <h6 class="text-start"> ₹{{../this.product.price}}</h6>
+                  {{/if}}
+                  
+
+                {{/ifCond}}
+              {{/each}}
+                   </td>
                 
                 <td><button class="cart-item-count ml-3 betaButton btn-sm"  id="neg-btn{{this.product._id}}"  onclick="changeQuantity('{{this._id}}','{{this.product._id}}',-1,'{{this.quantity}}')" style="width: 3rem;">-</button><span class="badge badge-light"   id="spn{{this.product._id}}">{{this.quantity}}</span><button class="cart-item-count mr-3 betaButton btn-sm"  onclick="changeQuantity('{{this._id}}','{{this.product._id}}',1,'{{this.quantity}}')" style="width: 3rem;">+</button></td>
-                <td><span id="subTotal">{{this.subTotal}}</span></td>
+                <td>
+                       {{#each ../categories}}
+                   
+                {{#ifCond ../this.product.category this._id}}
+                  {{#if this.offer}}
+                    <span id="subTotal">₹{{#off ../this.product.price this.offer}}{{/off}}</span> 
+                 
+                  {{else}}
+                  <span id="subTotal">₹{{../this.subTotal}}</span>
+                  {{/if}}
+                  
+
+                {{/ifCond}}
+              {{/each}}
+                    </td>
                 <td><button  onclick="productDelete('{{this.product._id}}','{{this._id}}','{{this.product.productname}}')"class="betaButton">remove</button></td>
                 
                 </tr>
@@ -49,7 +77,7 @@
         {{else}}
         <div class="container">
             <span class=" text-center">
-                <h3 class="font-bold">Empty Cart</h3>
+                <h3 class="font-bold">Nothing here!</h3>
             </span>
         </div>
         {{/if}}
