@@ -9,7 +9,12 @@
   <div class="card-body">
     <h5 id="card-name" class="card-title">{{this.product.productname}}</h5>
     <p id="card-text" class="card-text">{{this.product.description}}</p>
-    <p class="card-text">Rs.{{this.product.price}}</p>
+    {{#if this.product.offerPrice}}
+    <p class="card-text">₹{{this.product.offerPrice}}</p>
+    {{else}}
+    <p class="card-text">₹{{this.product.price}}</p>
+    {{/if}}
+    
     <button class="betaButton" onclick="addToCart('{{this.product._id}}')" style="
     width: 7rem;
 ">add to cart</button>

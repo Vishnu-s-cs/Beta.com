@@ -43,7 +43,12 @@
     padding-bottom: 2rem;
     padding-top: 1rem;
 ">
-                        <h5>Total Amount:Rs. {{total}}</h5>
+                        <h5>{{#if coupon}}
+                            Total Amount:<strike>₹{{total}}</strike>₹{{#off total coupon.off}}{{/off}}
+                            {{else}}
+                                Total Amount:Rs. {{total}}
+                            {{/if}}
+                            </h5>
                         <hr>
                         <div class="payment">
                             <p>Payment method</p>
@@ -56,6 +61,9 @@
                             <label class="radio-inline mt-2">
                                 <input type="radio" name="Payment-method" value="Online-Payment" onclick="toggle()" required>Razorpay Payment
                             </label><br><br>
+                            {{#if coupon}}
+                            <input type="text" name="coupon" value={{coupon.off}} style="display: none;">
+                            {{/if}}
                             <button type="submit" class="float-rleft btn-primary clr" id="co">Checkout</button>
                       
                             <div id="paypal-button-container" style="margin-top: 1rem;" class="clr"></div>
@@ -64,7 +72,13 @@
                 </div>
             </div>
         </form>
-
+         <form action="/verifyCoupon" method="post" style="width: 25rem;    margin-bottom: -1rem;
+    margin-top: -3rem;
+    margin-right: 3rem;" class="float-right">
+  <label for="Add coupon">Add Coupon</label><br>
+      <input type="text" class="form-control" name="coupon" style="width: 15rem; display: inline-block;" placeholder="Add Coupon...">
+      <button type="submit" class="betaButton mt-1 ml-auto" style="text-decoration: none ;">Add Coupon</button>
+  </form>
     </div>
 </section>
 <style>

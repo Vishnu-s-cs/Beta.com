@@ -128,6 +128,44 @@
 
 
           <input type="file" name="image3" class="form-control" onchange="changeImg3(event)" id="id_image3"/><br />
+          {{!--  --}}
+          <label for="">Banner</label><br />
+           <div id="crop">
+<img
+ 
+  id="imgView4"
+  alt=""
+  style="height: 100px; width: 120px"
+
+ class="clr"
+/>
+
+<div class="vald-info" id="info"></div>
+<h5 class="error_form text-danger" id="image4_error_message"></h5>
+<div style="display: flex">
+  <div
+    id="image-box4"
+    class="image-container clr"
+    style="height: 300px; width: 20%"
+  ></div>
+  <button
+    type="button"
+    class="betaButton"
+    id="crop-btn4"
+    style="
+      margin-top: 10px;
+      display: none;
+      width: 50%;
+      margin: 20rem 0rem 0rem 0rem;
+    "
+  >
+    Crop
+  </button>
+</div>
+</div>
+
+
+          <input type="file" name="image4" class="form-control" onchange="changeImg4(event)" id="id_image4"/><br />
           <button type="submit" class="betaButton">submit</button>
         </form>
       </div>
@@ -337,6 +375,74 @@ const imagebox3 = document.getElementById("image-box3");
         document.getElementById("image-box3").style.display = "none";
         // Hide the crop button
         document.getElementById("crop-btn3").style.display = "none";
+
+          
+      });
+    });
+  });
+
+  /////
+  function changeImg4(event){
+            
+            document.getElementById('imgView4').src = URL.createObjectURL(event.target.files[0])
+        }
+const imagebox4 = document.getElementById("image-box4");
+  const crop_btn4 = document.getElementById("crop-btn4");
+  const input4 = document.getElementById("id_image4");
+
+
+  // When user uploads the image this event will get triggered
+  input4.addEventListener("change", () => {
+    // Getting image file object from the input variable
+    const img_data4 = input4.files[0];
+    // createObjectURL() static method creates a DOMString containing a URL representing the object given in the parameter.
+    // The new object URL represents the specified File object or Blob object.
+    const url4 = URL.createObjectURL(img_data4);
+    // Creating a image tag inside imagebox which will hold the cropping view image(uploaded file) to it using the url created before.
+    imagebox4.innerHTML = `<img src="${url4}" id="image4" style="width:100%;">`;
+    // Storing that cropping view image in a variable
+    const image4 = document.getElementById("image4");
+
+    // Displaying the image box
+    document.getElementById("image-box4").style.display = "block";
+    // Displaying the Crop buttton
+    document.getElementById("crop-btn4").style.display = "block";
+    // Hiding the Post button
+    document.getElementById("imgView4").style.display = "block";
+
+    const cropper4 = new Cropper(image4, {
+      autoCropArea: 1,
+      viewMode: 1,
+      scalable: false,
+      zoomable: false,
+      movable: false,
+      minCropBoxWidth: 50,
+      minCropBoxHeight: 50,
+    });
+    // When crop button is clicked this event will get triggered
+    crop_btn4.addEventListener("click", () => {
+      // This method coverts the selected cropped image on the cropper canvas into a blob object
+      cropper4.getCroppedCanvas().toBlob((blob) => {
+        // Gets the original image data
+        let fileInputElement4 = document.getElementById("id_image4");
+        // Make a new cropped image file using that blob object, image_data.name will make the new file name same as original image
+        let file4 = new File([blob], img_data4.name, {
+          type: "image/*",
+          lastModified: new Date().getTime(),
+        });
+        // Create a new container
+        let container4 = new DataTransfer();
+        // Add the cropped image file to the container
+        container4.items.add(file4);
+        // Replace the original image file with the new cropped image file
+        fileInputElement4.files = container4.files;
+        document.getElementById("imgView4").src = URL.createObjectURL(
+          fileInputElement4.files[0]
+        );
+        // Hide the cropper box
+        document.getElementById("image-box4").style.display = "none";
+        // Hide the crop button
+        document.getElementById("crop-btn4").style.display = "none";
 
           
       });

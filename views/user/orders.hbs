@@ -8,6 +8,7 @@
       <th scope="col">Amount</th>
      
       <th scope="col">Status</th>
+      <th scope="col">Products</th>
        <th scope="col" style="
     width: 19rem;
 ">Options</th>
@@ -22,9 +23,22 @@
       <td scope="row">{{this.totalAmount}}</td>
    
       <td scope="row"  id="status{{this._id}}" >{{this.status}}</td>
+      <td>
+        {{#each this.products.products}}
+        {{#each ../../products}}
+       
+
+        {{#eq this._id ../this.item}}
       
-      <td scope="row"><a href="/orderProducts?id={{this._id}}"class="betaButton">View Products</a>
-     <span class="betaButton"  onclick="setStatus('{{this._id}}')"  style="cursor: pointer;">
+        <li>{{this.productname}}</li> 
+        
+        
+      
+        {{/eq}}
+        {{/each}}
+        {{/each}}</td>
+      <td scope="row"><a href="/orderProducts?id={{this._id}}"class="btn betaButton" style="height: 46px;padding-top: 8px;">View Products</a>
+     <span class="btn betaButton"  onclick="setStatus('{{this._id}}')"  style="cursor: pointer;height: 46px;padding-top: 8px;">
       Request cancel order
       </span>
      </td>

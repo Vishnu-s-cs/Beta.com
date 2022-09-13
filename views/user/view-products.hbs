@@ -2,27 +2,25 @@
 <section class="sec">
   
   
-  <div  id="logwarn">
 
-  </div>
    
    
  
   <div id="carouselExampleControls" class="carousel slide mt-4" data-ride="carousel">
     <div class="carousel-inner">
-      <div class="carousel-item active">
-        <img
-          src="https://images-eu.ssl-images-amazon.com/images/G/31/img19/Wireless/OnePlus/OnePlus6T/PriceDrop/D9867094_IN_WLME_OnePlus_PriceDrop_NewKV_PC_LP_1500x600._CB465812565_.jpg"
+       <div class="carousel-item active">
+        <a href="#hehe"><img
+          src="/banners/beta.com.png"
           class="d-block " alt="...">
+          </a>
       </div>
+      {{#each newProducts}}
       <div class="carousel-item">
-        <img src="https://www.tapsmart.com/wp-content/uploads/2017/05/whyswitch.jpg" class="d-block" alt="...">
-      </div>
-      <div class="carousel-item">
-        <img
-          src="https://fdn.gsmarena.com/imgroot/news/19/06/xiaomi-mi-9t-malaysia-philippines/-1220x526/gsmarena_003.jpg"
-          class="d-block" alt="...">
-      </div>
+       <a href="/product-details?id={{this._id}}"><img
+          src="/banners/{{this._id}}.jpg"
+          class="d-block " alt="...">
+      </div></a> 
+     {{/each}}
     </div>
     <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev" style="top: 9rem;">
       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -33,12 +31,14 @@
       <span class="sr-only">Next</span>
     </a>
   </div>
+  <span id="hehe"></span>
  <h3 style="
     position: relative;
     margin-top: 15rem;
     margin-bottom: -13rem;
     margin-left: 7rem;
 ">Recent Launches</h3>
+
   {{#each newProducts}}
 <div class="card h-100" style="background-color: transparent;width: 18rem;display: inline-block;margin-top: 15rem;margin-left: 6.2rem;">
             <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light" data-mdb-ripple-color="light">

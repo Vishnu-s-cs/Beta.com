@@ -12,8 +12,8 @@
      <table id="userTable" class="table mt-5 pl-3">
     <thead>
       <tr>
-        <th scope="col">Category</th>
-        <th scope="col">Offer</th>
+        <th scope="col" style="width: 226.3px;">Category</th>
+        <th scope="col" style="width: 256.062px;">Offer</th>
         <th scope="col">Options</th>
       </tr>
     </thead>
@@ -24,21 +24,24 @@
           {{#if this.offer}}
           <td scope="row">{{this.offer}}%</td>
           {{else}}
-          <span> </span>
+          <td><span>no offers</span></td>
           {{/if}}
           <td>
 
-            <a href="/admin/edit-category?id={{this._id}}"><img
+            <a href="/admin/edit-category?id={{this._id}}" style="position: absolute;"><img
                 src="/images/EditButton.svg"
                 alt=""
                 class="editBtn"
               /></a>
-
-   
+            <a href="/admin/add-offer?id={{this._id}}" style="margin-left: 8rem;margin-right: -82px;"> <button type="submit"  class="betaButton mt-1 ml-auto" style="text-decoration: none ; ">Add Offer</button></a>
+        
             <a
               href="/admin/delete-category?id={{this._id}}"
               onclick="return confirm('Are you  want to remove {{this.category}}')"
-            ><i class="fa fa-trash deleteBtn"></i></a>
+            ><i class="fa fa-trash deleteBtn" style="
+    padding-left: 0px;
+    left: 54rem;
+"></i></a>
           </td>
         </tr>
       {{/each}}

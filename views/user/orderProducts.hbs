@@ -3,6 +3,7 @@
       <div class="row">
       
         {{#each product}}
+        {{#if this.product._id}}
         <div class="col-md-3">
     <div class="card p-5em mt-7" style="width: 14rem;">
   <img class="card-img-top" style="height:14em"src="/product-images/{{this.product._id}}.jpg" alt="Card image cap">
@@ -14,6 +15,7 @@
   </div>
   </div>
   </div>
+  {{/if}}
   {{/each}}
   </div>
   

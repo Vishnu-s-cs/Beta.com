@@ -12,6 +12,7 @@ exports.products = async (req, res) => {
         
         })
     } catch (err) {
+      res.redirect('/error')
       console.log(err);
     }
   };
@@ -73,6 +74,7 @@ exports.products = async (req, res) => {
       
     } catch (err) {
       console.log(err);
+      res.redirect('/error')
     }
   };
 
@@ -83,9 +85,10 @@ exports.blockUser = async (req, res,next) => {
     adminHelpers.blockUser(userId).then((response)=>{
       msg = "user blocked sucessfully"
       res.redirect("/admin/all-users");
-    })
+    }).catch(()=>{res.redirect('/error')})
     } catch (err) {
       console.log(err);
+      res.redirect('/error')
     }
   };
 
@@ -100,6 +103,7 @@ exports.getAllUsers = async (req, res,next) => {
       })
     } catch (err) {
       console.log(err);
+      res.redirect('/error')
     }
   };
 exports.unblock = async (req, res) => {
@@ -111,6 +115,7 @@ exports.unblock = async (req, res) => {
     })
     } catch (err) {
       console.log(err);
+      res.redirect('/error')
     }
   };
 exports.viewManageCategory = async (req, res) => {
@@ -123,6 +128,7 @@ exports.viewManageCategory = async (req, res) => {
     })
    } catch (err) {
       console.log(err);
+      res.redirect('/error')
     }
   };
 exports.viewLogin = async (req, res) => {
@@ -130,6 +136,7 @@ exports.viewLogin = async (req, res) => {
       res.render("admin/admin-login");
     } catch (err) {
       console.log(err);
+      res.redirect('/error')
     }
   };
 
@@ -141,6 +148,7 @@ exports.addCategory = async (req, res) => {
       // redirect to /admin/manage-categories
     } catch (err) {
       console.log(err);
+      res.redirect('/error')
     }
   };
 exports.viewEditCategory = async (req, res) => {
@@ -152,6 +160,7 @@ exports.viewEditCategory = async (req, res) => {
       res.render('admin/editCategory',{admin:true,category,Admin:req.session.admin})
     } catch (err) {
       console.log(err);
+      res.redirect('/error')
     }
   };
   exports.editCategory = (req, res) => {
@@ -163,6 +172,7 @@ exports.viewEditCategory = async (req, res) => {
       res.redirect('/admin/manage-categories')
     } catch (err) {
       console.log(err);
+      res.redirect('/error')
     }
   };
 exports.deleteCategory = async (req, res) => {
@@ -172,6 +182,7 @@ exports.deleteCategory = async (req, res) => {
       res.redirect("/admin/manage-categories")
     } catch (err) {
       console.log(err);
+      res.redirect('/error')
     }
   };
 
@@ -182,6 +193,7 @@ exports.deleteCategory = async (req, res) => {
       res.redirect("/admin/all-orders")
     } catch (err) {
       console.log(err);
+      res.redirect('/error')
     }
   };
 
@@ -199,13 +211,20 @@ exports.deleteCategory = async (req, res) => {
           }
         
         });
-       
+        let options = {year: 'numeric', month: 'short', day: 'numeric' };
+        orders.forEach(data => {
+          // console.log(data.deliveryDetails.Date);
+          data.date=(data.deliveryDetails.Date.toLocaleDateString("en-US", options))
+          
+          });
+        res.render('admin/salesReport',{admin:req.session.admin,total,no,orders})
       })
     
       
-      res.render('admin/salesReport',{admin:req.session.admin,total,no})
+      
     } catch (err) {
       console.log(err);
+      res.redirect('/error')
     }
   };
 exports.orderDetails = async (req, res) => {
@@ -218,6 +237,7 @@ exports.orderDetails = async (req, res) => {
       });
     } catch (err) {
       console.log(err);
+      res.redirect('/error')
     }
   };
   exports.addproduct=async(req,res,next)=>{
@@ -226,10 +246,12 @@ exports.orderDetails = async (req, res) => {
       productHelpers.addproducts(req.body, async(id) => {
             try {
               let image = req.files.image;
+              let banner = req.files.image4
               let subImages = []
               if(req.files?.image2){ subImages.push(req.files?.image2)}
               if(req.files?.image3){ subImages.push(req.files?.image3)}
-              for (let index = 0; index < 2; index++) {
+           
+              for (let index = 0; index < subImages.length; index++) {
                await subImages[index].mv("./public/product-images/" + id + index +".jpg", (err, data) => {
                   if (!err) {
                 
@@ -240,30 +262,91 @@ exports.orderDetails = async (req, res) => {
                 })
                 
               }
-              await image.mv("./public/product-images/" + id + ".jpg", (err, data) => {
-                if (!err) {
-                  res.redirect("/admin/products");
-                  
-                } else {
-                  console.log(err);
-                }
-              });
+              if (image) {
+                await image.mv("./public/product-images/" + proId + ".jpg", (err, data) => {
+                  if (!err) {
+                    res.redirect("/admin/products");
+                    
+                  } else {
+                    console.log(err);
+                  }
+                });
+              }
+              if (banner) {
+                await banner.mv("./public/banners/" + proId + ".jpg", (err, data) => {
+                  if (!err) {
+                    res.redirect("/admin/products");
+                    
+                  } else {
+                    console.log(err);
+                  }
+                });
+              }
             } catch (error) {
               res.redirect('/admin/products')
             }
+            await banner.mv("./public/banners/" + proId + ".jpg", (err, data) => {
+              if (!err) {
+                res.redirect("/admin/products");
+                
+              } else {
+                console.log(err);
+                
+              }
+            });
            
           });
     }catch(err){
       console.log(err+"error in add product")
+      res.redirect('/error')
     }
   }
+  exports.viewCoupons = async (req, res) => {
+    try {
+      adminHelpers.getCoupons().then((response)=>{
+        
+        let coupons=  response
+
+        res.render("admin/coupons",{coupons,admin:req.session.admin});
+    })
+   } catch (err) {
+      console.log(err);
+      res.redirect('/error')
+    }
+  };
+  exports.addCoupon = async (req, res) => {
+    try {
+      adminHelpers.addCoupon(req.body)
+        res.redirect("/admin/coupons");
+
+      // redirect to /admin/manage-categories
+    } catch (err) {
+      console.log(err);
+      res.redirect('/error')
+    }
+  };
+
+  exports.deleteCoupon = async (req, res) => {
+    try {
+      let proid=req.query.id
+    productHelpers.deleteCoupon(proid)
+      res.redirect("/admin/coupons")
+    } catch (err) {
+      console.log(err);
+      res.redirect('/error')
+    }
+  };
+  exports.addCatOffer = async (req, res) => {
+    try {
+      let catId = req.query.id
+      res.render("admin/addCategoryOffers",{catId,admin:true});
+    } catch (err) {
+     
+      res.redirect('/error')
+    }
+  };
+
 // exports.orderSuccess = async (req, res) => {
-//     try {
-//       res.render("user/orderSuccess");
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   };exports.orderSuccess = async (req, res) => {
 //     try {
 //       res.render("user/orderSuccess");
 //     } catch (err) {

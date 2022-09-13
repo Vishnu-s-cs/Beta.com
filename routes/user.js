@@ -140,4 +140,6 @@ router.post('/add-address2',verify, controller.addAddress2)
 
 router.post('/change-password',verify, controller.changePassword)
 
+router.post('/verifyCoupon',controller.verifyCoupon)
+
 module.exports = router;

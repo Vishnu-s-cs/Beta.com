@@ -626,3 +626,17 @@ nav .dropdown{
 .cart{
 margin-top: 5rem;
 }
+.sr .dataTables_filter{
+  display: none;
+}
+.sr  .dataTables_info{
+  display: none;
+}
+.sr .dataTables_paginate{
+  display: none;
+}
+.sr .dt-buttons{
+  position: absolute;
+  top: -101rem;
+  left: 5rem;
+}

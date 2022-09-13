@@ -37,19 +37,19 @@
                 
                 <td><button class="cart-item-count ml-3 betaButton btn-sm"  id="neg-btn{{this.product._id}}"  onclick="changeQuantity('{{this._id}}','{{this.product._id}}',-1,'{{this.quantity}}')" style="width: 3rem;">-</button><span class="badge badge-light"   id="spn{{this.product._id}}">{{this.quantity}}</span><button class="cart-item-count mr-3 betaButton btn-sm"  onclick="changeQuantity('{{this._id}}','{{this.product._id}}',1,'{{this.quantity}}')" style="width: 3rem;">+</button></td>
                 <td>
-                       {{#each ../categories}}
+                       {{!-- {{#each ../categories}}
                    
                 {{#ifCond ../this.product.category this._id}}
                   {{#if this.offer}}
                     <span id="subTotal">₹{{#off ../this.product.price this.offer}}{{/off}}</span> 
                  
-                  {{else}}
-                  <span id="subTotal">₹{{../this.subTotal}}</span>
-                  {{/if}}
+                  {{else}} --}}
+                  <span id="subTotal{{this.product._id}}">₹{{this.subTotal}}</span>
+                  {{!-- {{/if}}
                   
 
                 {{/ifCond}}
-              {{/each}}
+              {{/each}} --}}
                     </td>
                 <td><button  onclick="productDelete('{{this.product._id}}','{{this._id}}','{{this.product.productname}}')"class="betaButton">remove</button></td>
                 

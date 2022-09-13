@@ -87,6 +87,7 @@ exports.home = async function (req, res, next) {
 
 exports.viewLogin = (req, res) => {
   try {
+  
     if (req.session.userLoggedIn) {
       res.redirect("/");
     } else {
@@ -94,13 +95,14 @@ exports.viewLogin = (req, res) => {
         res.render("user/login", { loginErr: msg });
         msg = false;
       } else {
-        console.log("dasdas");
+       
         res.render("user/login", { loginErr: req.session.userLoginErr });
         req.session.userLoginErr = false;
       }
     }
   } catch (err) {
     console.log(err);
+    res.redirect('/error')
   }
 };
 
@@ -115,6 +117,7 @@ exports.viewSignUp = (req, res) => {
     }
   } catch (err) {
     console.log(err);
+    res.redirect('/error')
   }
 };
 
@@ -148,6 +151,7 @@ exports.SignUp = (req, res) => {
     });
   } catch (err) {
     console.log(err);
+    res.redirect('/error')
   }
 };
 
@@ -163,6 +167,7 @@ exports.logout = (req, res) => {
       .redirect("/");
   } catch (err) {
     console.log(err);
+    res.redirect('/error')
   }
 };
 
@@ -170,16 +175,36 @@ exports.viewCart = async (req, res) => {
   try {
     let products = await userHelper.getCartProducts(req.session.user._id);
 
-    let total = await userHelper.getTotalAmount(req.session.user._id);
-    
+    // let total = await userHelper.getTotalAmount(req.session.user._id);
+    let total = 0
+  
     let categories = await adminHelper.getCategories()
     products.forEach((data) => {
-      console.log("..........................", data);
-      data.subTotal = Number(data.quantity) * Number(data.product.price);
+
+      try {
+        if (data.product.offerPrice) {
+          data.subTotal = Number(data.quantity) * Number(data.product.offerPrice);
+          console.log(Number(data.product.offerPrice));
+    
+        } else {
+          data.subTotal = Number(data.quantity) * Number(data.product.price);
+         
+        }
+       total+=data.subTotal
+      } catch (error) {
+        data.subTotal = Number(data.quantity) * Number(data.product.price);
+      
+        total+=data.subTotal
+      }
+      
+     
     });
+    
+   
     res.render("user/cart", { products, total, user: req.session.user,categories});
   } catch (err) {
     console.log(err);
+    res.redirect('/error')
   }
 };
 
@@ -194,26 +219,55 @@ exports.addToCart = async(req, res) => {
     }
   } catch (err) {
     console.log(err);
+    res.redirect('/error')
   }
 };
 
 exports.changeCartQuantity = (req, res) => {
   try {
     let price = 0;
+    let offerPrice = 0;
+    let total  = 0
     productHelper.productsDetails(req.body.product).then((response) => {
       price = response.price;
+      offerPrice = response?.offerPrice
     });
+
     // console.log(price);
     userHelper.changeCartQuantity(req.body).then(async (response) => {
-      let total = await userHelper.getTotalAmount(req.session.user?._id);
+      let products = await userHelper.getCartProducts(req.session.user._id);
+      products.forEach((data) => {
 
-      response.total = total;
+  
+        try {
+          if (data.product.offerPrice) {
+            data.subTotal = Number(data.quantity) * Number(data.product.offerPrice);
+      
+          } else {
+            data.subTotal = Number(data.quantity) * Number(data.product.price);
+           
+          }
+         total+=data.subTotal
+        } catch (error) {
+          data.subTotal = Number(data.quantity) * Number(data.product.price);
+        
+          total+=data.subTotal
+        }
+         
+       
+        
+       
+      });
+      
+      response.total = total
       response.price = price;
+      response.offerPrice = offerPrice
       res.json(response);
     });
   } catch (err) {
     console.log(err);
     console.log(req.body);
+    res.redirect('/error')
   }
 };
 
@@ -224,12 +278,37 @@ exports.deleteProduct = (req, res) => {
     });
   } catch (err) {
     console.log(err);
+    res.redirect('/error')
   }
 };
 
 exports.viewPlaceOrder = async (req, res) => {
   try {
-    let total = await userHelper.getTotalAmount(req.session.user._id);
+    let total = 0
+    let products = await userHelper.getCartProducts(req.session.user._id);
+      products.forEach((data) => {
+
+  
+        try {
+          if (data.product.offerPrice) {
+            data.subTotal = Number(data.quantity) * Number(data.product.offerPrice);
+      
+          } else {
+            data.subTotal = Number(data.quantity) * Number(data.product.price);
+           
+          }
+         total+=data.subTotal
+        } catch (error) {
+          data.subTotal = Number(data.quantity) * Number(data.product.price);
+        
+          total+=data.subTotal
+        }
+         
+       
+        
+       
+      });
+    
     let user = await adminHelper.userDetails(req.session.user._id);
     let addresses = false;
     if (user.addresses) {
@@ -238,13 +317,14 @@ exports.viewPlaceOrder = async (req, res) => {
     res.render("user/placeorder", { total, user: req.session.user, addresses });
   } catch (err) {
     console.log(err);
+    res.redirect('/error')
   }
 };
 
 exports.placeOrder = async (req, res) => {
   try {
     // console.log("Checkout form body", req.body);
-    console.log("========");
+    
     let products = await userHelper.orderProducts(req.session.user._id);
 
     products.products.forEach(data=>{
@@ -257,16 +337,44 @@ exports.placeOrder = async (req, res) => {
     })
     let user = await adminHelper.userDetails(req.session.user._id);
    
-    let totalPrice = await userHelper.getTotalAmount(req.session.user._id);
+    let total = 0
+    let productss = await userHelper.getCartProducts(req.session.user._id);
+      productss.forEach((data) => {
+
+  
+        try {
+          if (data.product.offerPrice) {
+            data.subTotal = Number(data.quantity) * Number(data.product.offerPrice);
+      
+          } else {
+            data.subTotal = Number(data.quantity) * Number(data.product.price);
+           
+          }
+         total+=data.subTotal
+        } catch (error) {
+          data.subTotal = Number(data.quantity) * Number(data.product.price);
+        
+          total+=data.subTotal
+        }
+         if (req.body.coupon) {
+          let off = Number(req.body.coupon)
+          total= total-(total*(off/100))
+         }
+       
+        
+       
+      });
+    
+      
     req.body.UserId = req.session.user._id;
-    userHelper.orderPlace(req.body, products, totalPrice).then((orderId) => {
+    userHelper.orderPlace(req.body, products, total).then((orderId) => {
       if (req.body["Payment-method"] === "COD") {
         res.json({ codSuccess: true });
       } else if (req.body["Payment-method"] === "paypal") {
         res.json({ codSuccess: true });
       } else {
         userHelper
-          .generateRazorPay(orderId, totalPrice)
+          .generateRazorPay(orderId, total)
           .then((order) => {
             order.user = user;
             res.json(order);
@@ -280,6 +388,7 @@ exports.placeOrder = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
+    res.redirect('/error')
   }
 };
 
@@ -288,13 +397,14 @@ exports.orderSuccess = async (req, res) => {
     res.render("user/orderSuccess");
   } catch (err) {
     console.log(err);
+    res.redirect('/error')
   }
 };
 
 exports.viewOrders = async (req, res) => {
   try {
     let orders = await userHelper.getOrders(req.session.user._id);
-
+    let products = await productHelper.getAllProducts()
    let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     orders.forEach(data => {
       // console.log(data.deliveryDetails.Date);
@@ -302,9 +412,10 @@ exports.viewOrders = async (req, res) => {
       
       });
 
-    res.render("user/orders", { user: req.session.user, orders });
+    res.render("user/orders", { user: req.session.user, orders,products });
   } catch (err) {
     console.log(err);
+    res.redirect('/error')
   }
 };
 
@@ -316,6 +427,7 @@ exports.viewOrderProducts = async (req, res) => {
     res.render("user/orderProducts", { user: req.session.user, product });
   } catch (err) {
     console.log(err);
+    res.redirect('/error')
   }
 };                    
 
@@ -336,6 +448,7 @@ exports.verifyPayment = async (req, res) => {
       });
   } catch (err) {
     console.log(err);
+    res.redirect('/error')
   }
 };
 
@@ -345,6 +458,7 @@ exports.viewwishList = async (req, res) => {
     res.render("user/wishlist", { products, user: req.session.user });
   } catch (err) {
     console.log(err);
+    res.redirect('/error')
   }
 };
 
@@ -357,6 +471,7 @@ exports.removeWishList = (req, res) => {
       });
   } catch (err) {
     console.log(err);
+    res.redirect('/error')
   }
 };
 
@@ -376,6 +491,7 @@ exports.wishList = (req, res) => {
     });
   } catch (err) {
     console.log(err);
+    res.redirect('/error')
   }
 };
 exports.viewSendOTP = (req, res) => {
@@ -383,6 +499,7 @@ exports.viewSendOTP = (req, res) => {
     res.render("user/otpLogin");
   } catch (err) {
     console.log(err);
+    res.redirect('/error')
   }
 };
 exports.sendOTP = (req, res) => {
@@ -432,6 +549,7 @@ exports.sendOTP = (req, res) => {
     });
   } catch (err) {
     console.log(err);
+    res.redirect('/error')
   }
 };
 exports.verifyOTP = async (req, res) => {
@@ -477,6 +595,7 @@ exports.verifyOTP = async (req, res) => {
     }
   } catch (err) {
     console.log(err);
+    res.redirect('/error')
   }
 };
 exports.productsDetails = async (req, res) => {
@@ -504,6 +623,7 @@ exports.productsDetails = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
+    res.redirect('/error')
   }
 };
 let updatedUser = false;
@@ -525,6 +645,7 @@ exports.profile = async (req, res) => {
     res.render("user/profile", { user, cartCount, wishlist });
   } catch (err) {
     console.log(err);
+    res.redirect('/error')
   }
 };
 
@@ -542,6 +663,7 @@ exports.updateProfile = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
+    res.redirect('/error')
   }
 };
 exports.addAddress = async (req, res, next) => {
@@ -558,6 +680,7 @@ exports.addAddress = async (req, res, next) => {
     });
   } catch (err) {
     console.log(err);
+    res.redirect('/error')
   }
 };
 exports.addAddress2 = async (req, res, next) => {
@@ -574,6 +697,7 @@ exports.addAddress2 = async (req, res, next) => {
     });
   } catch (err) {
     console.log(err);
+    res.redirect('/error')
   }
 };
 exports.changePassword=async (req, res) => {
@@ -625,5 +749,48 @@ exports.changePassword=async (req, res) => {
 
   }catch(err){
     console.log(err,'error happened while changing password');
+    res.redirect('/error')
   }
 }
+exports.verifyCoupon = async (req, res, next) => {
+  try {
+    let total = 0
+    let products = await userHelper.getCartProducts(req.session.user._id);
+      products.forEach((data) => {
+
+  
+        try {
+          if (data.product.offerPrice) {
+            data.subTotal = Number(data.quantity) * Number(data.product.offerPrice);
+      
+          } else {
+            data.subTotal = Number(data.quantity) * Number(data.product.price);
+           
+          }
+         total+=data.subTotal
+        } catch (error) {
+          data.subTotal = Number(data.quantity) * Number(data.product.price);
+        
+          total+=data.subTotal
+        }
+         
+       
+        
+       
+      });
+    
+    let user = await adminHelper.userDetails(req.session.user._id);
+    let addresses = false;
+    if (user.addresses) {
+      addresses = user.addresses;
+    }
+    userHelper.verifyCoupon(req.body).then((coupon)=>{
+      console.log(coupon);
+      res.render("user/placeorder", { total, user: req.session.user, addresses,coupon });
+    })
+   
+  } catch (err) {
+    console.log(err);
+    res.redirect('/error')
+  }
+};

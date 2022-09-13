@@ -15,13 +15,30 @@ const helpers = require('template-helpers')();
 var fileUpload = require('express-fileupload')
 var app = express();
 let method = hbs.create({})
-
-method.handlebars.registerHelper('ifCond',function(v1,v2,options){
+method.handlebars.registerHelper('eq',function(v1,v2,options){
+  v1=v1.toString();
+  v2=v2.toString();
   if(v1 == v2){
-    return options.fn(this);
+  
+    return options.fn(this)
+    
   }
+  else{
      return options.inverse(this);
+  }
 });
+method.handlebars.registerHelper('ifCond',function(v1,v2,options){
+  
+  if(v1 == v2){
+   
+    return options.fn(this);
+    
+  }
+  else{
+     return options.inverse(this);
+  }
+});
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
@@ -32,6 +49,7 @@ const exhbs= hbs.create({
 
   helpers:{
     iff:function (a,b,options){
+      
      
       a=a.toString();
       b=b.toString();
@@ -83,7 +101,14 @@ app.use('/admin', adminRouter);
 
 
 
-
+app.get('/error',(req,res)=>{
+  if (req.session.admin) {
+    res.render('error',{admin:true});
+  }
+  else{
+    res.render('error');
+  }
+})
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -95,10 +120,11 @@ app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
+  console.log(err.message);
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.redirect('/error')
+  
 });
 
 app.listen(process.env.PORT || 4000,()=>{

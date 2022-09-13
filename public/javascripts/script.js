@@ -89,10 +89,18 @@ function changeQuantity(cartId,proId,count){
         },
         method:'post',
         success:(response)=>{
+           
+            let subTotal = 0
+            if (response.offerPrice) {
+                subTotal = response.offerPrice*(quantity+count)
+              
+            } else {
+                subTotal = response.price*(quantity+count)
             
-            let subTotal = response.price*(quantity+count)
-            
-            $('#subTotal').html(subTotal)
+            }
+           
+            console.log('#subTotal'+proId);
+            $('#subTotal'+proId).html('₹'+subTotal)
             if(response.deleteProduct){
                 if(response.total){
                   

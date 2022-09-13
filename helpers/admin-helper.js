@@ -67,13 +67,17 @@ module.exports={
     },
     blockUser:(userId)=>{
         return new Promise((resolve,reject)=>{
-           
+            
             let query={ _id: objectId(userId) };
             db.get().collection(collections.USER_COLLECTION).findOneAndUpdate(query,{$set:{blocked:true}}).then((response)=>{
                 resolve(response)
             }).catch((err)=>{
                 console.log(err)
+                reject()
             })
+            
+         
+          
         })
     }  ,
     unblockUser:(userId)=>{
@@ -147,11 +151,12 @@ module.exports={
             resolve(data);
           });
    },
-   addCategoryOff:(catId,offer)=>{
+   addCategoryOff:(catId,offer,validTill)=>{
     try {
         return new Promise(async(resolve,reject)=>{
             let offerPrice = []
             let off=Number(offer)
+            let offTill = validTill
             let ppa = {category:catId} 
             await db.get().collection(collections.PRODUCT_COLLECTION).find(ppa).toArray().then((res)=>{
                 res.forEach(data=>{
@@ -161,7 +166,7 @@ module.exports={
                offerPrice.forEach(data=>{
                 db.get().collection(collections.PRODUCT_COLLECTION).updateOne({_id:data.proId},{$set:{offerPrice:data.offerPrice}})
                })
-               db.get().collection(collections.CATEGORY_COLLECTION).updateOne({_id:objectId(catId)},{$set:{offer:off}}).then((res)=>{
+               db.get().collection(collections.CATEGORY_COLLECTION).updateOne({_id:objectId(catId)},{$set:{offer:off,validTill:offTill}}).then((res)=>{
                 
                })
             })
@@ -175,16 +180,22 @@ module.exports={
     }
     
         
-        //  let offer
-        // db.get().collection('categories').updateOne({category:"Nothing"},{$set:{offer:off}}).then(()=>{
-        //     db.get().collection(collections.PRODUCT_COLLECTION).updateMany({category:"6314f64327d16938f421f191"},{$set:{offerPrice:{$inc:{
-        //         "$price":-{$mul:{"$price":{$div:{off:100}}}}
-        //     }}}}).then(()=>{
-        //         resolve()
-        //     })
+    
+   },
+   
+   getCoupons:()=>{
+       return new Promise(async(resolve,reject)=>{
+        let coupons= await db.get().collection(collections.COUPON_COLLECTION).find().toArray()
+        
+        resolve(coupons)
+       })
+   }, addCoupon:(data)=>{
+        
+    db.get().collection(collections.COUPON_COLLECTION).insertOne(data)
      
-    // })
-   }
+     
+
+}
     //
     
 }

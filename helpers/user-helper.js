@@ -605,5 +605,13 @@ module.exports = {
           })
       })
 
+  }, verifyCoupon: (coupon) => {
+    return new Promise(async (resolve, reject) => {
+       db.get().collection(collections.COUPON_COLLECTION).findOne({coupon:coupon.coupon}).then((res)=>
+       {
+        console.log(res);
+        resolve(res)
+       })
+    });
   }
 };

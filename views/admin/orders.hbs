@@ -6,7 +6,7 @@
                     <tr>
                     <th>Date</th>
                     
-                    <th>Status</th>
+                    <th style="width: 171.325px;;">Status</th>
                     <th>Options</th>
                     </tr>
                 </thead>
@@ -33,7 +33,7 @@
     width: 8rem;
 "> User details</button>
   <button class="betaButton" type="button" data-toggle="collapse" data-target="#2{{this._id}}" aria-expanded="false" aria-controls="multiCollapseExample2" style="
-    width: 8rem;
+    width: 10rem;
 ">Order details</button>
 <a href="/admin/remove-order?id={{this._id}}"><i class="fa fa-close" style="
     font-size: 2rem;
@@ -55,15 +55,15 @@
     </div>
   </div>
   <div class="col">
-    <div class="collapse multi-collapse" id="2{{this._id}}">
+    <div class="collapse multi-collapse" id="2{{this._id}}" style="
+    width: 36rem;
+">
       <div class="card card-body">
         <h5>Address:{{this.deliveryDetails.address}}</h5><br>
-        <h5>Pincode:{{this.deliveryDetails.pincode}}</h5><br>
-        <h5>Mob.No:{{this.deliveryDetails.mobile_No}}</h5><br>
         <h5>Payment:{{this.payment_Method}}</h5><br>
         <h5>Amount:{{this.totalAmount}}</h5><br>
         <h5>Status:{{this.status}}</h5><br>
-        <a href="/admin/ordered-products?id={{this._id}}">Products</a>
+        <a href="/admin/ordered-products?id={{this._id}}" class="betaButton" style="text-align: center;">View Products</a>
 
       </div>
     </div>
