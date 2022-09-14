@@ -405,7 +405,7 @@ exports.viewOrders = async (req, res) => {
   try {
     let orders = await userHelper.getOrders(req.session.user._id);
     let products = await productHelper.getAllProducts()
-   let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+   let options = { year: 'numeric', month: 'short', day: 'numeric' };
     orders.forEach(data => {
       // console.log(data.deliveryDetails.Date);
       data.date=(data.deliveryDetails.Date.toLocaleDateString("en-US", options))

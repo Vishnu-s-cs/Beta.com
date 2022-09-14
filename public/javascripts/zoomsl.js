@@ -1,4 +1,4 @@
-/*http://zoomsl.sergeland.ru Sergey Zaragulov skype: deeserge icq: 287295769 sergeland@mail.ru*/
+
 
 (function ($, global) {
     "use strict";

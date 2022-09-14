@@ -2,156 +2,119 @@ var db=require('../config/connection')
 var collections=require('../config/collections')
 const bcrypt=require('bcrypt')
 var objectId=require('mongodb').ObjectId
+let moment = require('moment')
 module.exports={
-    doLogin:async (adminData)=>{
-        try {
-            return await new Promise(async (resolve, reject) => {
-             
-                let response = {}
-                let admin = await db.get().collection(collections.ADMIN_COLLECTION).findOne({ email: adminData.email })
-                if (admin) {
+    doLogin:(adminData)=>{
+try {
+    return new Promise(async(resolve,reject)=>{
+        let response={}
+        await db.get().collection(collections.ADMIN_COLLECTION).findOne({email:adminData.email}).then((admin)=>{
+            if(admin){
+            
+                bcrypt.compare(adminData.password,admin.password).then((status)=>{
+                    if(status){
+                        console.log("logged in");
+                        response.admin=admin
+                        response.status=true
+                        resolve(response)
+                    }else{
+                        console.log("password err")
+                        resolve({status:false})
 
-                    bcrypt.compare(adminData.password, admin.password).then((status) => {
-                        if (status) {
-                            console.log("logged in")
-                            response.admin = admin
-                            response.status = true
-                            resolve(response)
-                        } else {
-                            console.log("password err")
-                            resolve({ status: false })
-
-                        }
-                    })
-                }
-                else {
-                    console.log("user not found")
-                    resolve({ status: "falseUser" })
-                }
-            })
-        } catch(error) {
-            console.log(error);
-        }
+                    }
+                })
+            }else
+            {
+                console.log("user not found")
+                resolve({status:"falseUser"})
+            }
+        }).catch((err)=>{reject()})
+        })
+} catch (error) {
+    
+}
+        
+            
 
     },
    
-    getUsers:async ()=>{
-        try {
-            return await new Promise(async (resolve, reject) => {
-               await db.get().collection(collections.USER_COLLECTION).find().toArray()
-                .then((users)=>{
-                    resolve(users);
-                 }).catch((err)=>{reject();})
-
-            })
-        } catch (err) {
-            console.log(err);
-        }
+    getUsers:()=>{
+        return new Promise(async(resolve,reject)=>{
+         let users= await db.get().collection(collections.USER_COLLECTION).find().toArray()
+         
+         resolve(users)
+        })
     },
-    getAllOrders:async ()=>{
-        try {
-            return await new Promise(async (resolve, reject) => {
-               await db.get().collection(collections.ORDER_COLLECTION).find().sort({ "deliveryDetails.Date": -1 }).toArray()
-                .then((orders)=>{
-                    resolve(orders);
-                 }).catch((err)=>{reject();})
-            })
-        } catch(err) {
-            console.log(err);
-        }
+    getAllOrders:()=>{
+        return new Promise(async(resolve,reject)=>{
+            let orders=await db.get().collection(collections.ORDER_COLLECTION).find().sort({"deliveryDetails.Date":-1}).toArray()
+            
+            resolve(orders)
+        })
     },
  
    
-    userDetails:async (userId)=>{
+    userDetails:(userId)=>{
         
-        try {
-            return await new Promise(async (resolve, reject) => {
-                await db.get().collection(collection.USER_COLLECTION).findOne({ _id: objectId(userId) }).then((user)=>{
-                    resolve(user);
-                 }).catch((err)=>{reject();})
-
-            })
-        } catch(err) {
-            console.log(err);
-        }
+        return new Promise(async(resolve,reject)=>{
+         let user=await db.get().collection(collections.USER_COLLECTION).findOne({_id:objectId(userId)})
+                
+                resolve(user)
+            
+        })
     },
-    setStatus:async (details)=>{
+    setStatus:(details)=>{
         
-        try {
-            return await new Promise((resolve, reject) => {
-                db.get().collection(collections.ORDER_COLLECTION).updateOne({ _id: objectId(details.orderId) },
-                    {
-                        $set: { status: details.status }
-                    }
-                ).then(()=>{
-                    resolve();
-                 }).catch((err)=>{reject();})
-            })
-        }catch(err) {
-            console.log(err);
-        }
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collections.ORDER_COLLECTION).updateOne({_id:objectId(details.orderId)},
+            {
+                $set:{status:details.status}
+            }
+            )
+        })
     },
     blockUser:(userId)=>{
-        try {
-            return new Promise((resolve,reject)=>{
-            
-                let query={ _id: objectId(userId) };
-                db.get().collection(collections.USER_COLLECTION).findOneAndUpdate(query,{$set:{blocked:true}}).then((response)=>{
-                    resolve(response)
-                }).catch((err)=>{
-                    console.log(err)
-                    reject()
-                })
-                
-             
-              
+        return new Promise((resolve,reject)=>{
+           try {
+              let query={ _id: objectId(userId) };
+            db.get().collectin(collections.USER_COLLECTION).findOneAndUpdate(query,{$set:{blocked:true}}).then((response)=>{
+                resolve(response)
+            }).catch((err)=>{
+                console.log(err)
+                reject()
             })
-        } catch (error) {
+            
+           } catch (error) {
             console.log(error);
-        }
-       
+           }
+          
+        })
     }  ,
     unblockUser:(userId)=>{
-        try {
-            return new Promise((resolve,reject)=>{
+        return new Promise((resolve,reject)=>{
       
-                let query={ _id: objectId(userId) };
-                db.get().collection(collections.USER_COLLECTION).findOneAndUpdate(query,{$set:{blocked:false}}).then((response)=>{
-                    resolve(response)
-                }).catch((err)=>{
-                    console.log(err)
-                    reject()
-                })
-            })  
-        } catch (error) {
-            console.log(error);
-        }
-      
+            let query={ _id: objectId(userId) };
+            db.get().collection(collections.USER_COLLECTION).findOneAndUpdate(query,{$set:{blocked:false}}).then((response)=>{
+                resolve(response)
+            }).catch((err)=>{
+                console.log(err)
+            })
+        })
     },
    
-    getCategories:async ()=>{
-        try {
-            getOffers()
-            return await new Promise(async (resolve, reject) => {
-               await db.get().collection(collections.CATEGORY_COLLECTION).find()
-                console.log(categories);
-
-                resolve(categories)
-            })
-      
-    }catch(err){
-        console.log(err);
-    }}
+    getCategories:()=>{
+        getOffers()
+        return new Promise(async(resolve,reject)=>{
+         let categories= await db.get().collection(collections.CATEGORY_COLLECTION).find().toArray()
+         
+         resolve(categories)
+        })
+    }
     ,
    
     addCategories:(data)=>{
-        try {
-            db.get().collection(collections.CATEGORY_COLLECTION).insertOne(data)
-        } catch (error) {
-            console.log(error);
-        }
-       
-
+        
+        db.get().collection(collections.CATEGORY_COLLECTION).insertOne(data)
          
          
   
