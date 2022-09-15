@@ -19,9 +19,13 @@ var instance = new Razorpay({
 });
 module.exports = {
   doSignup: (userData) => {
-    try {
-      let res = null;
+
+     
       return new Promise(async (resolve, reject) => {
+        try {
+          let res = null;
+          
+        
         await db
           .get()
           .collection(collections.USER_COLLECTION)
@@ -68,15 +72,17 @@ module.exports = {
             }).catch((err)=>{reject()});
           resolve(userData);
         }
+      } catch (error) {
+          reject()
+      }
       });
-    } catch (error) {
-       console.log(error);
-    }
+    
 
   },
   doLogin: (userData) => {
-    try {
+    
       return new Promise(async (resolve, reject) => {
+        try {
         let loginStatus = false;
         let response = {};
         let user = await db
@@ -114,21 +120,22 @@ module.exports = {
               });
             }
           }).catch((err)=>{reject()});
-  
+        } catch (error) {
+          reject()
+        }
         
       });
-    } catch (error) {
-      console.log(error);
-    }
+    
    
   },
   addToCart: (proId, userId) => {
-    try {
-      let prodObj = {
-        item: objectId(proId),
-        quantity: 1,
-      };
+ 
       return new Promise(async (resolve, reject) => {
+        try {
+          let prodObj = {
+            item: objectId(proId),
+            quantity: 1,
+          };
         let userCart = await db
         .get()
         .collection(collections.CART_COLLECTION)
@@ -180,15 +187,19 @@ module.exports = {
             resolve();
           }).catch((err)=>{reject()});
         }
+      } catch (error) {
+        reject()
+      }
       });
       
-    } catch (error) {
-      console.log(error);
-    }
+    
     },
     getCartProducts: (userId) => {
     return new Promise(async (resolve, reject) => {
+      try {
+  
       let cartItems = await db
+      
         .get()
         .collection(collections.CART_COLLECTION)
         .aggregate([{
@@ -225,10 +236,16 @@ module.exports = {
         ])
         .toArray();
       resolve(cartItems);
+            
+    } catch (error) {
+        reject()
+    }
     });
   },
   cartCount: (userId) => {
     return new Promise(async (resolve, reject) => {
+      try {
+      
       let count = 0;
       let cart = await db
         .get()
@@ -240,11 +257,18 @@ module.exports = {
         count = cart.products.length;
       }
       resolve(count);
+        
+    } catch (error) {
+     reject()   
+    }
     });
   },
   changeCartQuantity: (details) => {
 
     return new Promise((resolve, reject) => {
+      try {
+        
+     
       let count = parseInt(details.count);
 
       if (count == -1 && details.quantity == 1) {
@@ -283,10 +307,15 @@ module.exports = {
             });
           });
       }
+    } catch (error) {
+        reject()
+    }
     });
   },
   deleteProduct: (details) => {
     return new Promise((resolve, reject) => {
+      try {
+    
       db.get()
         .collection(collections.CART_COLLECTION)
         .updateOne({
@@ -301,10 +330,16 @@ module.exports = {
         .then(() => {
           resolve();
         });
+            
+      } catch (error) {
+        reject()
+      }
     });
   },
   getTotalAmount: (userId) => {
     return new Promise(async (resolve, reject) => {
+      try {
+      
       let total = await db
         .get()
         .collection(collections.CART_COLLECTION)
@@ -356,10 +391,16 @@ module.exports = {
       } else {
         resolve(total[0].total);
       }
+        
+    } catch (error) {
+        reject()
+    }
     });
   },
   orderProducts: (userId) => {
     return new Promise(async (resolve, reject) => {
+      try {
+     
       db.get()
         .collection(collections.CART_COLLECTION)
         .findOne({
@@ -372,10 +413,16 @@ module.exports = {
           console.log("==", products);
           resolve(products);
         });
+           
+      } catch (error) {
+        reject()
+      }
     });
   },
   orderPlace: (order, products, totalPrice) => {
     return new Promise((resolve, reject) => {
+      try {
+    
       let status = order["Payment-method"] === "COD" || order["Payment-method"] === "paypal" ? "placed" : "pending";
 
       let orderObj = {
@@ -402,10 +449,16 @@ module.exports = {
 
           resolve(response.ops[0]._id);
         });
+            
+      } catch (error) {
+        reject()
+      }
     });
   },
   getOrders: (userId) => {
     return new Promise(async (resolve, reject) => {
+      try {
+   
       let order = await db
         .get()
         .collection(collections.ORDER_COLLECTION)
@@ -414,11 +467,16 @@ module.exports = {
         }).sort({"deliveryDetails.Date":-1})
         .toArray();
       resolve(order);
+           
+    } catch (error) {
+     reject()   
+    }
     });
   },
   orderedProducts: (orderId) => {
     return new Promise(async (resolve, reject) => {
-
+     try {
+    
 
       let products = await db
         .get()
@@ -458,11 +516,18 @@ module.exports = {
         .toArray();
       resolve(products);
       console.log(products);
+        
+     } catch (error) {
+      reject()
+    }
     });
   },
   generateRazorPay: (orderId, total) => {
-    console.log("generateRazorpay");
+    
     return new Promise((resolve, reject) => {
+      try {
+        
+    
       var options = {
         amount: total * 100, // amount in the smallest currency unit
         currency: "INR",
@@ -477,11 +542,15 @@ module.exports = {
           resolve(order);
         }
       });
+    } catch (error) {
+        reject()
+    }
     });
   },
   verifyPayment: (details) => {
-    console.log(details);
     return new Promise((resolve, reject) => {
+      try {
+        
       const crypto = require("crypto");
       let hmac = crypto.createHmac("sha256", "73qfzFvApj30rgWd3CxUBxCW");
 
@@ -498,10 +567,16 @@ module.exports = {
         console.log('failed');
         reject;
       }
+      
+    } catch (error) {
+        reject()
+    }
     });
   },
   changePaymentStatus: (orderId) => {
     return new Promise((resolve, reject) => {
+      try {
+      
       db.get()
         .collection(collections.ORDER_COLLECTION)
         .updateOne({
@@ -514,10 +589,16 @@ module.exports = {
         .then(() => {
           resolve();
         });
+          
+      } catch (error) {
+        reject()
+      }
     });
   },
   wishList: (details) => {
     return new Promise(async (resolve, reject) => {
+      try {
+      
       let wish = await db
         .get()
         .collection(collections.WISHLIST_COLLECTION)
@@ -574,10 +655,16 @@ module.exports = {
             });
           });
       }
+        
+    } catch (error) {
+        reject()
+    }
     });
   },
   getWishlist: (userId) => {
     return new Promise(async (resolve, reject) => {
+      try {
+     
       let wishList = await db
         .get()
         .collection(collections.WISHLIST_COLLECTION)
@@ -609,6 +696,10 @@ module.exports = {
         .toArray();
 
       resolve(wishList);
+         
+    } catch (error) {
+        reject()
+    }
     });
   },
   removeWish: (user, pro) => {
@@ -630,6 +721,7 @@ module.exports = {
           });
       } catch (error) {
         console.log('product not existing');
+        reject()
       }
 
 
@@ -638,6 +730,8 @@ module.exports = {
   },
   getWishProd: (user) => {
     return new Promise(async (resolve, reject) => {
+      try {
+      
       let prods = await db
         .get()
         .collection(collections.WISHLIST_COLLECTION)
@@ -645,10 +739,16 @@ module.exports = {
           userId: objectId(user)
         });
       resolve(prods);
+        
+    } catch (error) {
+        reject()
+    }
     });
   },
   search: (val) => {
     return new Promise(async (resolve, reject) => {
+      try {
+     
       let data = await db
         .get()
         .collection(collections.PRODUCT_COLLECTION)
@@ -660,10 +760,17 @@ module.exports = {
         })
         .toArray();
       resolve(data);
+         
+    } catch (error) {
+        reject()
+    }
     });
   },
   sendOTP: (phone) => {
     return new Promise(async (resolve, reject) => {
+      try {
+        
+     
       db.get()
         .collection(collections.USER_COLLECTION)
         .findOne({
@@ -673,11 +780,16 @@ module.exports = {
           console.log(response);
           resolve(response);
         });
+      } catch (error) {
+        reject()
+      }
     });
   },
   updateProfile: (userId, userDetails) => {
 
     return new Promise((resolve, reject) => {
+      try {
+       
       db.get().collection(collections.USER_COLLECTION)
         .updateOne({
           _id: objectId(userId)
@@ -692,19 +804,26 @@ module.exports = {
 
           resolve()
         })
+         
+      } catch (error) {
+        reject()
+      }
     })
 
   },
   addAddress: (userId, userDetails) => {
-    let address = {
-      address: userDetails.address,
-      area: userDetails.area,
-      city: userDetails.city,
-      pin: userDetails.pin,
-      state: userDetails.state,
-      country: userDetails.country
-    }
+   
     return new Promise((resolve, reject) => {
+      try {
+        let address = {
+          address: userDetails.address,
+          area: userDetails.area,
+          city: userDetails.city,
+          pin: userDetails.pin,
+          state: userDetails.state,
+          country: userDetails.country
+        }
+    
       db.get().collection(collections.USER_COLLECTION)
         .updateOne({
           _id: objectId(userId)
@@ -716,17 +835,29 @@ module.exports = {
 
           resolve()
         })
+            
+      } catch (error) {
+        reject()
+      }
     })
 
   },
   verifyCoupon: (coupon) => {
     return new Promise(async (resolve, reject) => {
+      try {
+    
       db.get().collection(collections.COUPON_COLLECTION).findOne({
         coupon: coupon.coupon
       }).then((res) => {
         console.log(res);
         resolve(res)
       })
+          
+    } catch (error) {
+        reject()
+    }
+      
     });
+    
   }
 };

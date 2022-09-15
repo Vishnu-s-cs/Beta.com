@@ -128,7 +128,7 @@ router.post("/sendOTP", controller.sendOTP);
 
 router.post("/verifyOTP", controller.verifyOTP);
 
-router.get('/product-details',verify, controller.productsDetails)
+router.get('/product-details',controller.productsDetails)
 
 router.get('/profile', verify, controller.profile)
 

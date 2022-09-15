@@ -10,7 +10,7 @@ exports.products = async (req, res) => {
           res.render('admin/admin-products',{admin:true,products,categories});
         })
         
-        })
+        }).catch(()=>{res.redirect('/error')})
     } catch (err) {
       res.redirect('/error')
       console.log(err);
@@ -34,7 +34,7 @@ exports.products = async (req, res) => {
           }
          });
         
-       })
+       }).catch(()=>{res.redirect('/error')})
      await  adminHelpers.getUsers().then((users)=>{
       users.reverse()
       let newUsers = []
@@ -66,7 +66,7 @@ exports.products = async (req, res) => {
       });
    
         
-      })
+      }).catch(()=>{res.redirect('/error')})
      
    
 
@@ -100,7 +100,7 @@ exports.getAllUsers = async (req, res,next) => {
     
         msg=""
         
-      })
+      }).catch(()=>{res.redirect('/error')})
     } catch (err) {
       console.log(err);
       res.redirect('/error')
@@ -112,7 +112,7 @@ exports.unblock = async (req, res) => {
     adminHelpers.unblockUser(userId).then((response)=>{
       msg = "user unblocked sucessfully"
       res.redirect("/admin/all-users");
-    })
+    }).catch(()=>{res.redirect('/error')})
     } catch (err) {
       console.log(err);
       res.redirect('/error')
@@ -125,7 +125,7 @@ exports.viewManageCategory = async (req, res) => {
         let category=  response
         console.log(req.session.admin);
         res.render("admin/manageCategory",{category,admin:req.session.admin});
-    })
+    }).catch(()=>{res.redirect('/error')})
    } catch (err) {
       console.log(err);
       res.redirect('/error')
@@ -142,7 +142,7 @@ exports.viewLogin = async (req, res) => {
 
 exports.addCategory = async (req, res) => {
     try {
-      adminHelpers.addCategories(req.body)
+      adminHelpers.addCategories(req.body).catch(()=>{res.redirect('/error')})
         res.redirect("/admin/manage-categories");
 
       // redirect to /admin/manage-categories
@@ -155,7 +155,7 @@ exports.viewEditCategory = async (req, res) => {
     try {
       let catId=req.query.id
       
-      let category=await productHelpers.categoryDetails(catId)
+      let category=await productHelpers.categoryDetails(catId).catch(()=>{res.redirect('/error')})
       
       res.render('admin/editCategory',{admin:true,category,Admin:req.session.admin})
     } catch (err) {
@@ -167,7 +167,7 @@ exports.viewEditCategory = async (req, res) => {
     try {
       let catId=req.query.id
      let data = req.body.category
-    productHelpers.editCategory(catId,data)
+    productHelpers.editCategory(catId,data).catch(()=>{res.redirect('/error')})
       
       res.redirect('/admin/manage-categories')
     } catch (err) {
@@ -178,7 +178,7 @@ exports.viewEditCategory = async (req, res) => {
 exports.deleteCategory = async (req, res) => {
     try {
       let proid=req.query.id
-    productHelpers.deleteCategory(proid)
+    productHelpers.deleteCategory(proid).catch(()=>{res.redirect('/error')})
       res.redirect("/admin/manage-categories")
     } catch (err) {
       console.log(err);
@@ -189,7 +189,7 @@ exports.deleteCategory = async (req, res) => {
   exports.removeOrder = async (req, res) => {
     try {
       let proid=req.query.id
-    productHelpers.removeOrder(proid)
+    productHelpers.removeOrder(proid).catch(()=>{res.redirect('/error')})
       res.redirect("/admin/all-orders")
     } catch (err) {
       console.log(err);
@@ -218,7 +218,7 @@ exports.deleteCategory = async (req, res) => {
           
           });
         res.render('admin/salesReport',{admin:req.session.admin,total,no,orders})
-      })
+      }).catch(()=>{res.redirect('/error')})
     
       
       
@@ -234,7 +234,7 @@ exports.orderDetails = async (req, res) => {
         // console.log(orders,orders.deliveryDetails.Date);
         res.json(orders);
         // res.send(orders)
-      });
+      }).catch(()=>{res.redirect('/error')});
     } catch (err) {
       console.log(err);
       res.redirect('/error')
@@ -295,7 +295,7 @@ exports.orderDetails = async (req, res) => {
               }
             });
            
-          });
+          }).catch(()=>{res.redirect('/error')});
     }catch(err){
       console.log(err+"error in add product")
       res.redirect('/error')
@@ -308,7 +308,7 @@ exports.orderDetails = async (req, res) => {
         let coupons=  response
 
         res.render("admin/coupons",{coupons,admin:req.session.admin});
-    })
+    }).catch(()=>{res.redirect('/error')})
    } catch (err) {
       console.log(err);
       res.redirect('/error')
@@ -316,7 +316,7 @@ exports.orderDetails = async (req, res) => {
   };
   exports.addCoupon = async (req, res) => {
     try {
-      adminHelpers.addCoupon(req.body)
+      adminHelpers.addCoupon(req.body).catch(()=>{res.redirect('/error')})
         res.redirect("/admin/coupons");
 
       // redirect to /admin/manage-categories
@@ -329,7 +329,7 @@ exports.orderDetails = async (req, res) => {
   exports.deleteCoupon = async (req, res) => {
     try {
       let proid=req.query.id
-    productHelpers.deleteCoupon(proid)
+    productHelpers.deleteCoupon(proid).catch(()=>{res.redirect('/error')})
       res.redirect("/admin/coupons")
     } catch (err) {
       console.log(err);
