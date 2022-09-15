@@ -38,7 +38,7 @@ exports.login = async (req, res, next) => {
         req.session.userLoginErr = "invalid user name or password";
         res.redirect("/login");
       }
-    });
+    }).catch(()=>{res.redirect('/error')});
   } catch (err) {
     next(err);
   }
@@ -76,8 +76,8 @@ exports.home = async function (req, res, next) {
             newProducts,
           });
         
-      });
-    });
+      }).catch(()=>{res.redirect('/error')});
+    }).catch(()=>{res.redirect('/error')});
   } catch (err) {
     loginWarn = req.session.noUser;
     res.render("user/view-products", { loginWarn });
@@ -148,7 +148,7 @@ exports.SignUp = (req, res) => {
           })
           .redirect("/");
       }
-    });
+    }).catch(()=>{res.redirect('/error')});
   } catch (err) {
     console.log(err);
     res.redirect('/error')
@@ -173,12 +173,12 @@ exports.logout = (req, res) => {
 
 exports.viewCart = async (req, res) => {
   try {
-    let products = await userHelper.getCartProducts(req.session.user._id);
+    let products = await userHelper.getCartProducts(req.session.user._id).catch(()=>{res.redirect('/error')});
 
     // let total = await userHelper.getTotalAmount(req.session.user._id);
     let total = 0
   
-    let categories = await adminHelper.getCategories()
+    let categories = await adminHelper.getCategories().catch(()=>{res.redirect('/error')})
     products.forEach((data) => {
 
       try {
@@ -215,7 +215,7 @@ exports.addToCart = async(req, res) => {
     } else {
       userHelper.addToCart(req.query.id, req.session.user._id).then(() => {
         res.json({ status: true });
-      });
+      }).catch(()=>{res.redirect('/error')});
     }
   } catch (err) {
     console.log(err);
@@ -231,7 +231,7 @@ exports.changeCartQuantity = (req, res) => {
     productHelper.productsDetails(req.body.product).then((response) => {
       price = response.price;
       offerPrice = response?.offerPrice
-    });
+    }).catch(()=>{res.redirect('/error')});
 
     // console.log(price);
     userHelper.changeCartQuantity(req.body).then(async (response) => {

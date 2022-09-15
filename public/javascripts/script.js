@@ -54,7 +54,10 @@ $("#search").on('change keyup paste', function () {
 
 
 
-function addToCart(proId){
+function addToCart(proId,e){
+    const alertText = document.getElementById('alert-text')
+    const alertBox = document.getElementById('alert-box')
+
     $.ajax({
         url:'/add-to-cart?id='+proId,
         method:'POST',
@@ -64,10 +67,19 @@ function addToCart(proId){
                 let count=$('#cart-count').html()
                 count=parseInt(count)+1         
                 $('#cart-count').html(count)
-                console.log('hi buddy');
+                // e.target.style.margin = "-50px 260px"
+
+                alertText.innerText = "successfully added to the cart"
+                alertBox.style.opacity = "1"
+                alertBox.style.transform = "scale(.5)"
+                setTimeout(() => {
+                    alertBox.style.transform = "scale(0.25)"
+                    alertBox.style.opacity = "0"
+            
+                }, 1000)
             }
             else{
-                console.log('hi buddy');
+              
                 swal("Please login").then(()=>{location.href='/Login'})
             
             }

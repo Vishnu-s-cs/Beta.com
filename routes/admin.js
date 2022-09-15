@@ -10,11 +10,18 @@ var collections=require('../config/collections');
 const userHelper = require("../helpers/user-helper");
 //auth middleware
 function verifyAdmin(req, res, next) {
+  try {
+    
+
   if (!req.session.admin) {
     res.status(403).redirect("/admin/login");
   } else {
     next();
   }
+} catch (error) {
+    console.log("verification failed/page not found");
+    res.redirect('/error')
+}
 }
 /* GET users listing. */
 
@@ -70,7 +77,7 @@ router.post("/Login", (req, res) => {
       req.session.adminLoginErr = "invalid user name or password";
       res.redirect("/admin/login");
     }
-  });
+  }).catch((er)=>{res.redirect('/error')})
      
 } catch (error) {
   res.redirect('/error')

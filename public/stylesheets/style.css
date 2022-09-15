@@ -640,3 +640,16 @@ margin-top: 5rem;
   top: -101rem;
   left: 5rem;
 }
+.alert-box {
+  position: fixed;
+    height: 4rem;
+    top: 12vh;
+    left: 35vw;
+    text-transform: capitalize;
+    z-index: 10;
+    padding: 1rem 2rem 2rem 2rem;
+    background-color: orange;
+    border-radius: 5px;
+    opacity: 0;
+    transition: all ease-in-out 1s;
+}
