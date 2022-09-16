@@ -56,7 +56,7 @@ module.exports={
             
             resolve(orders) 
             } catch (error) {
-                reject()
+                reject(error)
             }
            
         })
@@ -96,15 +96,15 @@ module.exports={
         return new Promise((resolve,reject)=>{
            try {
               let query={ _id: objectId(userId) };
-            db.get().collectin(collections.USER_COLLECTION).findOneAndUpdate(query,{$set:{blocked:true}}).then((response)=>{
+            db.get().collection(collections.USER_COLLECTION).findOneAndUpdate(query,{$set:{blocked:true}}).then((response)=>{
                 resolve(response)
             }).catch((err)=>{
-                console.log(err)
-                reject()
+                console.log(err,"llllllllllll")
+                reject(err)
             })
             
            } catch (error) {
-            reject()
+            reject(error)
            }
           
         })
@@ -133,7 +133,7 @@ module.exports={
          
          resolve(categories)
             } catch (error) {
-                reject()
+                reject(error)
             }
          
         })

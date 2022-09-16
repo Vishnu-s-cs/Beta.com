@@ -173,37 +173,44 @@ exports.logout = (req, res) => {
 
 exports.viewCart = async (req, res) => {
   try {
-    let products = await userHelper.getCartProducts(req.session.user._id).catch(()=>{res.redirect('/error')});
+    let total = 0
+    await userHelper.getCartProducts(req.session.user._id).then(async(products)=>{
+      products.forEach((data) => {
+
+        try {
+          if (data.product.offerPrice) {
+            data.subTotal = Number(data.quantity) * Number(data.product.offerPrice);
+            console.log(Number(data.product.offerPrice));
+      
+          } else {
+            data.subTotal = Number(data.quantity) * Number(data.product.price);
+           
+          }
+         total+=data.subTotal
+        } catch (error) {
+          data.subTotal = Number(data.quantity) * Number(data.product.price);
+        
+          total+=data.subTotal
+        }
+        
+       
+      });
+
+    
 
     // let total = await userHelper.getTotalAmount(req.session.user._id);
-    let total = 0
-  
-    let categories = await adminHelper.getCategories().catch(()=>{res.redirect('/error')})
-    products.forEach((data) => {
-
-      try {
-        if (data.product.offerPrice) {
-          data.subTotal = Number(data.quantity) * Number(data.product.offerPrice);
-          console.log(Number(data.product.offerPrice));
     
-        } else {
-          data.subTotal = Number(data.quantity) * Number(data.product.price);
-         
-        }
-       total+=data.subTotal
-      } catch (error) {
-        data.subTotal = Number(data.quantity) * Number(data.product.price);
-      
-        total+=data.subTotal
-      }
-      
-     
-    });
+  
+    let categories = await adminHelper.getCategories().catch((err)=>{console.log(err,"hello"); res.redirect('/error')})
+    
     
    
     res.render("user/cart", { products, total, user: req.session.user,categories});
+  }).catch((error)=>{
+    console.log(error,"hi");
+    res.redirect('/error')});
   } catch (err) {
-    console.log(err);
+    console.log(err,"hey");
     res.redirect('/error')
   }
 };
@@ -275,7 +282,7 @@ exports.deleteProduct = (req, res) => {
   try {
     userHelper.deleteProduct(req.body).then(() => {
       res.json({ status: true });
-    });
+    }).catch(()=>{res.redirect('/error')});;
   } catch (err) {
     console.log(err);
     res.redirect('/error')
@@ -333,12 +340,12 @@ exports.placeOrder = async (req, res) => {
       .removeWish(req.session.user._id, data.item)
       .then((response) => {
         console.log('');
-      });
+      }).catch(()=>{res.redirect('/error')});;
     })
-    let user = await adminHelper.userDetails(req.session.user._id);
+    let user = await adminHelper.userDetails(req.session.user._id).catch(()=>{res.redirect('/error')});;
    
     let total = 0
-    let productss = await userHelper.getCartProducts(req.session.user._id);
+    let productss = await userHelper.getCartProducts(req.session.user._id).catch(()=>{res.redirect('/error')});;
       productss.forEach((data) => {
 
   
@@ -368,6 +375,7 @@ exports.placeOrder = async (req, res) => {
       
     req.body.UserId = req.session.user._id;
     userHelper.orderPlace(req.body, products, total).then((orderId) => {
+   
       if (req.body["Payment-method"] === "COD") {
         res.json({ codSuccess: true });
       } else if (req.body["Payment-method"] === "paypal") {
@@ -385,7 +393,7 @@ exports.placeOrder = async (req, res) => {
             res.status(500).json({ paymentErr: true });
           });
       }
-    });
+    }).catch(()=>{res.redirect('/error')});;
   } catch (err) {
     console.log(err);
     res.redirect('/error')
@@ -422,7 +430,7 @@ exports.viewOrders = async (req, res) => {
 exports.viewOrderProducts = async (req, res) => {
   try {
    
-    let product = await userHelper.orderedProducts(req.query.id);
+    let product = await userHelper.orderedProducts(req.query.id).catch(()=>{res.redirect('/error')});;
  
     res.render("user/orderProducts", { user: req.session.user, product });
   } catch (err) {
@@ -454,7 +462,7 @@ exports.verifyPayment = async (req, res) => {
 
 exports.viewwishList = async (req, res) => {
   try {
-    let products = await userHelper.getWishlist(req.session.user._id);
+    let products = await userHelper.getWishlist(req.session.user._id).catch(()=>{res.redirect('/error')});;
     res.render("user/wishlist", { products, user: req.session.user });
   } catch (err) {
     console.log(err);
@@ -468,7 +476,7 @@ exports.removeWishList = (req, res) => {
       .removeWish(req.session.user._id, req.query.id)
       .then((response) => {
         res.json({ status: true });
-      });
+      }).catch(()=>{res.redirect('/error')});
   } catch (err) {
     console.log(err);
     res.redirect('/error')
@@ -479,7 +487,7 @@ exports.search = (req, res) => {
   try {
     userHelper.search(req.query.val).then((data) => {
       res.json(data);
-    });
+    }).catch(()=>{res.redirect('/error')});;
   } catch (err) {
     console.log(err);
   }
@@ -488,7 +496,7 @@ exports.wishList = (req, res) => {
   try {
     userHelper.wishList(req.body).then((response) => {
       res.json(response);
-    });
+    }).catch(()=>{res.redirect('/error')});;
   } catch (err) {
     console.log(err);
     res.redirect('/error')
@@ -546,7 +554,7 @@ exports.sendOTP = (req, res) => {
         .render("user/verifyOTP");
       // .send({ phone, hash: fullhash, otp })
       console.log(otp);
-    });
+    }).catch(()=>{res.redirect('/error')});;
   } catch (err) {
     console.log(err);
     res.redirect('/error')
@@ -604,15 +612,15 @@ exports.productsDetails = async (req, res) => {
     let cartCount = null;
     let wishlist = null;
     if (user) {
-      cartCount = await userHelper.cartCount(user._id);
-      wishlist = await userHelper.getWishProd(user._id);
+      cartCount = await userHelper.cartCount(user._id).catch(()=>{res.redirect('/error')});;
+      wishlist = await userHelper.getWishProd(user._id).catch(()=>{res.redirect('/error')});;
       wishlist = wishlist?.products;
     }
     let proId = req.query.id;
 
-    let product = await productHelper.productsDetails(proId);
+    let product = await productHelper.productsDetails(proId).catch(()=>{res.redirect('/error')});;
     console.log(proId);
-    let category = await productHelper.categoryDetails(product.category);
+    let category = await productHelper.categoryDetails(product.category).catch(()=>{res.redirect('/error')});;
     res.render("user/products", {
       product,
       proId,
@@ -638,8 +646,8 @@ exports.profile = async (req, res) => {
     let cartCount = null;
     let wishlist = null;
     if (user) {
-      cartCount = await userHelper.cartCount(user._id);
-      wishlist = await userHelper.getWishProd(user._id);
+      cartCount = await userHelper.cartCount(user._id).catch(()=>{res.redirect('/error')});;
+      wishlist = await userHelper.getWishProd(user._id).catch(()=>{res.redirect('/error')});;
     }
 
     res.render("user/profile", { user, cartCount, wishlist });
@@ -657,10 +665,10 @@ exports.updateProfile = async (req, res) => {
       adminHelper.userDetails(userId).then((response) => {
         req.session.updatedUser = response;
         updatedUser = response;
-      });
+      }).catch(()=>{res.redirect('/error')});;
 
       res.redirect("/profile");
-    });
+    }).catch(()=>{res.redirect('/error')});;
   } catch (err) {
     console.log(err);
     res.redirect('/error')
@@ -674,10 +682,10 @@ exports.addAddress = async (req, res, next) => {
       adminHelper.userDetails(userId).then((response) => {
         req.session.updatedUser = response;
         updatedUser = response;
-      });
+      }).catch(()=>{res.redirect('/error')});;
 
       res.redirect("/profile");
-    });
+    }).catch(()=>{res.redirect('/error')});;
   } catch (err) {
     console.log(err);
     res.redirect('/error')
@@ -691,10 +699,10 @@ exports.addAddress2 = async (req, res, next) => {
       adminHelper.userDetails(userId).then((response) => {
         req.session.updatedUser = response;
         updatedUser = response;
-      });
+      }).catch(()=>{res.redirect('/error')});;
 
       res.redirect("/place-order");
-    });
+    }).catch(()=>{res.redirect('/error')});;
   } catch (err) {
     console.log(err);
     res.redirect('/error')
@@ -706,7 +714,7 @@ exports.changePassword=async (req, res) => {
 
   let enteredPassword = req.body.password;
   let newPassword = req.body.newPassword;
-  let userdetails = await db.get().collection(collections.USER_COLLECTION).findOne({ _id: objectId(userId) });
+  let userdetails = await db.get().collection(collections.USER_COLLECTION).findOne({ _id: objectId(userId) }).catch(()=>{res.redirect('/error')});;
 
   let verifypassword = bcrypt.compareSync(
     enteredPassword,
@@ -730,7 +738,7 @@ exports.changePassword=async (req, res) => {
             password: bcrypt.hashSync(newPassword, 10),
           },
         }
-      );
+      ).catch(()=>{res.redirect('/error')});;
 
       req.session.message = {
         type: "success",
@@ -755,7 +763,7 @@ exports.changePassword=async (req, res) => {
 exports.verifyCoupon = async (req, res, next) => {
   try {
     let total = 0
-    let products = await userHelper.getCartProducts(req.session.user._id);
+    let products = await userHelper.getCartProducts(req.session.user._id).catch(()=>{res.redirect('/error')});;
       products.forEach((data) => {
 
   
@@ -779,7 +787,7 @@ exports.verifyCoupon = async (req, res, next) => {
        
       });
     
-    let user = await adminHelper.userDetails(req.session.user._id);
+    let user = await adminHelper.userDetails(req.session.user._id).catch(()=>{res.redirect('/error')});;
     let addresses = false;
     if (user.addresses) {
       addresses = user.addresses;
@@ -787,7 +795,7 @@ exports.verifyCoupon = async (req, res, next) => {
     userHelper.verifyCoupon(req.body).then((coupon)=>{
       console.log(coupon);
       res.render("user/placeorder", { total, user: req.session.user, addresses,coupon });
-    })
+    }).catch(()=>{res.redirect('/error')});
    
   } catch (err) {
     console.log(err);

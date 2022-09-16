@@ -189,7 +189,7 @@ $('#checkout-form').submit((e)=>{
                         location.href='/orderPlaced'
                       }
                       else if(response.paymentErr){
-                        alert("payment error")
+                        swal("payment error")
                           
                       } else {
                         console.log(response);

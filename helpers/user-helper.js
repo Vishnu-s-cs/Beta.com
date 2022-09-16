@@ -197,7 +197,6 @@ module.exports = {
     getCartProducts: (userId) => {
     return new Promise(async (resolve, reject) => {
       try {
-  
       let cartItems = await db
       
         .get()
@@ -234,7 +233,7 @@ module.exports = {
             },
           },
         ])
-        .toArray();
+        .toArray().catch((err)=>{reject(err)});
       resolve(cartItems);
             
     } catch (error) {
