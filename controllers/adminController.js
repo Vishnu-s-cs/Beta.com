@@ -446,19 +446,14 @@ exports.editProduct = async(req, res,next) => {
         if(req.files?.image2){subImages.push(req.files?.image2)}
         if(req.files?.image3){subImages.push(req.files?.image3)}
         try {
-          
-       
         for (let index = 0; index < subImages.length; index++) {
          await subImages[index].mv("./public/product-images/" + proId + index +".jpg", (err, data) => {
-            if (!err) {
-             
+            if (!err) {        
             console.log("sub images added",index);
-           
             } else {
               console.log(err);
             }
           })
-          
         }
       } catch (error) {
           res.redirect('/error')

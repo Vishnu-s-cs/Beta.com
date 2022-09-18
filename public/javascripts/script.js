@@ -54,7 +54,7 @@ $("#search").on('change keyup paste', function () {
 
 
 
-function addToCart(proId,e){
+function addToCart(proId){
     const alertText = document.getElementById('alert-text')
     const alertBox = document.getElementById('alert-box')
 
@@ -243,7 +243,7 @@ function razorPayment(order) {
 
 }
 function verifyPayment(payment,order){
-   console.log("helo");
+ 
     $.ajax({
         url:'/verify-payment',
         data:{
