@@ -47,7 +47,7 @@
 <div class="row">
   <div class="col">
     <div class="collapse multi-collapse" id="1{{this._id}}">
-      <div class="card card-body">
+      <div class="card card-body" style="padding: 2rem;">
         <h6>Name:</h6><span id="name{{this._id}}"></span><br>
         <h6>Email:</h6><span id="email{{this._id}}"></span>
         
@@ -58,12 +58,12 @@
     <div class="collapse multi-collapse" id="2{{this._id}}" style="
     width: 36rem;
 ">
-      <div class="card card-body">
+      <div class="card card-body" style="padding: 2rem;">
         <h5>Address:{{this.deliveryDetails.address}}</h5><br>
         <h5>Payment:{{this.payment_Method}}</h5><br>
         <h5>Amount:{{this.totalAmount}}</h5><br>
         <h5>Status:{{this.status}}</h5><br>
-        <a href="/admin/ordered-products?id={{this._id}}" class="betaButton" style="text-align: center;">View Products</a>
+        <a href="/admin/ordered-products?id={{this._id}}" class="betaButton" style="text-align: center;padding-top: 9px;">View Products</a>
 
       </div>
     </div>
