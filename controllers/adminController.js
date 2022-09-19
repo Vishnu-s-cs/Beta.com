@@ -304,7 +304,7 @@ exports.orderDetails = async (req, res) => {
           finally{
             res.redirect("/admin/products")
           }
-          }).then(()=>{res.redirect("/admin/products")}).catch((err)=>{console.log(err);res.redirect('/error')});
+          }).then(()=>{console.log("added succesfully")}).catch((err)=>{console.log(err);});
     }catch(err){
       console.log(err+"error in add product")
       res.redirect('/error')
@@ -487,7 +487,7 @@ exports.editProduct = async(req, res,next) => {
       finally{
         res.redirect("/admin/products")
       }
-    }).then(()=>{res.redirect('/admin/products')}).catch((err)=>{res.redirect('/error')});
+    }).then(()=>{console.log("edit successfull");}).catch((err)=>{console.log("error");});
   } catch (error) {
     res.redirect('/error')
   }

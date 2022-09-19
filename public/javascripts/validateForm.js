@@ -166,8 +166,70 @@ $(".UFA").validate({
       minlength: "Please enter a valid address",
     },
     pin: {
-      minlength: "Please enter  6 digit pin code",
+      minlength: "Please enter 6 digit pin code",
     },
+
+  },
+});
+$("#addProduct").validate({
+  rules: {
+
+    productname: {
+      required: true,
+      minlength5: true,
+    },
+    description: {
+      required: true,
+      minlength5: true,
+    },
+    price: {
+      required: true,
+      number: true,
+    }
+  },
+  messages: {
+
+    productname: {
+      minlength: "Please enter at least 4 characters",
+    },
+    description: {
+      minlength: "Please enter at least 6 characters",
+    },
+    price: {
+      required: "hey do you forget me",
+    },
+
+
+  },
+});
+$("#editProduct").validate({
+  rules: {
+
+    productname: {
+      required: true,
+      minlength5: true,
+    },
+    description: {
+      required: true,
+      minlength5: true,
+    },
+    price: {
+      required: true,
+      number: true,
+    }
+  },
+  messages: {
+
+    productname: {
+      minlength: "Please enter at least 4 characters",
+    },
+    description: {
+      minlength: "Please enter at least 6 characters",
+    },
+    price: {
+      required: "hey do you forget me",
+    },
+
 
   },
 });

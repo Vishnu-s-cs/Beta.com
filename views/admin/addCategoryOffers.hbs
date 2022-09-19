@@ -1,8 +1,8 @@
     <section>
      <form action="/admin/add-offer?id={{catId}}" method="post" style="display: inline-block;margin-left:10rem">
-      <input type="text" class="form-control" name="off" placeholder="Add offer...">
+      <input type="number" class="form-control" name="off" placeholder="Add offer..." required>
       <label for="offTill">Valid Till</label>
-      <input type="date" class="form-control" name="offTill">
+      <input type="date" class="form-control" name="offTill" required>
       <button type="submit"  class="betaButton mt-1 ml-auto" style="text-decoration: none ; ">Add Offer</button>
      </form>
    </section>

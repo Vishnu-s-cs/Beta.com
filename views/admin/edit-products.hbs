@@ -2,14 +2,19 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6">
-                <h1 class="text-center">Edit Products</h1>
-                <form action="/admin/edit-products?id={{product._id}}" method="post" enctype="multipart/form-data">
+                <h1 class="text-center">Edit Product</h1>
+                <form action="/admin/edit-products?id={{product._id}}" method="post" enctype="multipart/form-data" id="editProduct">
                     <label for="name">Product Name</label><br>
                     <input type="text"value="{{product.productname}}" name="productname" class="form-control"><br>
                    <label for="category">Category</label><br />
           <select name="category">
             {{#each categories}}
-            <option value="{{this._id}}">{{this.category}}</option>
+            {{#ifCond ../product.category this._id}}
+            <option value="{{this._id}}" selected>{{this.category}}</option>
+            {{else}}
+             <option value="{{this._id}}">{{this.category}}</option>
+            {{/ifCond}}
+           
            {{/each}}
           </select><br><br>
          

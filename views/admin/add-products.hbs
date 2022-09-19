@@ -2,11 +2,12 @@
   <div class="container">
     <div class="row">
       <div class="col-md-6">
-        <h1 class="text-center">Add Products</h1>
+        <h1 class="text-center">Add Product</h1>
         <form
           action="/admin/add-products"
           method="post"
           enctype="multipart/form-data"
+          id="addProduct"
         >
           <label for="name">Product Name</label><br />
           <input type="text" name="productname" class="form-control" /><br />
@@ -60,7 +61,7 @@
 </div>
 
 
-          <input type="file" name="image" class="form-control" onchange="changeImg(event)" id="id_image1"/><br />
+          <input type="file" name="image" class="form-control" onchange="changeImg(event)" id="id_image1" required/><br />
           <label for="">image 2</label><br />
            <div id="crop">
 <img
@@ -97,7 +98,7 @@
 </div>
 
 
-          <input type="file" name="image2" class="form-control" onchange="changeImg2(event)" id="id_image2"/><br />
+          <input type="file" name="image2" class="form-control" onchange="changeImg2(event)" id="id_image2" required/><br />
            <label for="">image 3</label><br />
            <div id="crop">
 <img
@@ -134,7 +135,7 @@
 </div>
 
 
-          <input type="file" name="image3" class="form-control" onchange="changeImg3(event)" id="id_image3"/><br />
+          <input type="file" name="image3" class="form-control" onchange="changeImg3(event)" id="id_image3" required/><br />
           <label for="">Banner</label><br />
            <div id="crop">
 <img
@@ -171,7 +172,7 @@
 </div>
 
 
-          <input type="file" name="image4" class="form-control" onchange="changeImg4(event)" id="id_image4"/><br />
+          <input type="file" name="image4" class="form-control" onchange="changeImg4(event)" id="id_image4" required/><br />
           <button type="submit" class="betaButton">submit</button>
         </form>
       </div>
