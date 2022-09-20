@@ -1,5 +1,6 @@
 let productHelpers=require('../helpers/product-helpers')
 let adminHelpers=require('../helpers/admin-helper');
+let userHelper = require('../helpers/user-helper')
 let db=require('../config/connection')
 let msg = ""
 exports.products = async (req, res) => {
@@ -699,6 +700,7 @@ exports.stats2 = async (req, res) => {
         });
       });
     } catch (error) {
+      console.log(error);
       res.redirect('/error')
     }
   }
