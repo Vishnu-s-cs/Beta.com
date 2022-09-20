@@ -89,13 +89,13 @@
 <script>
   function toggle(id) {
     console.log(id)
-    document.getElementById("1"+id).classList.add("sft");//user details
+    document.getElementById("1"+id).classList.toggle("sft");//user details
     document.getElementById("2"+id).classList.remove("sft");//delivery details
 
   }
    function toggle1(id) {
   document.getElementById("1"+id).classList.remove("sft");
-  document.getElementById("2"+id).classList.add("sft");
+  document.getElementById("2"+id).classList.toggle("sft");
 
   }
 </script>
