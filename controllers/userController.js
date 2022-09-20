@@ -345,7 +345,7 @@ exports.placeOrder = async (req, res) => {
     let user = await adminHelper.userDetails(req.session.user._id).catch(()=>{res.redirect('/error')});;
    
     let total = 0
-    let productss = await userHelper.getCartProducts(req.session.user._id).catch(()=>{res.redirect('/error')});;
+    await userHelper.getCartProducts(req.session.user._id).then((productss)=>{
       productss.forEach((data) => {
 
   
@@ -371,10 +371,14 @@ exports.placeOrder = async (req, res) => {
         
        
       });
+
+
+    }).catch(()=>{res.redirect('/error')});;
+      
     
       
     req.body.UserId = req.session.user._id;
-    userHelper.orderPlace(req.body, products, total).then((orderId) => {
+    await userHelper.orderPlace(req.body, products, total).then((orderId) => {
    
       if (req.body["Payment-method"] === "COD") {
         res.json({ codSuccess: true });
