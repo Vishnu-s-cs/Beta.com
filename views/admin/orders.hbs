@@ -29,12 +29,12 @@
                         </td>
                         <td>
                             <p>
-  <button class="betaButton" data-toggle="collapse" data-target="#1{{this._id}}" type="button" onclick="userDetails('{{this.userId}}','{{this._id}}')" aria-expanded="false" aria-controls="multiCollapseExample1" style="
+  <button class="betaButton" data-toggle="collapse" data-target="#1{{this._id}}" type="button" onclick="userDetails('{{this.userId}}','{{this._id}}'); toggle('{{this._id}}')" aria-expanded="false" aria-controls="multiCollapseExample1" style="
     width: 8rem;
 "> User details</button>
   <button class="betaButton" type="button" data-toggle="collapse" data-target="#2{{this._id}}" aria-expanded="false" aria-controls="multiCollapseExample2" style="
     width: 10rem;
-">Order details</button>
+" onclick="toggle1('{{this._id}}')">Order details</button>
 <a href="/admin/remove-order?id={{this._id}}"><i class="fa fa-close" style="
     font-size: 2rem;
     padding-left: .5rem;
@@ -46,7 +46,7 @@
 </p>
 <div class="row">
   <div class="col">
-    <div class="collapse multi-collapse" id="1{{this._id}}">
+    <div class="collapse multi-collapse ud clr" id="1{{this._id}}">
       <div class="card card-body" style="padding: 2rem;">
         <h6>Name:</h6><span id="name{{this._id}}"></span><br>
         <h6>Email:</h6><span id="email{{this._id}}"></span>
@@ -55,7 +55,7 @@
     </div>
   </div>
   <div class="col">
-    <div class="collapse multi-collapse" id="2{{this._id}}" style="
+    <div class="collapse multi-collapse dd clr" id="2{{this._id}}" style="
     width: 36rem;
 ">
       <div class="card card-body" style="padding: 2rem;">
@@ -77,3 +77,25 @@
         </div>
     </div>
 </section>
+<style>
+  .clr {
+    display: none !important;
+  }
+
+  .sft {
+   display: block !important;
+  }
+</style>
+<script>
+  function toggle(id) {
+    console.log(id)
+    document.getElementById("1"+id).classList.add("sft");//user details
+    document.getElementById("2"+id).classList.remove("sft");//delivery details
+
+  }
+   function toggle1(id) {
+  document.getElementById("1"+id).classList.remove("sft");
+  document.getElementById("2"+id).classList.add("sft");
+
+  }
+</script>
