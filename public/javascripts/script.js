@@ -282,9 +282,11 @@ function setStatus(id){
     let status=$('#status'+id).val()
    
     if (!status) {
+      
         status = "Waiting for cancel approval"
         $('#status'+id).html(status)
     }
+   
     $.ajax({
         url:'/admin/set-status',
         data:{

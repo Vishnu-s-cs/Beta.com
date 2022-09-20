@@ -65,7 +65,7 @@ router.get("/ordered-products", verifyAdmin, controller.getOrderedProducts);
 
 router.get("/user-details",  verifyAdmin,controller.getUserDetails);
 
-router.post("/set-status", verifyAdmin, controller.setStatus);
+router.post("/set-status", controller.setStatus);
 
 router.get("/", verifyAdmin, controller.dashboard);
 

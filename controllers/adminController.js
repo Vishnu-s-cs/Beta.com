@@ -718,7 +718,7 @@ exports.stats2 = async (req, res) => {
  
   exports.setStatus = (req, res) => {
     try {
-      
+      console.log("ivide ethiyo",req.body);
       adminHelpers.setStatus(req.body).then(() => {
         res.json({ status: true });
       });
