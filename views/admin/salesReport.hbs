@@ -96,10 +96,9 @@
                 </tbody>
             </table>
 </section>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.min.js"></script>
+<script src="/javascripts/chart/chart.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
- 
+
 
 <script>
 
@@ -266,7 +265,7 @@ let money1=[]
      });
        dateGraph= myChart
       
-  },600)
+  },800)
       setTimeout(()=>{
 
  var ctx3 = $("#monthly").get(0).getContext("2d");
@@ -285,7 +284,7 @@ let money1=[]
              responsive: true
          }
      });
-  },600)
+  },800)
     setTimeout(()=>{
 
  var ctx3 = $("#weekly").get(0).getContext("2d");
@@ -304,7 +303,7 @@ let money1=[]
              responsive: true,
          }
      });
-  },600)
+  },800)
     setTimeout(()=>{
 
  var ctx3 = $("#daily").get(0).getContext("2d");
@@ -323,7 +322,7 @@ let money1=[]
              responsive: true
          }
      });
-  },600)
+  },800)
    setTimeout(()=>{
 
  var ctx3 = $("#yearly").get(0).getContext("2d");
@@ -345,7 +344,7 @@ let money1=[]
  convertedDates1=convertedDates
  money1=money
 
-  },600)
+  },800)
     })
 function filterDate(){
 
