@@ -97,10 +97,10 @@
             {{#if ../user}}<div class="like-btns"> <button onclick="wishList('{{../user._id}}','{{this._id}}')" class="like float-right "><img
                 id="like{{this._id}}" class="icon-like" src="/images/heart.png" alt=""><img id="liked{{this._id}}"
                 class="icon-liked" src="/images/liked.png"
-                alt=""></button>{{#each ../wishlist }}{{#iff this ../this._id}}{{#if status}}
+                alt=""></button>{{#each ../wishlist }}{{#iff this ../this._id}}
             <button id="likebtn{{../this.id}}" onclick="unWish('{{../../../user._id}}','{{../../this._id}}')" class="liked float-right liked{{../../this._id}}"><img  class="iconliked" src="/images/liked.png"
                 alt=""></button>
-            {{/if}}
+            {{!-- {{/if}} --}}
             {{/iff}}{{/each}}</div>{{/if}}
                 </button>
                 {{!-- </a> --}}
