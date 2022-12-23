@@ -31,11 +31,9 @@
 * AWS
 * Google cloud services(currently hosted in)
 
+## Images
+![alt text](https://github.com/Vishnu-s-cs/Beta.com/blob/9ea18623565eb1380d95e6a85a511208836c40c2/WhatsApp%20Image%202022-12-23%20at%208.40.32%20PM.jpeg)
+
 ## Future Updations:
 
 * User-Generated Reviews
-Home page
-image.png
-Product page
-image.png
-image.png
