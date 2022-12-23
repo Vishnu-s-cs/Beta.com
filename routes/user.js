@@ -31,46 +31,48 @@ router.post("/api/orders/:orderId/capture", async (req, res) => {
 //auth middleware
 async function verify(req, res, next) {
 
-
-  if (req.session.user == undefined) {
+next();
+  // if (req.session.user == undefined) {
 
   
-    res.redirect('/Login')
-  } 
-  else 
-  {
-    const accessToken =  req.headers?.cookie?.split("=")[1];
+  //   res.redirect('/Login')
+  // } else{
+  //   next();
+  // }
+  // else 
+  // {
+  //   const accessToken =  req.headers?.cookie?.split("=")[1];
 
 
-    jwt.verify(
-      accessToken,
-      process.env.JWT_AUTH_TOKEN,
-      async (err, phone) => {
-        if (phone) {
-          req.phone = phone;
-          phoneNo = phone;
-          next();
-        } else if (err.message === "TokenExpiredError") {
+  //   jwt.verify(
+  //     accessToken,
+  //     process.env.JWT_AUTH_TOKEN,
+  //     async (err, phone) => {
+  //       if (phone) {
+  //         req.phone = phone;
+  //         phoneNo = phone;
+  //         next();
+  //       } else if (err.message === "TokenExpiredError") {
         
-          return res.status(403).redirect("/Login");
-        } else {
+  //         return res.status(403).redirect("/Login");
+  //       } else {
 
-          res.status(403).redirect("/Login");
+  //         res.status(403).redirect("/Login");
 
-        }
-      }
-    );
-    let user = db
-      .get()
-      .collection(collections.USER_COLLECTION)
-      .findOne({
-        phone: phoneNo
-      });
-    if (user.blocked) {
-      res.status(403).redirect("/Login");
-    }
+  //       }
+  //     }
+  //   );
+  //   let user = db
+  //     .get()
+  //     .collection(collections.USER_COLLECTION)
+  //     .findOne({
+  //       phone: phoneNo
+  //     });
+  //   if (user.blocked) {
+  //     res.status(403).redirect("/Login");
+  //   }
 
-  }
+  // }
 
 }
 function loginCheck(req,res) {
