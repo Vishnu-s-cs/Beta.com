@@ -39,7 +39,7 @@ async function verify(req, res, next) {
   } 
   else 
   {
-    const accessToken = req.cookies.accessToken;
+    const accessToken =  req.headers?.cookie?.split("=")[1];
 
 
     jwt.verify(
