@@ -38,7 +38,7 @@ exports.login = async (req, res, next) => {
         req.session.userLoginErr = "invalid user name or password";
         res.redirect("/login");
       }
-    }).catch(()=>{res.redirect('/error')});
+    }).catch(()=>{res.redirect('/')});
   } catch (err) {
     next(err);
   }
