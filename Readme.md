@@ -28,8 +28,8 @@
 * Nginx
 
 ## Services used:
-* AWS
-* Google cloud services(currently hosted in)
+* AWS : EC2, Route 53
+* Google cloud services(currently hosted in): Cloud compute (ubuntu)
 
 ## Images
 * Home
@@ -37,7 +37,12 @@
 * Product page
 ![alt text](https://github.com/Vishnu-s-cs/Beta.com/blob/831aee3126732f34b10fc6891872f20236dbc13d/WhatsApp%20Image%202022-12-23%20at%208.44.24%20PM.jpeg)
 ![alt text](https://github.com/Vishnu-s-cs/Beta.com/blob/831aee3126732f34b10fc6891872f20236dbc13d/WhatsApp%20Image%202022-12-23%20at%208.43.57%20PM.jpeg)
-
+* Payment gateways
+![alt text](https://github.com/Vishnu-s-cs/Beta.com/blob/c6140c03c9634033bc940c89f8159773e13ef621/Razorpay.png)
+![alt text](https://github.com/Vishnu-s-cs/Beta.com/blob/a4c8fc4ed88b794f59dcb664693a6059a0a24fb5/Screenshot_20221226_000356.png)
+* Admin panel
+![alt text](https://github.com/Vishnu-s-cs/Beta.com/blob/0bc556f5e10cf75c9840f15e50923ea4c8aa15c8/Screenshot_20221226_000836.png)
+![alt text](https://github.com/Vishnu-s-cs/Beta.com/blob/0bc556f5e10cf75c9840f15e50923ea4c8aa15c8/Screenshot_20221223_204237.png)
 ## Future Updations:
 
 * User-Generated Reviews
