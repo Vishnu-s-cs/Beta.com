@@ -1,5 +1,5 @@
 # E-Commerce-app-using-Nodejs and hbs express generator
-## Ecommerce application for gadgets (backend)
+## Ecommerce application for smartphones (backend)
 [Link to the live application](https://www.betamobiles.shop/)
 ## Features:
 * User & Admin Authentication
